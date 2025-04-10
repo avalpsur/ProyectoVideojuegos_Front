@@ -1,29 +1,40 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
-  selector: 'app-login-pixelground',
+  selector: 'app-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './login.component.html',
+  templateUrl: './login.component.html'
 })
 export class LoginComponent {
-  loginForm!: FormGroup;
+  loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
-
-  ngOnInit(): void {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.loginForm = this.fb.group({
-      identifier: ['', Validators.required], 
-      password: ['', Validators.required],
+      login: [''],
+      password: ['']
     });
   }
 
-  onSubmit(): void {
-    if (this.loginForm.valid) {
-      const { identifier, password } = this.loginForm.value;
-      console.log('Login con:', identifier, password);
-    }
+  onSubmit() {
+    const { login, password } = this.loginForm.value;
+
+    this.authService.login(login, password).subscribe({
+      next: (token: string) => {
+        localStorage.setItem('token', token);
+        this.router.navigate(['/home']);
+      },
+      error: () => {
+        alert('Login incorrecto');
+      }
+    });
   }
 }

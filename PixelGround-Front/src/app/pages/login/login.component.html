@@ -1,71 +1,27 @@
-<div class="min-h-screen flex items-center justify-center bg-white px-4 py-12">
-    <div class="max-w-md w-full space-y-8">
-      <div class="text-center">
-        <h1 class="text-4xl font-light text-gray-800">
-          <span class="font-thin">Pixel</span><span class="font-semibold">Ground</span>
-        </h1>
-        <h2 class="mt-6 text-3xl font-bold text-gray-900">Sign in</h2>
-      </div>
+<div class="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+    <div class="bg-gray-800 p-8 rounded-xl shadow-md w-full max-w-md">
+      <h1 class="text-3xl text-center text-pink-500 mb-6 font-bold">Login</h1>
   
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
-        <div>
-            <input
-            id="identifier"
-            type="text"
-            formControlName="identifier"
-            placeholder="Email or Username"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
-          />
-        </div>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <input
+          formControlName="login"
+          type="text"
+          placeholder="Email o usuario"
+          class="w-full p-3 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-pink-500"
+        />
   
-        <div>
-          <div class="flex justify-between">
-            <label for="password" class="sr-only">Password</label>
-            <a href="#" class="text-sm text-gray-600 hover:underline">Forgot password?</a>
-          </div>
-          <input
-            id="password"
-            type="password"
-            formControlName="password"
-            placeholder="Password"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black mt-2"
-          />
-        </div>
+        <input
+          formControlName="password"
+          type="password"
+          placeholder="Contraseña"
+          class="w-full p-3 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-pink-500"
+        />
   
         <button
           type="submit"
-          class="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition"
+          class="w-full bg-pink-500 text-white py-3 rounded hover:bg-pink-600 transition"
         >
-          Sign in
-        </button>
-  
-        <p class="text-xs text-gray-600 text-center">
-          By signing in, you agree to the PixelGround
-          <a href="#" class="underline">Terms of Service</a> and
-          <a href="#" class="underline">Privacy Policy</a>.
-        </p>
-  
-        <div class="flex items-center justify-center space-x-2">
-          <input type="checkbox" id="keep" />
-          <label for="keep" class="text-sm text-gray-700">
-            Keep me signed in. <a href="#" class="underline">Details</a>
-          </label>
-        </div>
-  
-        <div class="relative">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-300"></div>
-          </div>
-          <div class="relative flex justify-center text-sm">
-            <span class="px-2 bg-white text-gray-500">New to PixelGround?</span>
-          </div>
-        </div>
-  
-        <button
-          type="button"
-          class="w-full border border-gray-400 text-gray-700 py-2 rounded-md hover:bg-gray-100 transition"
-        >
-          Sign up
+          Iniciar sesión
         </button>
       </form>
     </div>
