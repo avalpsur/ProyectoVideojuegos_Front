@@ -1,0 +1,26 @@
+<div class="pt-24 px-6 text-white">
+    <div class="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-6">
+      <!-- Columna izquierda: Listas del usuario -->
+      <section class="bg-[var(--color-fondo-form)] p-6 rounded-xl shadow">
+        <h2 class="text-xl font-semibold text-[var(--color-rosa-principal)] mb-4">Tus listas</h2>
+  
+        <div class="flex gap-4 overflow-x-auto pb-2">
+          @for (lista of listas; track lista.id) {
+            <div class="min-w-[200px] bg-[var(--color-terciario)] rounded-lg p-3 flex flex-col justify-between">
+              <h3 class="font-bold text-sm mb-2">{{ lista.nombre }}</h3>
+              <p class="text-xs text-[var(--color-texto-secundario)] truncate">{{ lista.descripcion }}</p>
+            </div>
+          }
+        </div>
+      </section>
+  
+      <!-- Columna derecha: Juegos actuales -->
+      <section class="bg-[var(--color-fondo-form)] p-6 rounded-xl shadow">
+        <h2 class="text-lg font-semibold text-[var(--color-rosa-principal)] mb-3">Jugando ahora</h2>
+        <p class="text-sm text-[var(--color-texto-secundario)]">
+          Aún no estás jugando a ningún juego.
+        </p>
+      </section>
+    </div>
+  </div>
+  

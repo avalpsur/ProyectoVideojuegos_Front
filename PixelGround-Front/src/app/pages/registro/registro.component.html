@@ -1,34 +1,53 @@
-<div class="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-[#181818] text-white">
-    <!-- IZQUIERDA -->
-    <div class="flex flex-col justify-center items-center bg-[#0f0f0f] p-10">
-      <h1 class="text-4xl font-bold text-pink-500 mb-4">Únete a PixelGround</h1>
-      <p class="text-lg text-gray-300 text-center max-w-md">
-        Explora, comparte y sigue tu progreso en videojuegos con otros jugadores. ¡Comienza tu aventura!
+<div class="min-h-screen grid grid-cols-1 md:grid-cols-2 text-[var(--color-texto-principal)]">
+
+  <!-- IZQUIERDA -->
+  <div class="relative min-h-screen flex flex-col justify-center items-center p-10 bg-cover bg-center"
+    style="background-image: url('/images/bloodborne.jpg')">
+    <div class="relative z-10 text-center max-w-md text-white">
+      <h1 class="text-4xl font-bold mb-4">
+        Únete a <span class="text-[var(--color-rosa-principal)]">PixelGround</span>
+      </h1>
+      <p class="text-lg text-white">
+        Por jugadores, para jugadores.
       </p>
     </div>
-  
-    <!-- DERECHA -->
-    <div class="flex items-center justify-center p-10">
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="w-full max-w-md space-y-6">
+  </div>
+
+
+  <!-- DERECHA -->
+  <div
+    class="flex flex-col justify-center p-10 bg-gradient-to-b from-[var(--color-fondo-oscuro)] to-[var(--color-secundario)]">
+
+    <div class="max-w-md w-full mx-auto space-y-6">
+      <h2 class="text-2xl font-semibold text-[var(--color-rosa-principal)] text-center mb-2">Crea tu cuenta</h2>
+      <p class="text-sm text-[var(--color-texto-secundario)] text-center mb-6">
+        ¡Empieza a construir tu biblioteca de juegos y conecta con otros jugadores como tú!
+      </p>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
         <div>
           <label class="block text-sm mb-1" for="email">Email</label>
-          <input id="email" formControlName="email" type="email" class="w-full p-3 bg-[#27272A] rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500" />
+          <input id="email" formControlName="email" type="email"
+            class="w-full p-3 bg-[var(--color-terciario)] text-[var(--color-texto-principal)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-rosa-principal)]" />
         </div>
-  
+
         <div>
           <label class="block text-sm mb-1" for="nombreUsuario">Nombre de usuario</label>
-          <input id="nombreUsuario" formControlName="nombreUsuario" type="text" class="w-full p-3 bg-[#27272A] rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500" />
+          <input id="nombreUsuario" formControlName="nombreUsuario" type="text"
+            class="w-full p-3 bg-[var(--color-terciario)] text-[var(--color-texto-principal)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-rosa-principal)]" />
         </div>
-  
+
         <div>
           <label class="block text-sm mb-1" for="password">Contraseña</label>
-          <input id="password" formControlName="password" type="password" class="w-full p-3 bg-[#27272A] rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500" />
+          <input id="password" formControlName="password" type="password"
+            class="w-full p-3 bg-[var(--color-terciario)] text-[var(--color-texto-principal)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-rosa-principal)]" />
         </div>
-  
-        <button type="submit" class="w-full bg-pink-500 text-white py-3 rounded-xl hover:bg-pink-600 transition">
+
+        <button type="submit"
+          class="w-full bg-[var(--color-rosa-principal)] text-white py-3 rounded-xl hover:bg-[var(--color-rosa-hover)] transition shadow-lg shadow-[var(--color-rosa-principal)]/30">
           Crear cuenta
         </button>
       </form>
     </div>
   </div>
-  
+</div>

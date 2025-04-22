@@ -1,29 +1,34 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-900 text-white">
-    <div class="bg-gray-800 p-8 rounded-xl shadow-md w-full max-w-md">
-      <h1 class="text-3xl text-center text-pink-500 mb-6 font-bold">Login</h1>
-  
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
-        <input
-          formControlName="login"
-          type="text"
-          placeholder="Email o usuario"
-          class="w-full p-3 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-pink-500"
-        />
-  
-        <input
-          formControlName="password"
-          type="password"
-          placeholder="Contraseña"
-          class="w-full p-3 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-pink-500"
-        />
-  
-        <button
-          type="submit"
-          class="w-full bg-pink-500 text-white py-3 rounded hover:bg-pink-600 transition"
-        >
-          Iniciar sesión
-        </button>
-      </form>
-    </div>
+<div class="min-h-screen flex items-center justify-center bg-[var(--color-fondo-oscuro)] text-[var(--color-texto-principal)] bg-cover bg-center"
+     style="background-image: url('images/majima.jpg')">
+  <div class="bg-[var(--color-fondo-form)] p-8 rounded-xl shadow-md w-full max-w-md">
+    <h1 class="text-3xl text-center text-[var(--color-rosa-principal)] mb-6 font-bold">PixelGround</h1>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <input
+        formControlName="login"
+        type="text"
+        placeholder="Email o usuario"
+        class="w-full p-3 bg-[var(--color-terciario)] text-[var(--color-texto-principal)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-rosa-principal)]"
+      />
+
+      <input
+        formControlName="password"
+        type="password"
+        placeholder="Contraseña"
+        class="w-full p-3 bg-[var(--color-terciario)] text-[var(--color-texto-principal)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-rosa-principal)]"
+      />
+
+      <button
+        type="submit"
+        class="w-full bg-[var(--color-rosa-principal)] text-white py-3 rounded hover:bg-[var(--color-rosa-hover)] transition"
+      >
+        Iniciar sesión
+      </button>
+
+      <div class="flex justify-between text-sm pt-2">
+        <a routerLink="/registro" class="text-[var(--color-rosa-principal)] hover:underline">Crear cuenta</a>
+        <button type="button" class="text-[var(--color-rosa-principal)] hover:underline">¿Olvidaste tu contraseña?</button>
+      </div>
+    </form>
   </div>
-  
+</div>
