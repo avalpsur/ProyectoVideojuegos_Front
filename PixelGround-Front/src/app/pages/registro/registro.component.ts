@@ -1,37 +1,53 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './registro.component.html'
+  imports: [ReactiveFormsModule],
+  templateUrl: './registro.component.html',
+  styleUrls: ['./registro.component.css']
 })
 export class RegistroComponent {
-  registerForm: FormGroup;
+  registerForm: FormGroup = new FormGroup({});
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
     this.registerForm = this.fb.group({
-      email: [''],
-      nombreUsuario: [''],
-      password: ['']
+      email: ['', [Validators.required, Validators.email]],
+      nombreUsuario: ['', Validators.required],
+      password: ['', Validators.required],
     });
   }
 
-  onSubmit() {
-    const user = this.registerForm.value;
+  onSubmit(): void {
+    if (this.registerForm.invalid) return;
 
-    this.http.post('http://localhost:8080/api/usuarios/registro', user).subscribe({
-      next: () => {
-        alert('Usuario registrado correctamente');
+    const { email, nombreUsuario, password } = this.registerForm.value;
+
+this.authService.register(email, nombreUsuario, password).subscribe({
+  next: () => {
+    this.authService.login(email, password).subscribe({
+      next: (token: string) => {
+        localStorage.setItem('token', token);
         this.router.navigate(['/home']);
       },
-      error: () => {
-        alert('Error al registrar el usuario');
+      error: (err) => {
+        console.error('Error al hacer login automático:', err);
       }
     });
+  },
+  error: (err) => {
+    console.error('Error al registrar:', err);
+  }
+});
+
   }
 }

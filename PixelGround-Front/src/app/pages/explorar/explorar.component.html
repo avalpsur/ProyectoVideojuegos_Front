@@ -1,0 +1,57 @@
+<div class="pt-24 pb-12 px-6 min-h-screen bg-[var(--color-fondo-oscuro)] text-[var(--color-texto-principal)]">
+    <!-- Buscador + filtros -->
+    <div class="flex flex-col md:flex-row md:items-center flex-wrap gap-4 mb-6">
+
+        <!-- Input de búsqueda -->
+        <input [(ngModel)]="query" (keydown.enter)="buscar()" placeholder="Buscar videojuegos..."
+            class="flex-1 min-w-[200px] px-4 py-2 rounded-xl bg-[var(--color-fondo-form)] text-white focus:outline-none focus:ring-2 focus:ring-[var(--color-rosa-principal)]" />
+
+        <!-- Botón buscar -->
+        <button (click)="buscar()"
+            class="px-6 py-2 rounded-xl bg-[var(--color-rosa-principal)] hover:bg-[var(--color-rosa-hover)] text-white transition">
+            Buscar
+        </button>
+
+        <!-- Filtro género -->
+        <select [(ngModel)]="filtroGenero"
+            class="min-w-[200px] px-4 py-2 rounded-xl bg-[var(--color-fondo-form)] text-white">
+            <option value="">Todos los géneros</option>
+            <option *ngFor="let g of generos" [value]="g.slug">{{ g.name }}</option>
+        </select>
+
+        <!-- Filtro plataforma -->
+        <select [(ngModel)]="filtroPlataforma"
+            class="min-w-[200px] px-4 py-2 rounded-xl bg-[var(--color-fondo-form)] text-white">
+            <option value="">Todas las plataformas</option>
+            <option *ngFor="let p of plataformas" [value]="p.id">{{ p.name }}</option>
+        </select>
+
+        <!-- Botón aplicar filtros -->
+        <button (click)="buscar()"
+            class="px-6 py-2 rounded-xl bg-[var(--color-rosa-principal)] hover:bg-[var(--color-rosa-hover)] text-white transition">
+            Aplicar filtros
+        </button>
+    </div>
+
+
+    <!-- Resultados -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div *ngFor="let juego of resultados" class="bg-[var(--color-terciario)] rounded-xl overflow-hidden shadow">
+            <img [src]="juego.background_image" [alt]="juego.name" class="w-full h-40 object-cover" />
+            <div class="p-4 flex flex-col justify-between">
+                <h3 class="font-bold mb-2">{{ juego.name }}</h3>
+                <p class="text-sm text-[var(--color-texto-secundario)] mb-4">Lanzamiento: {{ juego.released }}</p>
+
+                <p class="text-sm text-[var(--color-texto-secundario)] mb-2">
+                    Valoración de la comunidad: Próximamente
+                </p>
+
+
+                <button
+                    class="bg-[var(--color-rosa-principal)] hover:bg-[var(--color-rosa-hover)] text-white py-2 px-4 rounded">
+                    Añadir a mi lista
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

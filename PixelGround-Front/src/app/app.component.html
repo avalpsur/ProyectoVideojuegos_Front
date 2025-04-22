@@ -1,1 +1,9 @@
-<router-outlet></router-outlet>
+@if (mostrarMenu()) {
+    <app-menu />
+  }
+  
+  <router-outlet />
+
+@if (mostrarMenu()) {
+    <app-footer />
+  }
