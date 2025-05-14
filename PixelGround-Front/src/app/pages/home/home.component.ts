@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-home',
-  standalone: true,
-  imports: [],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  templateUrl: './home.component.html'
 })
-export class HomeComponent {
-  constructor() {}
+export class HomeComponent implements OnInit {
+  nombreUsuario = '';
 
   ngOnInit(): void {
+    const usuarioStr = localStorage.getItem('usuario');
+    if (usuarioStr) {
+      const usuario = JSON.parse(usuarioStr);
+      this.nombreUsuario = usuario.nombreUsuario;
+    }
   }
 }

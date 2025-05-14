@@ -27,15 +27,29 @@ export class LoginComponent {
 
   onSubmit() {
     const { login, password } = this.loginForm.value;
-
+  
     this.authService.login(login, password).subscribe({
       next: (token: string) => {
+        console.log('Token recibido:', token);
         localStorage.setItem('token', token);
-        this.router.navigate(['/home']);
+  
+        this.authService.obtenerPerfil(token).subscribe({
+          next: (usuario) => {
+            console.log('Usuario recibido:', usuario);
+            localStorage.setItem('usuario', JSON.stringify(usuario));
+            this.router.navigate(['/home']);
+          },
+          error: (err) => {
+            console.error('Error en obtenerPerfil:', err);
+            alert('Error al obtener perfil de usuario');
+          }
+        });
       },
       error: () => {
         alert('Login incorrecto');
       }
     });
   }
+  
+  
 }

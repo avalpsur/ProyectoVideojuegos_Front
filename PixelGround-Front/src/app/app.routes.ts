@@ -4,6 +4,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { RegistroComponent } from './pages/registro/registro.component';
 import { ExplorarComponent } from './pages/explorar/explorar.component';
 import { MisJuegosComponent } from './pages/mis-juegos/mis-juegos.component';
+import { AmistadComponent } from './pages/amistad/amistad.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -12,5 +13,6 @@ export const routes: Routes = [
   { path: 'registro', component: RegistroComponent },
   { path: 'explorar', component: ExplorarComponent },
   { path: 'mis-juegos', component: MisJuegosComponent },
+  { path: 'amistad', component: AmistadComponent },
 
 ];

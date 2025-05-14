@@ -27,30 +27,27 @@ export class RegistroComponent {
     });
   }
 
-  onSubmit(): void {
-    if (this.registerForm.invalid) {
-      console.warn('Formulario inválido:', this.registerForm.value);
-      return;
-    }
-  
+  onSubmit() {
     const { email, nombreUsuario, password } = this.registerForm.value;
   
     this.authService.register(email, nombreUsuario, password).subscribe({
-      next: () => {
-        this.authService.login(email, password).subscribe({
-          next: (token: string) => {
-            localStorage.setItem('token', token);
+      next: (token: string) => {
+        localStorage.setItem('token', token);
+  
+        this.authService.obtenerPerfil(token).subscribe({
+          next: (usuario) => {
+            localStorage.setItem('usuario', JSON.stringify(usuario));
             this.router.navigate(['/home']);
           },
-          error: (err) => {
-            console.error('Error al hacer login automático:', err);
+          error: () => {
+            alert('Error al obtener perfil después de registrarse');
           }
         });
       },
-      error: (err) => {
-        console.error('Error al registrar:', err);
+      error: () => {
+        alert('Error al registrar usuario');
       }
     });
-  }
+  }  
   
 }
