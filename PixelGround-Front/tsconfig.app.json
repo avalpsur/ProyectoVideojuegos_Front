@@ -4,12 +4,18 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": []
+    "types": ["jasmine"]
   },
   "files": [
     "src/main.ts"
   ],
-  "include": [
-    "src/**/*.d.ts"
-  ]
+"include": [
+  "src/**/*.ts",
+  "src/typings.d.ts",
+  
+],
+"exclude": [
+  "**/*.spec.ts"
+]
+
 }

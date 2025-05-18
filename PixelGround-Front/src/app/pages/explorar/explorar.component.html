@@ -1,31 +1,43 @@
 <div class="pt-24 pb-12 px-6 min-h-screen bg-[var(--color-fondo-oscuro)] text-[var(--color-texto-principal)]">
   <div class="flex flex-col md:flex-row md:items-center flex-wrap gap-4 mb-6">
-    <input [(ngModel)]="query" (keydown.enter)="buscar()" placeholder="Buscar videojuegos..."
-      class="flex-1 min-w-[200px] px-4 py-2 rounded-xl bg-[var(--color-fondo-form)] text-white focus:outline-none focus:ring-2 focus:ring-[var(--color-rosa-principal)]" />
+    <input
+      [(ngModel)]="query"
+      (keydown.enter)="buscar()"
+      placeholder="Buscar videojuegos..."
+      class="flex-1 min-w-[200px] px-4 py-2 rounded-xl bg-[var(--color-fondo-form)] text-white focus:outline-none focus:ring-2 focus:ring-[var(--color-rosa-principal)]"
+    />
 
-    <button (click)="buscar()"
-      class="px-6 py-2 rounded-xl bg-[var(--color-rosa-principal)] hover:bg-[var(--color-rosa-hover)] text-white transition">
+    <button
+      (click)="buscar()"
+      class="px-6 py-2 rounded-xl bg-[var(--color-rosa-principal)] hover:bg-[var(--color-rosa-hover)] text-white transition"
+    >
       Buscar
     </button>
 
-    <select [(ngModel)]="filtroGenero"
-      class="min-w-[200px] px-4 py-2 rounded-xl bg-[var(--color-fondo-form)] text-white">
+    <select
+      [(ngModel)]="filtroGenero"
+      class="min-w-[200px] px-4 py-2 rounded-xl bg-[var(--color-fondo-form)] text-white"
+    >
       <option value="">Todos los géneros</option>
       <ng-container *ngFor="let g of generos">
         <option [value]="g.slug">{{ g.name }}</option>
       </ng-container>
     </select>
 
-    <select [(ngModel)]="filtroPlataforma"
-      class="min-w-[200px] px-4 py-2 rounded-xl bg-[var(--color-fondo-form)] text-white">
+    <select
+      [(ngModel)]="filtroPlataforma"
+      class="min-w-[200px] px-4 py-2 rounded-xl bg-[var(--color-fondo-form)] text-white"
+    >
       <option value="">Todas las plataformas</option>
       <ng-container *ngFor="let p of plataformas">
         <option [value]="p.id">{{ p.name }}</option>
       </ng-container>
     </select>
 
-    <button (click)="buscar()"
-      class="px-6 py-2 rounded-xl bg-[var(--color-rosa-principal)] hover:bg-[var(--color-rosa-hover)] text-white transition">
+    <button
+      (click)="buscar()"
+      class="px-6 py-2 rounded-xl bg-[var(--color-rosa-principal)] hover:bg-[var(--color-rosa-hover)] text-white transition"
+    >
       Aplicar filtros
     </button>
   </div>
@@ -33,7 +45,11 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
     <ng-container *ngFor="let juego of resultados">
       <div class="bg-[var(--color-terciario)] rounded-xl overflow-visible shadow">
-        <img [src]="juego.background_image" [alt]="juego.name" class="w-full h-40 object-cover rounded-t-xl" />
+        <img
+          [src]="juego.background_image"
+          [alt]="juego.name"
+          class="w-full h-40 object-cover rounded-t-xl"
+        />
         <div class="p-4 flex flex-col justify-between relative">
           <h3 class="font-bold mb-2">{{ juego.name }}</h3>
           <p class="text-sm text-[var(--color-texto-secundario)] mb-4">Lanzamiento: {{ juego.released }}</p>
@@ -41,37 +57,54 @@
             Valoración de la comunidad: Próximamente
           </p>
 
-          <button (click)="toggleDropdown(juego.id, $event)"
-            class="bg-[var(--color-rosa-principal)] hover:bg-[var(--color-rosa-hover)] text-white py-2 px-4 rounded transition z-10 relative">
+          <button
+            (click)="toggleDropdown(juego.id, $event)"
+            class="bg-[var(--color-rosa-principal)] hover:bg-[var(--color-rosa-hover)] text-white py-2 px-4 rounded transition z-10 relative"
+          >
             Añadir a lista
           </button>
 
           <!-- Dropdown -->
-          <div *ngIf="selectedJuegoId === juego.id" (click)="$event.stopPropagation()"
-            class="absolute top-full mt-2 left-4 z-50 w-60 bg-[var(--color-fondo-form)] rounded-xl shadow-xl border border-[var(--color-terciario)]">
-
-            <!-- Listas existentes -->
-            <!-- <ng-container *ngFor="let lista of listas">
-              <div class="px-4 py-2 hover:bg-[var(--color-terciario)] text-white cursor-pointer"
-                (click)="guardarJuegoEnLista(juego, lista.id)">
-                {{ lista.nombre }}
-              </div>
-            </ng-container> -->
-
-            <!-- Crear nueva -->
+          <div
+            *ngIf="selectedJuegoId === juego.id"
+            (click)="$event.stopPropagation()"
+            class="absolute top-full mt-2 left-4 z-50 w-60 bg-[var(--color-fondo-form)] rounded-xl shadow-xl border border-[var(--color-terciario)]"
+          >
             <hr class="border-[var(--color-terciario)] my-1" />
             <div class="px-4 py-2">
-              <input #campoLista type="text" placeholder="Nueva lista..."
-                class="w-full px-3 py-2 rounded-lg bg-[var(--color-terciario)] text-white focus:outline-none mb-2" />
-
-              <button type="button"
-                class="w-full bg-[var(--color-rosa-principal)] hover:bg-[var(--color-rosa-hover)] text-white py-1.5 rounded-lg text-sm">
+              <input
+                #campoLista
+                type="text"
+                placeholder="Nueva lista..."
+                class="w-full px-3 py-2 rounded-lg bg-[var(--color-terciario)] text-white focus:outline-none mb-2"
+              />
+              <button
+                type="button"
+                class="w-full bg-[var(--color-rosa-principal)] hover:bg-[var(--color-rosa-hover)] text-white py-1.5 rounded-lg text-sm"
+              >
                 Crear y añadir
               </button>
-
             </div>
           </div>
 
+          <!-- Votación -->
+          <div class="mt-4">
+            <label class="text-sm text-white block mb-1">Votar (0–5):</label>
+            <input
+              type="number"
+              step="0.5"
+              min="0"
+              max="5"
+              [(ngModel)]="puntuaciones[juego.id]"
+              class="w-20 px-2 py-1 rounded bg-[var(--color-terciario)] text-white mb-2"
+            />
+            <button
+              class="w-full bg-green-600 hover:bg-green-700 text-white py-1 rounded text-sm"
+              (click)="votar(juego)"
+            >
+              Enviar voto
+            </button>
+          </div>
         </div>
       </div>
     </ng-container>

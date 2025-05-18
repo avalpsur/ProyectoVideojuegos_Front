@@ -18,4 +18,8 @@ export class UsuarioService {
   getUsuarioByEmail(email: string): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiUrl}/email/${email}`);
   }
+
+  getUsuarioByUsername(nombreUsuario: string): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.apiUrl}//${nombreUsuario}`);
+  }
 }

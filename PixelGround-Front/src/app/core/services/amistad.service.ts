@@ -8,23 +8,25 @@ export class AmistadService {
 
   constructor(private http: HttpClient) {}
 
-  enviarSolicitud(solicitanteId: number, receptorId: number): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/solicitar`, { solicitanteId, receptorId });
+  enviarSolicitud(receptorId: number): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/solicitar`, { receptorId });
   }
 
-  aceptarSolicitud(receptorId: number, solicitanteId: number): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/aceptar`, { receptorId, solicitanteId });
+  aceptarSolicitud(solicitanteId: number): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/aceptar`, { solicitanteId });
   }
 
-  rechazarSolicitud(receptorId: number, solicitanteId: number): Observable<void> {
-    return this.http.request<void>('delete', `${this.apiUrl}/rechazar`, { body: { receptorId, solicitanteId } });
+  rechazarSolicitud(solicitanteId: number): Observable<void> {
+    return this.http.request<void>('delete', `${this.apiUrl}/rechazar`, {
+      body: { solicitanteId }
+    });
   }
 
-  obtenerAmigos(id: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/amigos/${id}`);
+  obtenerAmigos(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/amigos`);
   }
 
-  obtenerSolicitudes(id: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/solicitudes/${id}`);
+  obtenerSolicitudes(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/solicitudes`);
   }
 }

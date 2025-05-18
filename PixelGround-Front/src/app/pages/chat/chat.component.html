@@ -1,1 +1,47 @@
-<p>chat works!</p>
+<div class="flex h-[80vh] rounded-xl overflow-hidden shadow bg-[var(--color-fondo-form)] text-[var(--color-texto-principal)]">
+
+  <!-- Sidebar de amigos -->
+  <aside class="w-1/3 bg-[var(--color-terciario)] p-4 overflow-y-auto">
+    <h2 class="text-lg font-semibold text-[var(--color-rosa-principal)] mb-4">Amigos</h2>
+    <ul class="space-y-2">
+      <li *ngFor="let amigo of amigos"
+          (click)="seleccionarAmigo(amigo)"
+          [ngClass]="{ 'bg-[var(--color-rosa-principal)] text-white': amigoSeleccionado?.id === amigo.id }"
+          class="cursor-pointer rounded p-2 hover:bg-[var(--color-rosa-hover)] transition">
+        {{ amigo.nombreUsuario }}
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Zona de chat -->
+  <section class="flex flex-col flex-1 p-4">
+    <h3 *ngIf="amigoSeleccionado" class="text-lg font-semibold mb-2">
+      Chat con {{ amigoSeleccionado.nombreUsuario }}
+    </h3>
+
+    <!-- Mensajes -->
+    <div class="flex-1 overflow-y-auto space-y-2 mb-4">
+      <div *ngFor="let m of mensajes"
+           [ngClass]="{
+             'self-end bg-[var(--color-rosa-principal)] text-white': m.remitenteId === usuarioActual.id,
+             'self-start bg-[var(--color-terciario)]': m.remitenteId !== usuarioActual.id
+           }"
+           class="max-w-[70%] px-4 py-2 rounded-xl">
+        {{ m.contenido }}
+      </div>
+    </div>
+
+    <!-- Input para escribir -->
+    <div *ngIf="amigoSeleccionado" class="flex gap-2">
+      <input [(ngModel)]="mensaje"
+             (keydown.enter)="enviarMensaje()"
+             placeholder="Escribe un mensaje..."
+             class="flex-1 px-4 py-2 rounded-full bg-[var(--color-terciario)] text-white focus:outline-none focus:ring-2 focus:ring-[var(--color-rosa-principal)]" />
+
+      <button (click)="enviarMensaje()"
+              class="px-4 py-2 bg-[var(--color-rosa-principal)] hover:bg-[var(--color-rosa-hover)] text-white rounded-full transition">
+        Enviar
+      </button>
+    </div>
+  </section>
+</div>

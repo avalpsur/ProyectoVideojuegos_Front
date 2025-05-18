@@ -10,7 +10,7 @@ import { AmistadService } from '../../core/services/amistad.service';
   templateUrl: './amistad.component.html'
 })
 export class AmistadComponent implements OnInit {
-  usuarioId = 1; // Reemplaza con el ID del usuario logueado
+  usuario: any;
   solicitudesPendientes: any[] = [];
   amigos: any[] = [];
   usuarioBuscado = '';
@@ -18,41 +18,42 @@ export class AmistadComponent implements OnInit {
   constructor(private amistadService: AmistadService) {}
 
   ngOnInit(): void {
+    this.usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
     this.cargarSolicitudes();
     this.cargarAmigos();
   }
 
   cargarSolicitudes(): void {
-    this.amistadService.obtenerSolicitudes(this.usuarioId).subscribe((data: any[]) => {
+    this.amistadService.obtenerSolicitudes().subscribe((data: any[]) => {
       this.solicitudesPendientes = data;
     });
   }
 
   cargarAmigos(): void {
-    this.amistadService.obtenerAmigos(this.usuarioId).subscribe((data: any[]) => {
+    this.amistadService.obtenerAmigos().subscribe((data: any[]) => {
       this.amigos = data;
     });
   }
 
   enviarSolicitud(): void {
     const receptorId = Number(this.usuarioBuscado);
-    if (!receptorId) return;
+    if (!receptorId || receptorId === this.usuario?.id) return;
 
-    this.amistadService.enviarSolicitud(this.usuarioId, receptorId).subscribe(() => {
+    this.amistadService.enviarSolicitud(receptorId).subscribe(() => {
       alert('Solicitud enviada');
       this.usuarioBuscado = '';
     });
   }
 
   aceptarSolicitud(solicitanteId: number): void {
-    this.amistadService.aceptarSolicitud(this.usuarioId, solicitanteId).subscribe(() => {
+    this.amistadService.aceptarSolicitud(solicitanteId).subscribe(() => {
       this.cargarSolicitudes();
       this.cargarAmigos();
     });
   }
 
   rechazarSolicitud(solicitanteId: number): void {
-    this.amistadService.rechazarSolicitud(this.usuarioId, solicitanteId).subscribe(() => {
+    this.amistadService.rechazarSolicitud(solicitanteId).subscribe(() => {
       this.cargarSolicitudes();
     });
   }

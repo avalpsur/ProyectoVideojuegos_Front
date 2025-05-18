@@ -1,17 +1,37 @@
 import { Component, OnInit } from '@angular/core';
+import { ActividadService } from '../../core/services/actividad.service';
+import { Actividad } from '../../core/models/actividad.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
-  templateUrl: './home.component.html'
+  imports: [CommonModule],
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  nombreUsuario = '';
+  actividades: Actividad[] = [];
+  cargando = true;
+  nombreUsuario = '...';
+
+  constructor(private actividadService: ActividadService) {}
 
   ngOnInit(): void {
-    const usuarioStr = localStorage.getItem('usuario');
-    if (usuarioStr) {
-      const usuario = JSON.parse(usuarioStr);
-      this.nombreUsuario = usuario.nombreUsuario;
+    this.actividadService.obtenerFeed().subscribe({
+      next: (res: Actividad[]) => {
+        this.actividades = res;
+        this.cargando = false;
+      },
+      error: () => (this.cargando = false),
+    });
+  }
+
+  extraerPuntuacion(contenidoExtra: string): string {
+    try {
+      const obj = JSON.parse(contenidoExtra);
+      return obj.puntuacion?.toFixed(1) ?? 'N/A';
+    } catch {
+      return 'N/A';
     }
   }
 }

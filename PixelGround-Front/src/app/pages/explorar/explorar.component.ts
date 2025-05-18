@@ -5,6 +5,10 @@ import { ListaJuegosService, ListaJuego } from '../../core/services/lista-juegos
 import { decodeToken } from '../../core/helpers/jwt-helper';
 import { RawgApiService } from '../../core/services/rawg-api.service';
 import { UsuarioService } from '../../core/services/usuario.service';
+import { VotacionService } from '../../core/services/votacion.service';
+import { Votacion } from '../../core/models/votacion.model';
+import { StarRatingModule } from 'ngx-star-rating';
+
 
 @Component({
   selector: 'app-explorar',
@@ -24,13 +28,16 @@ export class ExplorarComponent implements OnInit {
   generos: any[] = [];
   plataformas: any[] = [];
   usuarioId: number | null = null;
+  puntuaciones: { [juegoId: string]: number } = {};
+
 
   @ViewChild('inputNuevaLista') inputNuevaLista!: ElementRef;
 
   constructor(
     private listaService: ListaJuegosService,
     private rawgService: RawgApiService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private votacionService: VotacionService
   ) {}
 
   ngOnInit(): void {
@@ -94,6 +101,27 @@ export class ExplorarComponent implements OnInit {
     this.selectedJuegoId = null;
   }
 
+  votar(juego: any): void {
+  const puntuacion = this.puntuaciones[juego.id];
+  if (puntuacion < 0 || puntuacion > 5) {
+    alert("La puntuación debe estar entre 0 y 5");
+    return;
+  }
+
+  const usuarioId = +sessionStorage.getItem('usuarioId')!; // Asegúrate de guardar el ID en login
+  const voto: Votacion = {
+    usuarioId,
+    juegoApiId: juego.id,
+    puntuacion,
+    nombreJuego: juego.name,
+    imagenUrlJuego: juego.background_image
+  };
+
+  this.votacionService.votar(voto).subscribe({
+    next: () => alert(`Has votado ${juego.name} con ${puntuacion} estrellas`),
+    error: () => alert("Error al enviar el voto")
+  });
+}
   
   
 }

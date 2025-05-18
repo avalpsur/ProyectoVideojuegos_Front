@@ -1,49 +1,65 @@
 <div class="min-h-screen bg-[var(--color-fondo-oscuro)] text-[var(--color-texto-principal)] px-6 pt-24 pb-10">
 
-    <!-- Hero -->
-    <section class="text-center mb-10">
-      <h1 class="text-3xl md:text-4xl font-bold text-[var(--color-rosa-principal)] mb-2">
-        Bienvenido/a, {{ nombreUsuario }}
-      </h1>      
-      <p class="text-[var(--color-texto-secundario)] text-lg">
-        Explora juegos, sigue tu progreso y mantente al día con tu comunidad.
-      </p>
+  <!-- Hero -->
+  <section class="text-center mb-10">
+    <h1 class="text-3xl md:text-4xl font-bold text-[var(--color-rosa-principal)] mb-2">
+      Bienvenido/a, {{ nombreUsuario }}
+    </h1>
+    <p class="text-[var(--color-texto-secundario)] text-lg">
+      Explora juegos, sigue tu progreso y mantente al día con tu comunidad.
+    </p>
+  </section>
+
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_2fr_1fr] gap-6">
+
+    <!-- Columna izquierda-->
+    <section class="bg-[var(--color-fondo-form)] p-4 rounded-xl shadow-md">
+      <h2 class="text-xl font-semibold text-[var(--color-rosa-principal)] mb-4">Por jugar</h2>
+      <div class="space-y-2">
+        <div class="bg-[var(--color-terciario)] p-3 rounded">Hollow Knight</div>
+        <div class="bg-[var(--color-terciario)] p-3 rounded">Celeste</div>
+        <div class="bg-[var(--color-terciario)] p-3 rounded">Stardew Valley</div>
+      </div>
     </section>
-  
-    <div class="grid grid-cols-1 lg:grid-cols-[1fr_2fr_1fr] gap-6">
-  
-      <!-- Columna izquierda-->
-      <section class="bg-[var(--color-fondo-form)] p-4 rounded-xl shadow-md">
-        <h2 class="text-xl font-semibold text-[var(--color-rosa-principal)] mb-4">Por jugar</h2>
-        <div class="space-y-2">
-          <div class="bg-[var(--color-terciario)] p-3 rounded">Hollow Knight</div>
-          <div class="bg-[var(--color-terciario)] p-3 rounded">Celeste</div>
-          <div class="bg-[var(--color-terciario)] p-3 rounded">Stardew Valley</div>
-        </div>
-      </section>
-  
-      <!-- Columna central (feed) -->
-      <section class="bg-[var(--color-fondo-form)] p-4 rounded-xl shadow-md">
-        <h2 class="text-xl font-semibold text-[var(--color-rosa-principal)] mb-4">Actividad reciente</h2>
-        <div class="space-y-4">
-          <div class="bg-[var(--color-terciario)] p-3 rounded">
-            <span class="font-semibold">ana</span> ha añadido <span class="italic">Hollow Knight</span> a su lista
+
+    <!-- Columna central (feed) -->
+    <section class="bg-[var(--color-fondo-form)] p-4 rounded-xl shadow-md">
+      <h2 class="text-xl font-semibold text-[var(--color-rosa-principal)] mb-4">Actividad reciente</h2>
+
+      <div *ngIf="cargando">Cargando actividad...</div>
+
+      <div class="space-y-4" *ngIf="!cargando && actividades.length > 0">
+        <div *ngFor="let act of actividades" class="bg-[var(--color-terciario)] p-3 rounded flex gap-3 items-center">
+          <img [src]="act.imagenUrlJuego || 'assets/no-image.png'" alt="Juego" class="w-14 h-14 object-cover rounded" />
+          <div>
+            <span class="font-semibold">{{ act.nombreUsuario }}</span>
+            ha
+            <span *ngIf="act.tipo === 'voto'">
+              valorado <span class="italic">{{ act.nombreJuego }}</span> con {{
+              extraerPuntuacion(act.contenidoExtra)
+              }} estrellas
+            </span>
+            <div class="text-xs text-[var(--color-texto-secundario)]">
+              {{ act.fecha | date: 'short' }}
+            </div>
           </div>
-          <div class="bg-[var(--color-terciario)] p-3 rounded">
-            <span class="font-semibold">marcos</span> ha comenzado <span class="italic">Celeste</span>
-          </div>
         </div>
-      </section>
-  
-      <!-- Columna derecha -->
-      <section class="bg-[var(--color-fondo-form)] p-4 rounded-xl shadow-md">
-        <h2 class="text-xl font-semibold text-[var(--color-rosa-principal)] mb-4">Tus estadísticas</h2>
-        <div class="bg-[var(--color-terciario)] p-6 rounded">
-          <p>Horas jugadas esta semana: 12</p>
-          <p>Juegos completados: 3</p>
-        </div>
-      </section>
-  
-    </div>
+      </div>
+
+      <div *ngIf="!cargando && actividades.length === 0" class="text-[var(--color-texto-secundario)]">
+        Aún no hay actividad.
+      </div>
+    </section>
+
+
+    <!-- Columna derecha -->
+    <section class="bg-[var(--color-fondo-form)] p-4 rounded-xl shadow-md">
+      <h2 class="text-xl font-semibold text-[var(--color-rosa-principal)] mb-4">Tus estadísticas</h2>
+      <div class="bg-[var(--color-terciario)] p-6 rounded">
+        <p>Horas jugadas esta semana: 12</p>
+        <p>Juegos completados: 3</p>
+      </div>
+    </section>
+
   </div>
-  
+</div>
