@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Juego {
@@ -23,20 +23,38 @@ export class ListaJuegosService {
 
   constructor(private http: HttpClient) {}
 
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  }
+
   obtenerListasDeUsuario(usuarioId: number): Observable<ListaJuego[]> {
-    return this.http.get<ListaJuego[]>(`${this.baseUrl}/usuario/${usuarioId}`);
+    return this.http.get<ListaJuego[]>(
+      `${this.baseUrl}/usuario/${usuarioId}`,
+      { headers: this.getAuthHeaders() }
+    );
   }
 
   crearLista(lista: Partial<ListaJuego>): Observable<ListaJuego> {
-    return this.http.post<ListaJuego>(this.baseUrl, lista);
+    return this.http.post<ListaJuego>(
+      this.baseUrl,
+      lista,
+      { headers: this.getAuthHeaders() }
+    );
   }
 
   añadirJuegoALista(listaId: number, juego: Juego): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/${listaId}/juegos`, juego);
+    return this.http.post<void>(
+      `${this.baseUrl}/${listaId}/juegos`,
+      juego,
+      { headers: this.getAuthHeaders() }
+    );
   }
 
   eliminarLista(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    return this.http.delete<void>(
+      `${this.baseUrl}/${id}`,
+      { headers: this.getAuthHeaders() }
+    );
   }
-  
 }

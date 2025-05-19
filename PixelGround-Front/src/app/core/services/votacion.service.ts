@@ -5,13 +5,21 @@ import { Votacion } from '../models/votacion.model';
 
 @Injectable({ providedIn: 'root' })
 export class VotacionService {
-  private apiUrl = 'http://localhost:8080/votaciones';
+  private apiUrl = 'http://localhost:8080/api/votaciones';
 
   constructor(private http: HttpClient) {}
 
-  votar(voto: Votacion): Observable<any> {
-    const token = sessionStorage.getItem('token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.post(this.apiUrl, voto, { headers });
+  votar(votacion: Votacion): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = { Authorization: `Bearer ${token}` };
+
+    return this.http.post(this.apiUrl, votacion, { headers });
+  }
+
+  obtenerVotacionesDeUsuario(usuarioId: number): Observable<Votacion[]> {
+    const token = localStorage.getItem('token');
+    const headers = { Authorization: `Bearer ${token}` };
+
+    return this.http.get<Votacion[]>(`${this.apiUrl}/usuario/${usuarioId}`, { headers });
   }
 }

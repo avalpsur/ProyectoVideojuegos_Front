@@ -1,47 +1,46 @@
-<div class="flex h-[80vh] rounded-xl overflow-hidden shadow bg-[var(--color-fondo-form)] text-[var(--color-texto-principal)]">
+<div class="flex flex-col min-h-screen bg-[var(--color-fondo-principal)] text-[var(--color-texto-principal)]">
 
-  <!-- Sidebar de amigos -->
-  <aside class="w-1/3 bg-[var(--color-terciario)] p-4 overflow-y-auto">
-    <h2 class="text-lg font-semibold text-[var(--color-rosa-principal)] mb-4">Amigos</h2>
-    <ul class="space-y-2">
-      <li *ngFor="let amigo of amigos"
-          (click)="seleccionarAmigo(amigo)"
+  <!-- Contenedor del chat -->
+<div class="flex flex-1 overflow-hidden shadow bg-[var(--color-fondo-form)] h-[80vh]">
+
+    <!-- Sidebar de amigos -->
+    <aside class="w-1/3 bg-[var(--color-terciario)] px-6 py-4 overflow-y-auto">
+      <h2 class="text-lg font-semibold text-[var(--color-rosa-principal)] mb-4">Amigos</h2>
+      <ul class="space-y-2">
+        <li *ngFor="let amigo of amigos" (click)="seleccionarAmigo(amigo)"
           [ngClass]="{ 'bg-[var(--color-rosa-principal)] text-white': amigoSeleccionado?.id === amigo.id }"
           class="cursor-pointer rounded p-2 hover:bg-[var(--color-rosa-hover)] transition">
-        {{ amigo.nombreUsuario }}
-      </li>
-    </ul>
-  </aside>
+          {{ amigo.nombreUsuario }}
+        </li>
+      </ul>
+    </aside>
 
-  <!-- Zona de chat -->
-  <section class="flex flex-col flex-1 p-4">
-    <h3 *ngIf="amigoSeleccionado" class="text-lg font-semibold mb-2">
-      Chat con {{ amigoSeleccionado.nombreUsuario }}
-    </h3>
+    <!-- Zona de chat -->
+    <section class="flex flex-col flex-1 p-4">
+      <h3 *ngIf="amigoSeleccionado" class="text-lg font-semibold mb-2">
+        Chat con {{ amigoSeleccionado.nombreUsuario }}
+      </h3>
 
-    <!-- Mensajes -->
-    <div class="flex-1 overflow-y-auto space-y-2 mb-4">
-      <div *ngFor="let m of mensajes"
-           [ngClass]="{
-             'self-end bg-[var(--color-rosa-principal)] text-white': m.remitenteId === usuarioActual.id,
-             'self-start bg-[var(--color-terciario)]': m.remitenteId !== usuarioActual.id
-           }"
-           class="max-w-[70%] px-4 py-2 rounded-xl">
-        {{ m.contenido }}
+      <!-- Mensajes -->
+      <div #chatMensajes class="flex-1 overflow-y-auto space-y-2 mb-4 pr-2 scroll-smooth">
+        <div *ngFor="let m of mensajes" [ngClass]="{
+               'ml-auto bg-[var(--color-rosa-principal)] text-white': m.remitenteId === usuarioActual.id,
+               'mr-auto bg-[var(--color-terciario)] text-white': m.remitenteId !== usuarioActual.id
+             }" class="max-w-[70%] px-4 py-2 rounded-xl break-words whitespace-pre-wrap shadow transition">
+          {{ m.contenido }}
+        </div>
       </div>
-    </div>
 
-    <!-- Input para escribir -->
-    <div *ngIf="amigoSeleccionado" class="flex gap-2">
-      <input [(ngModel)]="mensaje"
-             (keydown.enter)="enviarMensaje()"
-             placeholder="Escribe un mensaje..."
-             class="flex-1 px-4 py-2 rounded-full bg-[var(--color-terciario)] text-white focus:outline-none focus:ring-2 focus:ring-[var(--color-rosa-principal)]" />
+      <!-- Input para escribir -->
+      <div *ngIf="amigoSeleccionado" class="flex gap-2 items-center">
+        <input [(ngModel)]="mensaje" (keydown.enter)="enviarMensaje()" placeholder="Escribe un mensaje..."
+          class="flex-1 px-4 py-2 rounded-full bg-[var(--color-terciario)] text-white focus:outline-none focus:ring-2 focus:ring-[var(--color-rosa-principal)]" />
 
-      <button (click)="enviarMensaje()"
-              class="px-4 py-2 bg-[var(--color-rosa-principal)] hover:bg-[var(--color-rosa-hover)] text-white rounded-full transition">
-        Enviar
-      </button>
-    </div>
-  </section>
+        <button (click)="enviarMensaje()"
+          class="px-4 py-2 min-w-[80px] bg-[var(--color-rosa-principal)] hover:bg-[var(--color-rosa-hover)] text-white rounded-full transition">
+          Enviar
+        </button>
+      </div>
+    </section>
+  </div>
 </div>

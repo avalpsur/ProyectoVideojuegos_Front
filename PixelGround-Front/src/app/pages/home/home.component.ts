@@ -16,15 +16,19 @@ export class HomeComponent implements OnInit {
 
   constructor(private actividadService: ActividadService) {}
 
-  ngOnInit(): void {
-    this.actividadService.obtenerFeed().subscribe({
-      next: (res: Actividad[]) => {
-        this.actividades = res;
-        this.cargando = false;
-      },
-      error: () => (this.cargando = false),
-    });
-  }
+ngOnInit(): void {
+  const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+  this.nombreUsuario = usuario.nombreUsuario || '...';
+
+  this.actividadService.obtenerFeed().subscribe({
+    next: (res: Actividad[]) => {
+      this.actividades = res;
+      this.cargando = false;
+    },
+    error: () => (this.cargando = false),
+  });
+}
+
 
   extraerPuntuacion(contenidoExtra: string): string {
     try {

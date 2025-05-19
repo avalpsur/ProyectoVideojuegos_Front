@@ -4,6 +4,7 @@ import SockJS from 'sockjs-client';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-chat',
@@ -19,8 +20,10 @@ export class ChatComponent implements OnInit, OnDestroy {
   mensajes: any[] = [];
   amigos: any[] = [];
   amigoSeleccionado: any;
+  @ViewChild('chatMensajes') contenedorMensajes!: ElementRef;
 
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
     this.cargarAmigos();
@@ -31,6 +34,15 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.cliente.deactivate();
   }
 
+  ngAfterViewChecked() {
+    this.scrollAlFinal();
+  }
+
+  private scrollAlFinal(): void {
+    try {
+      this.contenedorMensajes.nativeElement.scrollTop = this.contenedorMensajes.nativeElement.scrollHeight;
+    } catch (err) { }
+  }
   cargarAmigos() {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({

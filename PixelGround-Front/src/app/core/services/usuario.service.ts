@@ -15,11 +15,19 @@ export class UsuarioService {
 
   constructor(private http: HttpClient) {}
 
-  getUsuarioByEmail(email: string): Observable<Usuario> {
-    return this.http.get<Usuario>(`${this.apiUrl}/email/${email}`);
-  }
+ getUsuarioByEmail(email: string): Observable<Usuario> {
+  const token = localStorage.getItem('token');
+  const headers = { Authorization: `Bearer ${token}` };
 
-  getUsuarioByUsername(nombreUsuario: string): Observable<Usuario> {
-    return this.http.get<Usuario>(`${this.apiUrl}//${nombreUsuario}`);
-  }
+  return this.http.get<Usuario>(`${this.apiUrl}/email/${email}`, { headers });
+}
+
+
+getUsuarioByUsername(nombreUsuario: string): Observable<Usuario> {
+  const token = localStorage.getItem('token');
+  const headers = { Authorization: `Bearer ${token}` };
+
+  return this.http.get<Usuario>(`${this.apiUrl}/${nombreUsuario}`, { headers });
+}
+
 }

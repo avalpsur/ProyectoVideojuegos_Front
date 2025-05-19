@@ -12,7 +12,7 @@ export class ActividadService {
   constructor(private http: HttpClient) {}
 
   obtenerFeed(): Observable<Actividad[]> {
-    const token = sessionStorage.getItem('token'); 
+    const token = localStorage.getItem('token'); 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     return this.http.get<Actividad[]>(this.apiUrl, { headers });
