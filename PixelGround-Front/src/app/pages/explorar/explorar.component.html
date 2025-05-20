@@ -37,9 +37,7 @@
         <div class="p-4 flex flex-col justify-between relative">
           <h3 class="font-bold mb-2">{{ juego.name }}</h3>
           <p class="text-sm text-[var(--color-texto-secundario)] mb-4">Lanzamiento: {{ juego.released }}</p>
-          <p class="text-sm text-[var(--color-texto-secundario)] mb-2">
-            Valoración de la comunidad: Próximamente
-          </p>
+
 
           <button (click)="toggleDropdown(juego.id, $event)"
             class="bg-[var(--color-rosa-principal)] hover:bg-[var(--color-rosa-hover)] text-white py-2 px-4 rounded transition z-10 relative">
