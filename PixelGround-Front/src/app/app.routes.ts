@@ -6,6 +6,8 @@ import { ExplorarComponent } from './pages/explorar/explorar.component';
 import { MisJuegosComponent } from './pages/mis-juegos/mis-juegos.component';
 import { AmistadComponent } from './pages/amistad/amistad.component';
 import { ChatComponent } from './pages/chat/chat.component';
+import { JuegoDetalleComponent } from './pages/juego-detalle/juego-detalle.component';
+import { PerfilUsuarioComponent } from './pages/perfil-usuario/perfil-usuario.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -16,5 +18,7 @@ export const routes: Routes = [
   { path: 'mis-juegos', component: MisJuegosComponent },
   { path: 'amistad', component: AmistadComponent },
   { path: 'chat', component: ChatComponent },
-
+  { path: 'juego/:id', component: JuegoDetalleComponent },
+  { path: 'perfil/:nombreUsuario', component: PerfilUsuarioComponent },
+  { path: 'perfil', component: PerfilUsuarioComponent }, //Accede al perfil del usuario autenticado por defecto
 ];

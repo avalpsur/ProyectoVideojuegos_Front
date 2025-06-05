@@ -1,32 +1,87 @@
-<div class="p-6 rounded-xl bg-[var(--color-fondo-form)] shadow-md text-white">
-    <h2 class="text-xl font-semibold text-[var(--color-rosa-principal)] mb-4">Añadir amigos</h2>
-    
-    <input type="text" [(ngModel)]="usuarioBuscado" placeholder="ID de Usuario"
-           class="w-full p-3 rounded bg-[var(--color-terciario)] mb-2 text-white">
-    <button (click)="enviarSolicitud()" class="bg-[var(--color-rosa-principal)] text-white py-2 px-4 rounded">
-      Enviar solicitud
-    </button>
-  </div>
+<!-- PixelGround gamer/retro visual redesign for AmistadComponent -->
+<div class="w-full min-h-screen flex justify-center items-start bg-gradient-to-br from-[#111] via-[#1f002b] to-[#020024]">
+  <div class="max-w-4xl w-full mx-auto p-4 flex flex-col gap-8">
   
-  <div class="mt-4 p-6 rounded-xl bg-[var(--color-fondo-form)] shadow-md text-white">
-    <h2 class="text-xl font-semibold text-[var(--color-rosa-principal)] mb-4">Solicitudes pendientes</h2>
-    <ul>
-      <li *ngFor="let solicitud of solicitudesPendientes" class="flex justify-between bg-[var(--color-terciario)] p-2 rounded mb-2">
-        {{ solicitud.nombreReceptor }}
-        <div>
-          <button (click)="aceptarSolicitud(solicitud.idSolicitante)" class="bg-green-500 py-1 px-2 rounded mr-2">Aceptar</button>
-          <button (click)="rechazarSolicitud(solicitud.idSolicitante)" class="bg-red-500 py-1 px-2 rounded">Rechazar</button>
-        </div>
-      </li>
-    </ul>
+    <!-- Solicitudes pendientes -->
+    <div class="rounded-xl bg-black/60 shadow-pink-400/40 shadow-lg ring-2 ring-pink-500/70 p-6">
+      <h2 class="text-2xl font-pixel text-pink-400 flex items-center gap-2 mb-4 drop-shadow-pink-400">
+        <svg class="w-7 h-7 text-pink-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h0a4 4 0 014 4v2"/></svg>
+        Solicitudes pendientes
+      </h2>
+      <ul class="grid md:grid-cols-2 gap-4">
+        <li *ngFor="let solicitud of solicitudesPendientes" class="flex items-center gap-4 bg-black/40 rounded-lg p-3 shadow-lg border border-pink-400/20 hover:scale-105 transition-all">
+          <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-pink-900/60 border-2 border-pink-400/40 text-pink-200 font-pixel text-2xl shadow">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h0a4 4 0 014 4v2"/></svg>
+          </span>
+          <span class="flex-1 font-bold text-lg text-pink-200 truncate">{{ solicitud.nombreReceptor }}</span>
+          <button (click)="aceptarSolicitud(solicitud.idSolicitante)" title="Aceptar" class="bg-green-500 hover:scale-110 hover:brightness-110 text-white rounded-full p-2 shadow-lg transition-all mr-1 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          </button>
+          <button (click)="rechazarSolicitud(solicitud.idSolicitante)" title="Rechazar" class="bg-red-500 hover:scale-110 hover:brightness-110 text-white rounded-full p-2 shadow-lg transition-all flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </li>
+        <li *ngIf="solicitudesPendientes.length === 0" class="text-center text-pink-200/70 italic py-2 col-span-full">No tienes solicitudes pendientes.</li>
+      </ul>
+    </div>
+
+    <!-- Lista de amigos -->
+    <div class="rounded-xl bg-black/60 shadow-pink-400/40 shadow-lg ring-2 ring-pink-500/70 p-6">
+      <h2 class="text-2xl font-pixel text-pink-400 flex items-center gap-2 mb-4 drop-shadow-pink-400">
+        <svg class="w-7 h-7 text-pink-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h0a4 4 0 014 4v2"/></svg>
+        Mis amigos
+      </h2>
+      <ul class="grid md:grid-cols-2 gap-4">
+        <li *ngFor="let amigo of amigos" class="flex items-center gap-4 bg-black/40 rounded-lg p-3 shadow-lg border border-pink-400/20 hover:scale-105 transition-all">
+          <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-pink-900/60 border-2 border-pink-400/40 text-pink-200 font-pixel text-2xl shadow">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h0a4 4 0 014 4v2"/></svg>
+          </span>
+          <span class="flex-1 font-bold text-lg text-pink-200 truncate">{{ amigo.nombreUsuario }}</span>
+        </li>
+        <li *ngIf="amigos.length === 0" class="text-center text-pink-200/70 italic py-2 col-span-full">No tienes amigos aún.</li>
+      </ul>
+    </div>
+
+    <!-- Buscar usuarios -->
+    <div class="rounded-xl bg-black/60 shadow-pink-400/40 shadow-lg ring-2 ring-pink-500/70 p-6 flex flex-col gap-4 items-center">
+      <h2 class="text-2xl font-pixel text-pink-400 flex items-center gap-2 tracking-wide drop-shadow-pink-400">
+        <svg class="w-7 h-7 text-pink-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h0a4 4 0 014 4v2"/></svg>
+        Buscar usuarios
+      </h2>
+      <div class="flex w-full gap-2">
+        <input type="text" [(ngModel)]="usuarioBuscado" (input)="buscarUsuarios()" placeholder="Nombre de usuario..."
+          class="flex-1 p-3 rounded-lg bg-black/60 border-2 border-pink-400/30 focus:border-pink-400 text-white placeholder-pink-200 font-mono shadow-inner transition-all" />
+      </div>
+      <div *ngIf="buscando" class="text-pink-200 font-pixel text-center w-full py-2 animate-pulse">Buscando...</div>
+      <ul *ngIf="usuarioBuscado && resultadosBusqueda.length > 0" class="w-full flex flex-col gap-2 mt-2">
+        <li *ngFor="let user of resultadosBusqueda" class="flex items-center gap-4 bg-black/40 rounded-lg p-3 shadow-lg border border-pink-400/20 hover:scale-105 transition-all">
+          <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-pink-900/60 border-2 border-pink-400/40 text-pink-200 font-pixel text-2xl shadow">
+            <ng-container *ngIf="user.avatar; else iniciales"> <img [src]="user.avatar" class="w-full h-full object-cover rounded-full" /> </ng-container>
+            <ng-template #iniciales>{{ user.nombreUsuario ? user.nombreUsuario[0] : '?' }}</ng-template>
+          </span>
+          <span class="flex-1 font-bold text-lg text-pink-200 truncate">{{ user.nombreUsuario }}</span>
+          <button (click)="enviarSolicitud(user.id)"
+            *ngIf="!user.solicitudEnviada"
+            class="flex items-center gap-2 bg-pink-500 hover:scale-105 hover:brightness-110 text-white font-pixel py-2 px-4 rounded-lg shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-pink-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+            Añadir
+          </button>
+          <span *ngIf="user.solicitudEnviada" class="text-pink-400 font-pixel text-sm">Solicitud enviada</span>
+          <button class="bg-indigo-700 hover:scale-110 hover:brightness-110 text-white rounded-full p-2 shadow-lg transition-all flex items-center justify-center" title="Ver perfil">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h0a4 4 0 014 4v2"/></svg>
+          </button>
+        </li>
+      </ul>
+      <div *ngIf="usuarioBuscado && resultadosBusqueda.length === 0 && !buscando" class="text-pink-200/70 italic font-pixel text-center w-full py-2">No se encontraron usuarios.</div>
+    </div>
+
+    <!-- Modal de éxito -->
+    <div *ngIf="modal.visible" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+      <div class="bg-gradient-to-br from-[#1f002b] via-[#232946] to-[#3e206d] rounded-2xl shadow-2xl p-8 border-2 border-pink-400 flex flex-col items-center gap-4 animate-fade-in-up">
+        <svg class="w-12 h-12 text-pink-400 animate-bounce" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        <span class="text-pink-200 font-pixel text-xl">{{ modal.mensaje }}</span>
+        <button (click)="cerrarModal()" class="mt-2 bg-pink-500 hover:bg-pink-600 text-white font-bold font-pixel py-2 px-6 rounded-xl shadow-lg transition-all">Cerrar</button>
+      </div>
+    </div>
   </div>
-  
-  <div class="mt-4 p-6 rounded-xl bg-[var(--color-fondo-form)] shadow-md text-white">
-    <h2 class="text-xl font-semibold text-[var(--color-rosa-principal)] mb-4">Mis amigos</h2>
-    <ul>
-      <li *ngFor="let amigo of amigos" class="bg-[var(--color-terciario)] p-2 rounded mb-2">
-        {{ amigo.nombreUsuario }}
-      </li>
-    </ul>
-  </div>
-  
+</div>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ListaJuegosService, ListaJuego } from '../../core/services/lista-juegos.service';
-import { decodeToken } from '../../core/helpers/jwt-helper';
+import { AuthService } from '../../core/services/auth.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -17,21 +17,30 @@ export class MisJuegosComponent implements OnInit {
   descripcionLista: string = '';
   usuarioId: number | null = null;
 
-  constructor(private listaService: ListaJuegosService) {}
+  constructor(private listaService: ListaJuegosService, private authService:AuthService) {}
 
-  ngOnInit(): void {
+ngOnInit(): void {
     const token = localStorage.getItem('token');
     if (!token) return;
 
-    const decoded = decodeToken(token);
-    this.usuarioId = decoded?.id;
+    this.authService.obtenerPerfil(token).subscribe({
+      next: (perfil) => {
+        console.log('Perfil del usuario:', perfil);
+        this.usuarioId = perfil.id;
+        this.cargarListas();
+      },
+      error: (err) => console.error('Error al obtener perfil del usuario', err)
+    });
+  }
 
-    if (this.usuarioId) {
-      this.listaService.obtenerListasDeUsuario(this.usuarioId).subscribe({
-        next: (listas) => this.listas = listas,
-        error: (err) => console.error('Error al cargar listas', err),
-      });
-    }
+  cargarListas(): void {
+    this.listaService.obtenerListasDeUsuario(this.usuarioId!).subscribe({
+      next: (listas) => {
+        console.log('Listas cargadas:', listas);
+        this.listas = listas;
+      },
+      error: (err) => console.error('Error al cargar listas', err),
+    });
   }
 
   crearLista(): void {
@@ -61,6 +70,8 @@ export class MisJuegosComponent implements OnInit {
       }
     });
   }
-  
-  
+
+  trackById(index: number, item: ListaJuego): number {
+    return item.id;
+  }
 }

@@ -1,0 +1,17 @@
+/* PixelGround perfil de usuario - estilos gamer/retro */
+:host {
+  display: block;
+}
+.bg-pixel {
+  background-image: repeating-linear-gradient(135deg, #1f002b 0 2px, #020024 2px 8px);
+}
+.font-pixel {
+  font-family: 'Press Start 2P', 'VT323', 'Pixelify Sans', monospace;
+}
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s cubic-bezier(.39,.575,.565,1) both;
+}
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: none; }
+}

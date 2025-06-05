@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
@@ -16,26 +17,29 @@ export class HomeComponent implements OnInit {
 
   constructor(private actividadService: ActividadService) {}
 
-ngOnInit(): void {
-  const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
-  this.nombreUsuario = usuario.nombreUsuario || '...';
+  ngOnInit(): void {
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+    this.nombreUsuario = usuario.nombreUsuario || '...';
 
-  this.actividadService.obtenerFeed().subscribe({
-    next: (res: Actividad[]) => {
-      this.actividades = res;
-      this.cargando = false;
-    },
-    error: () => (this.cargando = false),
-  });
-}
-
+    this.actividadService.obtenerFeed().subscribe({
+      next: (res: Actividad[]) => {
+        this.actividades = res;
+        this.cargando = false;
+      },
+      error: () => (this.cargando = false),
+    });
+  }
 
   extraerPuntuacion(contenidoExtra: string): string {
     try {
       const obj = JSON.parse(contenidoExtra);
       return obj.puntuacion?.toFixed(1) ?? 'N/A';
     } catch {
-      return 'N/A';
+      return contenidoExtra?.length < 10 ? contenidoExtra : 'N/A';
     }
+  }
+
+  isImagenValida(url: string): boolean {
+    return !!url && url !== 'URL vacía';
   }
 }

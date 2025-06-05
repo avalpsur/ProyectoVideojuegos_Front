@@ -1,16 +1,18 @@
 import { Component, HostListener, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { ListaJuegosService, ListaJuego } from '../../core/services/lista-juegos.service';
 import { RawgApiService } from '../../core/services/rawg-api.service';
 import { VotacionService } from '../../core/services/votacion.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Votacion } from '../../core/models/votacion.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-explorar',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './explorar.component.html',
   styleUrls: ['./explorar.component.css']
 })
@@ -28,14 +30,19 @@ export class ExplorarComponent implements OnInit {
   puntuaciones: { [juegoId: string]: number } = {};
   hover: { [juegoId: string]: number } = {};
 
+  paginaActual: number = 1;
+  pageSize: number = 12;
+  hayMasPaginas: boolean = true;
+
   @ViewChild('inputNuevaLista') inputNuevaLista!: ElementRef;
 
   constructor(
     private listaService: ListaJuegosService,
     private rawgService: RawgApiService,
     private votacionService: VotacionService,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     const token = localStorage.getItem('token');
@@ -46,14 +53,9 @@ export class ExplorarComponent implements OnInit {
         this.usuarioId = usuario.id;
         localStorage.setItem('usuario', JSON.stringify(usuario));
         this.cargarListas();
-        this.cargarVotaciones();
+        this.buscar(); // Carga inicial con paginación
       },
       error: (err) => console.error('Error al obtener perfil', err),
-    });
-
-    this.rawgService.obtenerJuegosPopulares().subscribe({
-      next: (data) => this.resultados = data.results,
-      error: (err) => console.error('Error al cargar juegos populares:', err),
     });
 
     this.rawgService.getGeneros().subscribe({
@@ -80,10 +82,11 @@ export class ExplorarComponent implements OnInit {
   }
 
   buscar(): void {
-    if (!this.query.trim()) return;
-
-    this.rawgService.buscarJuegos(this.query, this.filtroGenero, this.filtroPlataforma).subscribe({
-      next: (data) => this.resultados = data.results,
+    this.rawgService.buscarJuegos(this.query, this.filtroGenero, this.filtroPlataforma, this.paginaActual, this.pageSize).subscribe({
+      next: (data) => {
+        this.resultados = data.results;
+        this.hayMasPaginas = !!data.next;
+      },
       error: (err) => console.error('Error al buscar juegos:', err),
     });
   }
@@ -126,15 +129,31 @@ export class ExplorarComponent implements OnInit {
 
     const voto: Votacion = {
       usuarioId: usuario.id,
-      juegoApiId: juego.id,
+      juegoApiId: juego.id.toString(),
       puntuacion,
-      nombreJuego: juego.name,
-      imagenUrlJuego: juego.background_image
+      nombreJuego: juego.name || 'Juego desconocido',
+      imagenUrlJuego: juego.background_image || 'URL vacía'
     };
 
     this.votacionService.votar(voto).subscribe({
-      next: () => alert(`Has votado ${juego.name} con ${puntuacion} estrellas`),
+      next: () => {
+        this.puntuaciones[voto.juegoApiId] = voto.puntuacion;
+        alert(`Has votado ${voto.nombreJuego} con ${voto.puntuacion} estrellas`);
+      },
       error: () => alert("Error al enviar el voto")
     });
   }
+
+  
+verDetalle(id: number): void {
+  this.router.navigate(['/juego', id]);
+}
+
+cambiarPagina(delta: number): void {
+  const nuevaPagina = this.paginaActual + delta;
+  if (nuevaPagina < 1) return;
+  this.paginaActual = nuevaPagina;
+  this.buscar();
+}
+
 }

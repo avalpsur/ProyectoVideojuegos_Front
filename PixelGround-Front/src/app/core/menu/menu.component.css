@@ -2,3 +2,102 @@
     display: block;
   }
   
+  /* Fuente retro/gamer */
+  .font-pixelground {
+    font-family: 'Press Start 2P', 'VT323', 'Share Tech Mono', 'Montserrat', 'sans-serif';
+  }
+  
+  /* Sombra neón para el logo */
+  .drop-shadow-neon {
+    text-shadow: 0 0 6px var(--color-rosa-principal), 0 0 2px #fff2, 0 0 1px #fff2;
+  }
+  
+  /* Enlaces del menú */
+  .menu-link {
+    position: relative;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+  }
+  .menu-link:hover, .menu-link:focus {
+    color: var(--color-rosa-principal);
+    background: rgba(236, 72, 153, 0.08);
+    box-shadow: 0 0 8px 0 var(--color-rosa-principal);
+    outline: none;
+  }
+  
+  /* Botones de icono */
+  .icon-btn {
+    background: transparent;
+    color: var(--color-rosa-principal);
+    font-size: 1.3rem;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid transparent;
+    transition: background 0.2s, border 0.2s, color 0.2s, transform 0.2s;
+  }
+  .icon-btn:hover, .icon-btn:focus {
+    background: rgba(236, 72, 153, 0.12);
+    color: #fff;
+    border: 2px solid var(--color-rosa-principal);
+    transform: scale(1.08);
+    outline: none;
+  }
+  
+  /* Botón usuario */
+  .user-btn {
+    background: transparent;
+    color: #fff;
+    font-weight: 700;
+    border-radius: 1rem;
+    padding: 0.4rem 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 2px solid transparent;
+    transition: background 0.2s, border 0.2s, color 0.2s;
+  }
+  .user-btn:hover, .user-btn:focus {
+    color: var(--color-rosa-principal);
+    background: rgba(236, 72, 153, 0.10);
+    border: 2px solid var(--color-rosa-principal);
+    outline: none;
+  }
+  
+  /* Dropdown usuario */
+  .dropdown-link {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: #fff;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .dropdown-link:hover, .dropdown-link:focus {
+    background: var(--color-rosa-principal);
+    color: #fff;
+    outline: none;
+  }
+  
+  /* Responsive: menú compacto en móvil */
+  @media (max-width: 640px) {
+    nav > div:first-child {
+      gap: 1.2rem !important;
+    }
+    .menu-link {
+      font-size: 0.95rem;
+      padding: 0.2rem 0.4rem;
+    }
+    .icon-btn, .user-btn {
+      width: 2rem;
+      height: 2rem;
+      font-size: 1.1rem;
+      padding: 0.2rem 0.5rem;
+    }
+  }

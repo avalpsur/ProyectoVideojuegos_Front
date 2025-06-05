@@ -7,6 +7,7 @@ export interface Usuario {
   nombreUsuario: string;
   email: string;
   rol: string;
+  avatar?: string; // Opcional para UI
 }
 
 @Injectable({ providedIn: 'root' })
@@ -15,19 +16,24 @@ export class UsuarioService {
 
   constructor(private http: HttpClient) {}
 
- getUsuarioByEmail(email: string): Observable<Usuario> {
-  const token = localStorage.getItem('token');
-  const headers = { Authorization: `Bearer ${token}` };
+  getUsuarioByEmail(email: string): Observable<Usuario> {
+    const token = localStorage.getItem('token');
+    const headers = { Authorization: `Bearer ${token}` };
 
-  return this.http.get<Usuario>(`${this.apiUrl}/email/${email}`, { headers });
-}
+    return this.http.get<Usuario>(`${this.apiUrl}/email/${email}`, { headers });
+  }
 
+  getUsuarioByUsername(nombreUsuario: string): Observable<Usuario> {
+    const token = localStorage.getItem('token');
+    const headers = { Authorization: `Bearer ${token}` };
 
-getUsuarioByUsername(nombreUsuario: string): Observable<Usuario> {
-  const token = localStorage.getItem('token');
-  const headers = { Authorization: `Bearer ${token}` };
+    return this.http.get<Usuario>(`${this.apiUrl}/${nombreUsuario}`, { headers });
+  }
 
-  return this.http.get<Usuario>(`${this.apiUrl}/${nombreUsuario}`, { headers });
-}
+  buscarUsuariosPorNombreParcial(nombre: string): Observable<Usuario[]> {
+    const token = localStorage.getItem('token');
+    const headers = { Authorization: `Bearer ${token}` };
 
+    return this.http.get<Usuario[]>(`${this.apiUrl}/buscar?nombre=${encodeURIComponent(nombre)}`, { headers });
+  }
 }

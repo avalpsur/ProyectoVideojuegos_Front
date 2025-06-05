@@ -9,20 +9,24 @@ export class RawgApiService {
 
   constructor(private http: HttpClient) {}
 
-  buscarJuegos(query: string, genero: string = '', plataforma: string = ''): Observable<any> {
+  buscarJuegos(query: string, genero: string = '', plataforma: string = '', page: number = 1, page_size: number = 12): Observable<any> {
     const params: any = {
       key: this.apiKey,
       search: query
     };
-  
     if (genero) params.genres = genero;
     if (plataforma) params.platforms = plataforma;
-  
+    if (page) params.page = page;
+    if (page_size) params.page_size = page_size;
     return this.http.get(`${this.baseUrl}/games`, { params });
   }
   
   
-
+  obtenerJuegoPorId(id: number): Observable<any> {
+  return this.http.get(`${this.baseUrl}/games/${id}`, {
+    params: { key: this.apiKey }
+  });
+}
   obtenerJuegosPopulares(): Observable<any> {
     return this.http.get(`${this.baseUrl}/games`, {
       params: {
