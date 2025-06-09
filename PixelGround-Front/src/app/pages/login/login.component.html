@@ -1,34 +1,33 @@
 <div class="min-h-screen flex items-center justify-center bg-[var(--color-fondo-oscuro)] text-[var(--color-texto-principal)] bg-cover bg-center"
      style="background-image: url('images/majima.jpg')">
-  <div class="bg-[var(--color-fondo-form)] p-8 rounded-xl shadow-md w-full max-w-md">
-    <h1 class="text-3xl text-center text-[var(--color-rosa-principal)] mb-6 font-bold">PixelGround</h1>
-
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
-      <input
-        formControlName="login"
-        type="text"
-        placeholder="Email o usuario"
-        class="w-full p-3 bg-[var(--color-terciario)] text-[var(--color-texto-principal)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-rosa-principal)]"
-      />
-
-      <input
-        formControlName="password"
-        type="password"
-        placeholder="Contraseña"
-        class="w-full p-3 bg-[var(--color-terciario)] text-[var(--color-texto-principal)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-rosa-principal)]"
-      />
-
-      <button
-        type="submit"
-        class="w-full bg-[var(--color-rosa-principal)] text-white py-3 rounded hover:bg-[var(--color-rosa-hover)] transition"
-      >
-        Iniciar sesión
-      </button>
-
-      <div class="flex justify-between text-sm pt-2">
-        <a routerLink="/registro" class="text-[var(--color-rosa-principal)] hover:underline">Crear cuenta</a>
-        <button type="button" class="text-[var(--color-rosa-principal)] hover:underline">¿Olvidaste tu contraseña?</button>
-      </div>
-    </form>
+  <div class="w-full max-w-md p-0 md:p-2">
+    <div class="rounded-2xl shadow-2xl border-2 border-[var(--color-rosa-principal)]/30 bg-gradient-to-br from-black/80 via-[#1f002b]/80 to-[#020024]/90 backdrop-blur-md px-8 py-10 md:py-12 flex flex-col items-center">
+      <h1 class="text-4xl md:text-5xl text-center font-pixelground text-[var(--color-rosa-principal)] mb-8 drop-shadow-[0_2px_16px_var(--color-rosa-principal)] tracking-wider select-none">
+        PixelGround
+      </h1>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6 w-full">
+        <input
+          formControlName="login"
+          type="text"
+          placeholder="Email o usuario"
+          class="w-full p-3 bg-black/60 text-[var(--color-texto-principal)] border-2 border-[var(--color-rosa-principal)]/30 rounded-xl font-mono focus:outline-none focus:ring-2 focus:ring-[var(--color-rosa-principal)] focus:bg-black/80 placeholder:text-pink-300 placeholder:font-pixelground transition"
+        />
+        <input
+          formControlName="password"
+          type="password"
+          placeholder="Contraseña"
+          class="w-full p-3 bg-black/60 text-[var(--color-texto-principal)] border-2 border-[var(--color-rosa-principal)]/30 rounded-xl font-mono focus:outline-none focus:ring-2 focus:ring-[var(--color-rosa-principal)] focus:bg-black/80 placeholder:text-pink-300 placeholder:font-pixelground transition"
+        />
+        <button
+          type="submit"
+          class="w-full bg-[var(--color-rosa-principal)] text-white py-3 rounded-xl font-pixelground text-lg shadow-lg hover:bg-[var(--color-rosa-hover)] transition focus:ring-2 focus:ring-[var(--color-rosa-principal)] focus:outline-none tracking-wider">
+          Iniciar sesión
+        </button>
+        <div class="flex justify-between text-xs md:text-sm pt-2 font-mono">
+          <a routerLink="/registro" class="text-[var(--color-rosa-principal)] hover:underline font-pixelground">Crear cuenta</a>
+          <button type="button" class="text-[var(--color-rosa-principal)] hover:underline font-pixelground">¿Olvidaste tu contraseña?</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

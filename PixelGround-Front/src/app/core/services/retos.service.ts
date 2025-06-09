@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Reto {
-  id: number;
+  id?: number;
   titulo: string;
   descripcion: string;
   juego: string;
@@ -14,7 +14,7 @@ export interface Reto {
 }
 
 export interface ParticipanteReto {
-  id: number;
+  id?: number;
   usuarioId: number;
   nombreUsuario: string;
   retoId: number;

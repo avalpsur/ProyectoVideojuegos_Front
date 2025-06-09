@@ -21,6 +21,8 @@ export class RetosComponent implements OnInit {
   retoSeleccionado: Reto | null = null;
   mostrarModalDetalle = false;
   retoDetalleSeleccionado: any = null;
+  mostrarInscripcionExitosa: boolean = false;
+
 
 
   mostrarModalUnirse: boolean = false;
@@ -101,24 +103,55 @@ export class RetosComponent implements OnInit {
     return hoy >= inicio && hoy <= fin;
   }
 
-  unirseAlRetoSeleccionado() {
-    // Aquí iría la lógica real para unirse al reto seleccionado
-    this.mostrarModalUnirse = false;
+  unirseAReto(reto: Reto): void {
+    const participacion: ParticipanteReto = {
+      usuarioId: this.usuarioId,
+      nombreUsuario: '',
+      retoId: reto.id!,           // 👈 el fix aquí
+      tituloReto: reto.titulo,
+      comentario: '',
+      imagenPruebaUrl: null,
+      completado: false,
+      fechaCompletado: null
+    };
+
+    this.retosService.unirseAReto(participacion).subscribe({
+      next: (nuevaParticipacion) => {
+        this.misParticipaciones.push(nuevaParticipacion);
+
+        if (this.tabSeleccionada === 'mis') {
+          this.misParticipaciones = [...this.misParticipaciones]; 
+        }
+
+        this.mostrarInscripcionExitosa = true;
+        setTimeout(() => this.mostrarInscripcionExitosa = false, 3000);
+      },
+      error: (err) => {
+        console.error('Error al unirse al reto:', err);
+      }
+    });
+
   }
+
+
 
   cerrarModalUnirse() {
     this.mostrarModalUnirse = false;
   }
 
   abrirDetalleReto(reto: any): void {
-  this.retoDetalleSeleccionado = reto;
-}
+    this.retoDetalleSeleccionado = reto;
+  }
 
-cerrarModalDetalle(): void {
-  this.retoDetalleSeleccionado = null;
-}
+  cerrarModalDetalle(): void {
+    this.retoDetalleSeleccionado = null;
+  }
   isReto(reto: any): boolean {
     return reto.hasOwnProperty('juego') && reto.hasOwnProperty('descripcion');
+  }
+
+  estaInscrito(reto: Reto): boolean {
+    return this.misParticipaciones.some(p => p.retoId === reto.id);
   }
 
 }
