@@ -1,0 +1,142 @@
+<div
+  class="min-h-screen w-full pt-28 px-2 md:px-8 pb-12 bg-gradient-to-br from-[#111] via-[#1f002b] to-[#020024] flex flex-col items-center">
+  <div class="w-full max-w-6xl mx-auto">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
+      <h1 class="text-3xl md:text-4xl font-pixel text-pink-300 drop-shadow-lg tracking-wide">Retos</h1>
+      <input type="text" [(ngModel)]="busqueda" placeholder="Buscar reto o juego..."
+        class="w-full md:w-72 px-4 py-2 rounded-2xl border-2 border-pink-400/30 focus:border-pink-400 focus:ring-2 focus:ring-pink-400/30 bg-black/70 text-pink-200 font-mono text-base shadow-pink-400/10 transition-all duration-200" />
+    </div>
+    <div class="overflow-x-auto rounded-2xl shadow-xl bg-zinc-900/80">
+      <!-- Botones de tabs encima de la tabla -->
+      <div class="flex gap-2 flex-wrap justify-center md:justify-start py-4 px-4">
+        <button (click)="cambiarTab('todos')"
+          [ngClass]="{'bg-pink-600 text-white ring-2 ring-pink-400': tabSeleccionada === 'todos', 'bg-zinc-900/80 text-pink-300': tabSeleccionada !== 'todos'}"
+          class="px-5 py-2 rounded-2xl font-pixel text-lg shadow-xl border-b-4 border-pink-400/40 focus:outline-none transition-all duration-200 hover:ring-2 hover:ring-pink-400/60">
+          Todos los retos
+        </button>
+        <button (click)="cambiarTab('activos')"
+          [ngClass]="{'bg-pink-600 text-white ring-2 ring-pink-400': tabSeleccionada === 'activos', 'bg-zinc-900/80 text-pink-300': tabSeleccionada !== 'activos'}"
+          class="px-5 py-2 rounded-2xl font-pixel text-lg shadow-xl border-b-4 border-pink-400/40 focus:outline-none transition-all duration-200 hover:ring-2 hover:ring-pink-400/60">
+          Retos activos
+        </button>
+        <button (click)="cambiarTab('mis')"
+          [ngClass]="{'bg-pink-600 text-white ring-2 ring-pink-400': tabSeleccionada === 'mis', 'bg-zinc-900/80 text-pink-300': tabSeleccionada !== 'mis'}"
+          class="px-5 py-2 rounded-2xl font-pixel text-lg shadow-xl border-b-4 border-pink-400/40 focus:outline-none transition-all duration-200 hover:ring-2 hover:ring-pink-400/60">
+          Mis retos
+        </button>
+      </div>
+      <table class="min-w-full text-left font-mono">
+        <thead>
+          <tr *ngIf="!isTabMis()" class="bg-gradient-to-r from-[#1f002b] via-[#111] to-[#020024]">
+            <th class="px-6 py-4 text-pink-300 font-pixel text-lg">Título</th>
+            <th class="px-6 py-4 text-indigo-300 font-pixel text-lg">Juego</th>
+            <th class="px-6 py-4 text-zinc-300 font-pixel text-lg">Descripción</th>
+            <th class="px-6 py-4 text-pink-300 font-pixel text-lg">Fecha</th>
+            <th class="px-6 py-4 text-pink-300 font-pixel text-lg">Estado</th>
+            <th class="px-6 py-4 text-pink-300 font-pixel text-lg">Acciones</th>
+          </tr>
+          <tr *ngIf="isTabMis()" class="bg-gradient-to-r from-[#1f002b] via-[#111] to-[#020024]">
+            <th class="px-6 py-4 text-pink-300 font-pixel text-lg">Título</th>
+            <th class="px-6 py-4 text-pink-300 font-pixel text-lg">Estado</th>
+            <th class="px-6 py-4 text-zinc-300 font-pixel text-lg">Comentario</th>
+            <th class="px-6 py-4 text-pink-300 font-pixel text-lg">Completado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="!isTabMis()">
+            <tr *ngFor="let reto of retosFiltrados" (click)="abrirDetalleReto(reto)"
+              class="border-b border-zinc-800 hover:bg-zinc-700/40 transition cursor-pointer">
+              <td class="px-6 py-4 text-white font-bold text-base">{{ reto.titulo }}</td>
+              <td class="px-6 py-4 text-indigo-300">{{ reto.juego }}</td>
+              <td class="px-6 py-4 text-zinc-300 max-w-xs truncate">{{ reto.descripcion }}</td>
+              <td class="px-6 py-4 text-zinc-400 text-sm">{{ reto.fechaInicio | date:'shortDate' }}<br><span
+                  class="text-xs">→</span> {{ reto.fechaExpiracion | date:'shortDate' }}</td>
+              <td class="px-6 py-4">
+                <span *ngIf="esRetoActivo(reto)"
+                  class="inline-block px-3 py-1 bg-pink-600/80 text-white rounded font-pixel text-xs shadow">Activo</span>
+                <span *ngIf="!esRetoActivo(reto)"
+                  class="inline-block px-3 py-1 bg-zinc-700 text-zinc-300 rounded font-pixel text-xs">Finalizado</span>
+              </td>
+              <td class="px-6 py-4">
+                <!-- Acciones aquí si se desea -->
+              </td>
+            </tr>
+          </ng-container>
+          <ng-container *ngIf="isTabMis()">
+            <tr *ngFor="let p of misRetos" (click)="abrirDetalleReto(p)"
+              class="border-b border-zinc-800 hover:bg-pink-950/30 transition duration-200 cursor-pointer rounded-xl">
+              <td class="px-6 py-4 text-pink-200 font-bold text-base font-pixel tracking-wide">{{ p.tituloReto }}</td>
+              <td class="px-6 py-4">
+                <span *ngIf="!p.completado"
+                  class="inline-block px-3 py-1 bg-pink-700/90 text-white rounded-2xl font-pixel text-xs shadow-md">Pendiente</span>
+                <span *ngIf="p.completado"
+                  class="inline-block px-3 py-1 bg-green-600/80 text-green-100 rounded-2xl font-pixel text-xs shadow-md">Completado</span>
+              </td>
+              <td class="px-6 py-4 text-zinc-300 font-mono max-w-xs truncate">{{ p.comentario || 'Sin comentario' }}
+              </td>
+              <td class="px-6 py-4 text-zinc-400 font-mono text-sm">{{ p.completado ? (p.fechaCompletado |
+                date:'shortDate') : '-' }}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <!-- Modal unificado -->
+    <div *ngIf="mostrarModalUnirse" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+      <div
+        class="bg-gradient-to-br from-[#1f002b] via-[#111] to-[#020024] rounded-2xl shadow-2xl p-8 max-w-md w-full border-2 border-pink-400/30">
+        <h2 class="text-2xl font-pixel text-pink-300 mb-4">Unirse al reto</h2>
+        <p class="text-zinc-300 font-mono mb-6">¿Seguro que quieres unirte a este reto? ¡Demuestra tu habilidad!</p>
+        <div class="flex justify-end gap-4">
+          <button (click)="unirseAlRetoSeleccionado()"
+            class="px-5 py-2 rounded-2xl bg-pink-600 text-white font-pixel shadow-xl hover:bg-pink-700 transition-all ring-2 ring-pink-400/40">Unirse</button>
+          <button (click)="cerrarModalUnirse()"
+            class="px-5 py-2 rounded-2xl bg-zinc-800 text-pink-300 font-pixel shadow hover:bg-zinc-700 transition-all ring-2 ring-pink-400/20">Cancelar</button>
+        </div>
+      </div>
+    </div>
+    <!-- Modal detalle reto -->
+    <div *ngIf="retoDetalleSeleccionado" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+      <div
+        class="bg-gradient-to-br from-[#1f002b] via-[#111] to-[#020024] rounded-2xl shadow-2xl p-8 max-w-md w-full border-2 border-pink-400/30">
+        <h2 class="text-2xl font-pixel text-pink-300 mb-4">
+          {{ isReto(retoDetalleSeleccionado) ? retoDetalleSeleccionado.titulo : retoDetalleSeleccionado.tituloReto }}
+        </h2>
+
+        <div class="text-zinc-300 font-mono space-y-2">
+          <p *ngIf="isReto(retoDetalleSeleccionado)">
+            <span class="text-indigo-300">Juego:</span> {{ retoDetalleSeleccionado.juego }}
+          </p>
+          <p *ngIf="isReto(retoDetalleSeleccionado)">
+            {{ retoDetalleSeleccionado.descripcion }}
+          </p>
+          <p *ngIf="isReto(retoDetalleSeleccionado)">
+            Fecha: {{ retoDetalleSeleccionado.fechaInicio | date:'shortDate' }} → {{
+            retoDetalleSeleccionado.fechaExpiracion | date:'shortDate' }}
+          </p>
+          <p *ngIf="!isReto(retoDetalleSeleccionado)">
+            <span class="text-indigo-300">Comentario:</span> {{ retoDetalleSeleccionado.comentario || 'Sin comentario'
+            }}
+          </p>
+          <p *ngIf="!isReto(retoDetalleSeleccionado)">
+            Completado:
+            <span *ngIf="retoDetalleSeleccionado.fechaCompletado">{{ retoDetalleSeleccionado.fechaCompletado |
+              date:'shortDate' }}</span>
+            <span *ngIf="!retoDetalleSeleccionado.fechaCompletado">-</span>
+          </p>
+          <p *ngIf="!isReto(retoDetalleSeleccionado)">
+            Estado:
+            <span *ngIf="retoDetalleSeleccionado.completado" class="text-green-400 font-bold">Completado</span>
+            <span *ngIf="!retoDetalleSeleccionado.completado" class="text-[#a15a27] font-bold">Pendiente</span>
+          </p>
+        </div>
+
+        <div class="mt-6 flex justify-end">
+          <button (click)="cerrarModalDetalle()"
+            class="px-5 py-2 rounded-2xl bg-zinc-800 text-pink-300 font-pixel shadow hover:bg-zinc-700 transition-all ring-2 ring-pink-400/20">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -13,6 +13,7 @@ import { AuthService } from '../../core/services/auth.service';
 export class MenuComponent implements OnInit {
   nombreUsuario: string = '';
   avatar: string = '';
+  rol: string = '';
 
   constructor(
     private router: Router,
@@ -26,6 +27,7 @@ export class MenuComponent implements OnInit {
         next: (usuario) => {
           this.nombreUsuario = usuario.nombreUsuario;
           this.avatar = usuario.avatar || '';
+          this.rol = usuario.rol;
         },
         error: (err) => {
           console.error('Error al obtener perfil:', err);

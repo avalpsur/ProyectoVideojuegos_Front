@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { RawgApiService } from '../../core/services/rawg-api.service';
 import { VotacionService } from '../../core/services/votacion.service';
 import { ActividadService } from '../../core/services/actividad.service';
+import { ReviewService } from '../../core/services/review.service';
+import { Review } from '../../core/models/review.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Votacion } from '../../core/models/votacion.model';
@@ -18,15 +20,16 @@ export class JuegoDetalleComponent implements OnInit {
   id!: number;
   miVoto: number = 0;
   puntuacionMedia: number = 0;
-  reviews: any[] = [];
+  reviews: Review[] = [];
   nuevareview: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private rawgApi: RawgApiService,
     private votacionService: VotacionService,
-    private actividadService: ActividadService
-  ) {}
+    private actividadService: ActividadService,
+    private reviewService: ReviewService
+  ) { }
 
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.paramMap.get('id'));
@@ -37,16 +40,16 @@ export class JuegoDetalleComponent implements OnInit {
     this.rawgApi.obtenerJuegoPorId(this.id).subscribe(juego => {
       this.juego = juego;
     });
-
-    this.votacionService.obtenerMediaJuego(this.id).subscribe(media => {
-      this.puntuacionMedia = media;
-    });
-
+    /*
+        this.votacionService.obtenerMediaJuego(this.id).subscribe(media => {
+          this.puntuacionMedia = media;
+        });
+    */
     this.votacionService.obtenerVotoUsuario(this.id).subscribe(voto => {
       this.miVoto = voto;
     });
 
-    this.votacionService.obtenerReviews(this.id).subscribe(res => {
+    this.reviewService.getReviewsByJuego(this.id).subscribe(res => {
       this.reviews = res;
     });
   }
@@ -66,7 +69,6 @@ export class JuegoDetalleComponent implements OnInit {
       next: () => {
         this.miVoto = p;
         this.cargarDatos();
-
         this.actividadService.registrarActividad(
           'voto',
           voto.juegoApiId,
@@ -78,7 +80,23 @@ export class JuegoDetalleComponent implements OnInit {
   }
 
   enviarReview(): void {
-    this.votacionService.enviarReview(this.id, this.nuevareview).subscribe(() => {
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+
+    const review: Review = {
+      idUsuario: usuario.id,
+      nombreUsuario: usuario.nombreUsuario,
+      idJuego: this.id,
+      nombreJuego: this.juego?.name || 'Juego desconocido',
+      contenido: this.nuevareview
+    };
+
+    this.reviewService.crearReview({
+      idUsuario: usuario.id,
+      idJuego: this.id,
+      nombreUsuario: usuario.nombreUsuario,
+      nombreJuego: this.juego?.name,
+      contenido: this.nuevareview
+    }).subscribe(() => {
       this.nuevareview = '';
       this.cargarDatos();
     });

@@ -20,25 +20,12 @@ export class VotacionService {
     return this.http.post(`${this.apiUrl}/votaciones`, votacion, { headers });
   }
 
-
-
-
-
-
   obtenerMediaJuego(idJuego: number): Observable<number> {
     return this.http.get<number>(`${this.apiUrl}/media/${idJuego}`, { headers: this.headers });
   }
 
   obtenerVotoUsuario(idJuego: number): Observable<number> {
     return this.http.get<number>(`${this.apiUrl}/usuario/voto/${idJuego}`, { headers: this.headers });
-  }
-
-  obtenerReviews(idJuego: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/reviews/${idJuego}`, { headers: this.headers });
-  }
-
-  enviarReview(idJuego: number, texto: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/reviews`, { juegoId: idJuego, texto }, { headers: this.headers });
   }
 
   obtenerVotacionesDeUsuario(usuarioId: number): Observable<Votacion[]> {

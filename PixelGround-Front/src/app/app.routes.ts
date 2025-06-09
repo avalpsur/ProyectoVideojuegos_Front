@@ -8,6 +8,8 @@ import { AmistadComponent } from './pages/amistad/amistad.component';
 import { ChatComponent } from './pages/chat/chat.component';
 import { JuegoDetalleComponent } from './pages/juego-detalle/juego-detalle.component';
 import { PerfilUsuarioComponent } from './pages/perfil-usuario/perfil-usuario.component';
+import { GestionUsuariosComponent } from './pages/gestion-usuarios/gestion-usuarios.component';
+import { RetosComponent } from './pages/retos/retos.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -20,5 +22,7 @@ export const routes: Routes = [
   { path: 'chat', component: ChatComponent },
   { path: 'juego/:id', component: JuegoDetalleComponent },
   { path: 'perfil/:nombreUsuario', component: PerfilUsuarioComponent },
-  { path: 'perfil', component: PerfilUsuarioComponent }, //Accede al perfil del usuario autenticado por defecto
+  { path: 'perfil', component: PerfilUsuarioComponent }, 
+  { path: 'gestion-usuarios', component: GestionUsuariosComponent },
+  { path: 'retos', component: RetosComponent },
 ];

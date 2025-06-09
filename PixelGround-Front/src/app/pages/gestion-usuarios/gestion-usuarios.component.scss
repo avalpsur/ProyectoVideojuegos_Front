@@ -1,0 +1,32 @@
+.bg-gray-50 {
+  background: #f8fafc;
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 25px 0 rgba(0,0,0,0.08), 0 2px 4px 0 rgba(0,0,0,0.04);
+}
+
+/* Bot asistente animado */
+.animate-bounce {
+  animation: bounce 1.2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+/* Modal y tabla */
+select, button {
+  outline: none;
+}
+
+/* Mejorar la tabla en pantallas pequeñas */
+@media (max-width: 600px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+  th, td {
+    padding: 8px 4px;
+  }
+}
