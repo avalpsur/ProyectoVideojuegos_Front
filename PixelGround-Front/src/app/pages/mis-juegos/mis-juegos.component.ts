@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ListaJuegosService, ListaJuego } from '../../core/services/lista-juegos.service';
 import { AuthService } from '../../core/services/auth.service';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-mis-juegos',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './mis-juegos.component.html',
   styleUrls: ['./mis-juegos.component.css']
 })
@@ -17,15 +18,18 @@ export class MisJuegosComponent implements OnInit {
   descripcionLista: string = '';
   usuarioId: number | null = null;
 
-  constructor(private listaService: ListaJuegosService, private authService:AuthService) {}
+  constructor(
+    private listaService: ListaJuegosService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-ngOnInit(): void {
+  ngOnInit(): void {
     const token = localStorage.getItem('token');
     if (!token) return;
 
     this.authService.obtenerPerfil(token).subscribe({
       next: (perfil) => {
-        console.log('Perfil del usuario:', perfil);
         this.usuarioId = perfil.id;
         this.cargarListas();
       },
@@ -36,7 +40,6 @@ ngOnInit(): void {
   cargarListas(): void {
     this.listaService.obtenerListasDeUsuario(this.usuarioId!).subscribe({
       next: (listas) => {
-        console.log('Listas cargadas:', listas);
         this.listas = listas;
       },
       error: (err) => console.error('Error al cargar listas', err),

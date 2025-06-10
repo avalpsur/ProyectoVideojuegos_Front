@@ -53,7 +53,7 @@ export class ExplorarComponent implements OnInit {
         this.usuarioId = usuario.id;
         localStorage.setItem('usuario', JSON.stringify(usuario));
         this.cargarListas();
-        this.buscar(); // Carga inicial con paginación
+        this.buscar();
       },
       error: (err) => console.error('Error al obtener perfil', err),
     });
@@ -144,16 +144,78 @@ export class ExplorarComponent implements OnInit {
     });
   }
 
-  
-verDetalle(id: number): void {
-  this.router.navigate(['/juego', id]);
-}
+  verDetalle(id: number): void {
+    this.router.navigate(['/juego', id]);
+  }
 
-cambiarPagina(delta: number): void {
-  const nuevaPagina = this.paginaActual + delta;
-  if (nuevaPagina < 1) return;
-  this.paginaActual = nuevaPagina;
-  this.buscar();
-}
+  cambiarPagina(delta: number): void {
+    const nuevaPagina = this.paginaActual + delta;
+    if (nuevaPagina < 1) return;
+    this.paginaActual = nuevaPagina;
+    this.buscar();
+  }
+
+  anadirJuegoALista(listaId: number, juegoId: number): void {
+    this.listaService.anadirJuegoALista(listaId, juegoId).subscribe({
+      next: () => {
+        alert('Juego añadido a la lista correctamente');
+        this.selectedJuegoId = null;
+      },
+      error: (err) => {
+        console.error('Error al añadir juego a la lista:', err);
+        alert('Error al añadir juego a la lista');
+      }
+    });
+  }
+
+  eliminarJuegoDeLista(listaId: number, juegoId: number): void {
+    this.listaService.eliminarJuegoDeLista(listaId, juegoId).subscribe({
+      next: () => {
+        alert('Juego eliminado de la lista correctamente');
+        this.selectedJuegoId = null;
+      },
+      error: (err) => {
+        console.error('Error al eliminar juego de la lista:', err);
+        alert('Error al eliminar juego de la lista');
+      }
+    });
+  }
+
+  modalAbierto: boolean = false;
+  modalJuegoId: number | null = null;
+
+  abrirModal(juegoId: number): void {
+    this.modalAbierto = true;
+    this.modalJuegoId = juegoId;
+  }
+
+  cerrarModal(): void {
+    this.modalAbierto = false;
+    this.modalJuegoId = null;
+  }
+
+  crearYAnadirLista(juegoId: number, nombreLista: string): void {
+    if (!nombreLista.trim()) {
+      alert('El nombre de la lista no puede estar vacío');
+      return;
+    }
+    if (!this.usuarioId) {
+      alert('Usuario no identificado');
+      return;
+    }
+    this.listaService.crearLista({
+      usuarioId: this.usuarioId,
+      nombre: nombreLista
+    }).subscribe({
+      next: (nuevaLista: ListaJuego) => {
+        this.listas.push(nuevaLista);
+        this.anadirJuegoALista(nuevaLista.id, juegoId);
+      },
+      error: (err) => {
+        console.error('Error al crear la lista:', err);
+        alert('Error al crear la lista');
+      }
+    });
+  }
 
 }

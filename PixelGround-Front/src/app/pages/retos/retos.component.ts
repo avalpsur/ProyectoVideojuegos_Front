@@ -65,12 +65,10 @@ export class RetosComponent implements OnInit {
     this.cargarRetos();
   }
 
-  // Devuelve true si la pestaña seleccionada es 'mis'
   isTabMis(): boolean {
     return this.tabSeleccionada === 'mis';
   }
 
-  // Getter para retos filtrados (solo para 'todos' y 'activos')
   get retosFiltrados(): Reto[] {
     let lista = this.tabSeleccionada === 'activos' ? this.retosActivos : this.retosTodos;
     if (this.busqueda.trim()) {
@@ -82,7 +80,6 @@ export class RetosComponent implements OnInit {
     return lista;
   }
 
-  // Getter para mis retos (ParticipanteReto[])
   get misRetos(): ParticipanteReto[] {
     if (this.tabSeleccionada === 'mis') {
       if (this.busqueda.trim()) {
@@ -95,7 +92,6 @@ export class RetosComponent implements OnInit {
     return [];
   }
 
-  // Método para el template
   esRetoActivo(reto: Reto): boolean {
     const hoy = new Date();
     const inicio = new Date(reto.fechaInicio);
@@ -107,7 +103,7 @@ export class RetosComponent implements OnInit {
     const participacion: ParticipanteReto = {
       usuarioId: this.usuarioId,
       nombreUsuario: '',
-      retoId: reto.id!,           // 👈 el fix aquí
+      retoId: reto.id!, 
       tituloReto: reto.titulo,
       comentario: '',
       imagenPruebaUrl: null,

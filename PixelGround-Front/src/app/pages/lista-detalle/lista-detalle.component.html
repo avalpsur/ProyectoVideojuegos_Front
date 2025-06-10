@@ -1,0 +1,35 @@
+<div class="min-h-screen pt-24 px-2 sm:px-6 bg-gradient-to-br from-gray-950 via-zinc-900 to-indigo-950 text-white font-pixelground">
+  <div class="max-w-3xl mx-auto mb-10">
+    <button routerLink="/mis-juegos" class="mb-6 text-pink-400 hover:underline font-mono text-sm">← Volver a mis listas</button>
+    <div *ngIf="loading" class="text-center text-zinc-400">Cargando...</div>
+    <div *ngIf="error" class="text-center text-red-400">{{ error }}</div>
+    <ng-container *ngIf="!loading && lista">
+      <!-- Portada -->
+      <div class="w-full aspect-[3/1] rounded-2xl overflow-hidden shadow-xl mb-6 bg-cover bg-center border border-pink-400/30"
+           [ngStyle]="{ 'background-image': lista.juegos && lista.juegos.length > 0 ? 'url(' + lista.juegos[0].imagenUrl + ')' : 'url(/assets/default-list-cover.png)' }">
+        <div class="w-full h-full bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+      </div>
+      <!-- Info principal -->
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+        <div>
+          <h1 class="text-3xl md:text-4xl font-bold text-pink-400 drop-shadow-neon mb-2">{{ lista.nombre }}</h1>
+          <p class="text-zinc-300 font-mono text-base mb-1">{{ lista.descripcion || 'Sin descripción' }}</p>
+          <div class="text-sm text-zinc-400">Creada por: <span class="text-pink-300 font-bold">{{ usuario?.nombreUsuario || 'Desconocido' }}</span></div>
+        </div>
+      </div>
+      <!-- Juegos de la lista -->
+      <div>
+        <h2 class="text-xl font-semibold text-pink-300 mb-4 font-pixel">Juegos en la lista</h2>
+        <div *ngIf="!lista.juegos || lista.juegos.length === 0" class="text-zinc-400 italic">Esta lista está vacía.</div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+          <div *ngFor="let juego of lista.juegos" class="bg-zinc-800/80 rounded-xl shadow-lg border border-zinc-700 p-3 flex flex-col items-center hover:bg-pink-900/20 transition cursor-pointer">
+            <img [src]="juego.imagenUrl || '/assets/default-list-cover.png'" alt="{{ juego.nombre }}" class="w-full aspect-[3/4] object-cover rounded-lg mb-2 border border-pink-400/20">
+            <div class="text-center">
+              <div class="text-pink-200 font-bold text-lg line-clamp-1">{{ juego.nombre }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

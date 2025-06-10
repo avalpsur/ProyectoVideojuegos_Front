@@ -43,10 +43,16 @@ export class ListaJuegosService {
     );
   }
 
-  añadirJuegoALista(listaId: number, juego: Juego): Observable<void> {
+  anadirJuegoALista(listaId: number, apiId: number): Observable<void> {
     return this.http.post<void>(
       `${this.baseUrl}/${listaId}/juegos`,
-      juego,
+      { apiId },
+      { headers: this.getAuthHeaders() }
+    );
+  }
+  eliminarJuegoDeLista(listaId: number, apiId: number): Observable<void> {
+    return this.http.delete<void>(
+      `${this.baseUrl}/${listaId}/juegos/${apiId}`,
       { headers: this.getAuthHeaders() }
     );
   }

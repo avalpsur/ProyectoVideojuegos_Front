@@ -1,0 +1,22 @@
+/* Inspirado en mis-juegos, pero con detalles para la vista tipo Spotify */
+.portada-lista {
+  box-shadow: 0 0 0 2px var(--color-rosa-principal), 0 0 24px 0 var(--color-rosa-principal) inset;
+  border-color: var(--color-rosa-principal) !important;
+  image-rendering: pixelated;
+}
+
+.grid-juegos-lista {
+  gap: 1.5rem;
+}
+
+.bg-cover {
+  image-rendering: pixelated;
+}
+
+.font-pixel {
+  font-family: 'Press Start 2P', 'VT323', 'Share Tech Mono', 'Montserrat', 'sans-serif';
+}
+
+.drop-shadow-neon {
+  text-shadow: 0 0 6px var(--color-rosa-principal), 0 0 2px #fff2, 0 0 1px #fff2;
+}

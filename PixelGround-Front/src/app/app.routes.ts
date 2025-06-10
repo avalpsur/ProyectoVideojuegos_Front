@@ -10,6 +10,7 @@ import { JuegoDetalleComponent } from './pages/juego-detalle/juego-detalle.compo
 import { PerfilUsuarioComponent } from './pages/perfil-usuario/perfil-usuario.component';
 import { GestionUsuariosComponent } from './pages/gestion-usuarios/gestion-usuarios.component';
 import { RetosComponent } from './pages/retos/retos.component';
+import { ListaDetalleComponent } from './pages/lista-detalle/lista-detalle.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -25,4 +26,5 @@ export const routes: Routes = [
   { path: 'perfil', component: PerfilUsuarioComponent }, 
   { path: 'gestion-usuarios', component: GestionUsuariosComponent },
   { path: 'retos', component: RetosComponent },
+  { path: 'lista/:id', component: ListaDetalleComponent },
 ];

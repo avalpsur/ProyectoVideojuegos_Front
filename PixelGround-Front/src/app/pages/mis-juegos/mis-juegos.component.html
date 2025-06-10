@@ -36,10 +36,11 @@
   <!-- GRID DE LISTAS -->
   <div class="max-w-6xl mx-auto grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
     <div *ngFor="let lista of listas; trackBy: trackById"
-         class="group relative bg-gradient-to-br from-zinc-800/90 via-indigo-900/80 to-pink-900/80 rounded-2xl overflow-hidden shadow-xl border border-zinc-700 border-neon transition-transform hover:scale-[1.04] hover:shadow-pink-500/30 cursor-pointer">
+         class="group relative bg-gradient-to-br from-zinc-800/90 via-indigo-900/80 to-pink-900/80 rounded-2xl overflow-hidden shadow-xl border border-zinc-700 border-neon transition-transform hover:scale-[1.04] hover:shadow-pink-500/30 cursor-pointer"
+         [routerLink]="['/lista', lista.id]">
       <!-- Fondo simulado o imagen personalizada -->
       <div class="aspect-[3/4] bg-cover bg-center relative flex flex-col justify-end"
-           [ngStyle]="{ 'background-image': 'url(/assets/default-list-cover.png)' }">
+           [ngStyle]="{ 'background-image': lista.juegos && lista.juegos.length > 0 ? 'url(' + lista.juegos[0].imagenUrl + ')' : 'url(/assets/default-list-cover.png)' }">
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
         <div class="relative z-10 flex flex-col justify-end p-4 h-full">
           <div class="flex items-center gap-2 mb-2">
@@ -50,7 +51,7 @@
         </div>
       </div>
       <!-- Botón eliminar -->
-      <button (click)="eliminarLista(lista.id)"
+      <button (click)="eliminarLista(lista.id); $event.stopPropagation()"
               class="absolute top-3 right-3 bg-pink-600/90 text-white rounded-full w-10 h-10 flex items-center justify-center border-2 border-pink-300 shadow-lg hover:bg-red-600 hover:border-red-400 hover:scale-110 hover:rotate-12 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-pink-400/60 group-hover:scale-110 group-hover:rotate-6 cursor-pointer">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>

@@ -72,16 +72,9 @@
       >
         <a [routerLink]="['/perfil']" class="block px-4 py-3 text-sky-100 font-medium hover:bg-sky-700/80 hover:text-white transition cursor-pointer" role="menuitem">Ver perfil</a>
         <a routerLink="/amistad" class="block px-4 py-3 text-sky-100 font-medium hover:bg-pink-600/80 hover:text-white transition cursor-pointer flex items-center gap-2" role="menuitem">
-          <svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M18 8a6 6 0 11-12 0 6 6 0 0112 0z" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7m-4-4h8" />
-          </svg>
-          Solicitudes de amistad
+          Amigos
         </a>
         <a *ngIf="rol === 'ADMIN'" routerLink="/gestion-usuarios" class="block px-4 py-3 text-indigo-700 font-medium hover:bg-indigo-200/80 hover:text-indigo-900 transition cursor-pointer flex items-center gap-2 border-t border-indigo-200" role="menuitem">
-          <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-          </svg>
           Gestionar Usuarios
         </a>
         <a (click)="cerrarSesion()" class="block px-4 py-3 text-sky-100 font-medium hover:bg-pink-600/80 hover:text-white transition cursor-pointer" role="menuitem">Cerrar sesión</a>
