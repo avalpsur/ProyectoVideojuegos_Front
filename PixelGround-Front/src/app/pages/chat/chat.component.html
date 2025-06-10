@@ -1,111 +1,105 @@
 <div class="flex flex-col min-h-screen bg-gradient-to-br from-[#18122b] via-[#232946] to-[#3e206d] text-white font-pixelground">
   <!-- Contenedor principal -->
-  <div class="flex flex-1 overflow-hidden shadow-2xl bg-[#18122b]/80 h-[80vh] rounded-3xl max-w-6xl mx-auto mt-16 border-4 border-[#7f5af0]/30">
-    <!-- Sidebar de amigos -->
-    <aside class="hidden md:flex flex-col w-1/3 max-w-xs bg-gradient-to-b from-[#232946]/90 to-[#3e206d]/80 p-0 border-r-2 border-[#7f5af0]/20">
+  <div class="flex flex-1 overflow-hidden max-w-6xl mx-auto w-full rounded-3xl shadow-2xl border-4 border-[#7f5af0]/30 mt-8 md:mt-16 bg-[#18122b]/90 backdrop-blur-lg">
+    <!-- Sidebar de amigos (desktop) -->
+    <aside class="hidden md:flex flex-col w-1/3 max-w-xs bg-gradient-to-b from-[#232946]/90 to-[#3e206d]/80 border-r-2 border-[#7f5af0]/20 p-0 relative">
       <div class="px-6 py-4 border-b border-[#7f5af0]/20">
         <h2 class="text-lg font-bold text-[#7f5af0] flex items-center gap-2">
-          <svg class="w-6 h-6 text-[#7f5af0]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="3"/><rect x="7" y="3" width="10" height="4" rx="2"/></svg>
+          <svg class="w-6 h-6 text-[#7f5af0]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h0a4 4 0 014 4v2"/></svg>
           Amigos
         </h2>
       </div>
-      <ul class="flex-1 overflow-y-auto space-y-2 px-4 py-2">
+      <ul class="flex-1 overflow-y-auto px-2 py-4 space-y-2 custom-scrollbar">
         <li *ngFor="let amigo of amigos" (click)="seleccionarAmigo(amigo)"
-          [ngClass]="{ 'bg-[#7f5af0]/80 text-white ring-2 ring-[#7f5af0]': amigoSeleccionado?.id === amigo.id }"
-          class="flex items-center gap-3 cursor-pointer rounded-xl p-3 hover:bg-[#7f5af0]/40 transition group shadow-md relative">
-          <div class="w-10 h-10 rounded-full bg-[#232946] flex items-center justify-center text-xl font-bold text-[#7f5af0] border-2 border-[#7f5af0]/30 shadow group-hover:scale-105 transition">
-            <ng-container *ngIf="amigo.avatar; else iniciales">
+          class="flex flex-col items-center gap-1 cursor-pointer rounded-xl p-2 hover:bg-[#7f5af0]/40 transition group shadow-md min-w-[64px] relative border border-transparent group-hover:border-[#7f5af0]/40"
+          [ngClass]="{ 'bg-[#7f5af0]/80 text-white ring-2 ring-[#7f5af0]': amigoSeleccionado?.id === amigo.id }">
+          <div class="w-12 h-12 rounded-full bg-[#232946] flex items-center justify-center text-xl font-bold text-[#7f5af0] border-2 border-[#7f5af0]/30 shadow group-hover:scale-105 transition overflow-hidden">
+            <ng-container *ngIf="amigo.avatar; else iniciales2">
               <img [src]="amigo.avatar" alt="avatar" class="w-full h-full object-cover rounded-full" />
             </ng-container>
-            <ng-template #iniciales>{{ amigo.nombreUsuario ? amigo.nombreUsuario[0] : '?' }}</ng-template>
+            <ng-template #iniciales2>{{ amigo.nombreUsuario ? amigo.nombreUsuario[0] : '?' }}</ng-template>
           </div>
-          <div class="flex-1 min-w-0">
-            <div class="font-semibold truncate">{{ amigo.nombreUsuario }}</div>
-            <div class="flex items-center gap-1 text-xs">
-              <span class="inline-block w-2 h-2 rounded-full"
-                [ngClass]="amigo.online ? 'bg-green-400' : 'bg-gray-500'">
-              </span>
-              <span [ngClass]="amigo.online ? 'text-green-400' : 'text-gray-400'">
-                {{ amigo.online ? 'En línea' : 'Desconectado' }}
-              </span>
-            </div>
-          </div>
-          <span *ngIf="amigo.tieneMensajesNuevos" class="absolute top-2 right-2 bg-pink-500 text-white text-xs rounded-full px-2 py-0.5 font-bold animate-bounce">Nuevo</span>
+          <div class="text-xs font-semibold truncate max-w-[60px]">{{ amigo.nombreUsuario }}</div>
+          <span *ngIf="amigo.tieneMensajesNuevos" class="absolute top-2 right-2 bg-pink-500 text-white text-xs rounded-full px-2 py-0.5 font-bold animate-bounce shadow">Nuevo</span>
         </li>
       </ul>
     </aside>
+
     <!-- Sidebar móvil -->
     <aside class="md:hidden w-full bg-[#232946]/95 p-2 flex gap-2 overflow-x-auto border-b-2 border-[#7f5af0]/20">
       <div *ngFor="let amigo of amigos" (click)="seleccionarAmigo(amigo)"
         [ngClass]="{ 'bg-[#7f5af0]/80 text-white ring-2 ring-[#7f5af0]': amigoSeleccionado?.id === amigo.id }"
-        class="flex flex-col items-center gap-1 cursor-pointer rounded-xl p-2 hover:bg-[#7f5af0]/40 transition group shadow-md min-w-[64px] relative">
-        <div class="w-10 h-10 rounded-full bg-[#232946] flex items-center justify-center text-xl font-bold text-[#7f5af0] border-2 border-[#7f5af0]/30 shadow group-hover:scale-105 transition">
-          <ng-container *ngIf="amigo.avatar; else iniciales2">
+        class="flex flex-col items-center gap-1 cursor-pointer rounded-xl p-2 hover:bg-[#7f5af0]/40 transition group shadow-md min-w-[64px] relative border border-transparent group-hover:border-[#7f5af0]/40">
+        <div class="w-10 h-10 rounded-full bg-[#232946] flex items-center justify-center text-xl font-bold text-[#7f5af0] border-2 border-[#7f5af0]/30 shadow group-hover:scale-105 transition overflow-hidden">
+          <ng-container *ngIf="amigo.avatar; else iniciales">
             <img [src]="amigo.avatar" alt="avatar" class="w-full h-full object-cover rounded-full" />
           </ng-container>
-          <ng-template #iniciales2>{{ amigo.nombreUsuario ? amigo.nombreUsuario[0] : '?' }}</ng-template>
+          <ng-template #iniciales>{{ amigo.nombreUsuario ? amigo.nombreUsuario[0] : '?' }}</ng-template>
         </div>
         <div class="text-xs font-semibold truncate max-w-[60px]">{{ amigo.nombreUsuario }}</div>
-        <span *ngIf="amigo.tieneMensajesNuevos" class="absolute top-1 right-1 bg-pink-500 text-white text-xs rounded-full px-1.5 py-0.5 font-bold animate-bounce">•</span>
+        <span *ngIf="amigo.tieneMensajesNuevos" class="absolute top-2 right-2 bg-pink-500 text-white text-xs rounded-full px-1.5 py-0.5 font-bold animate-bounce shadow">Nuevo</span>
       </div>
     </aside>
-    <!-- Zona de chat -->
-    <section class="flex flex-col flex-1 p-0 md:p-4">
-      <div *ngIf="amigoSeleccionado" class="flex items-center gap-3 px-4 py-3 border-b border-[#7f5af0]/20 bg-[#232946]/80">
-        <div class="w-10 h-10 rounded-full bg-[#232946] flex items-center justify-center text-xl font-bold text-[#7f5af0] border-2 border-[#7f5af0]/30 shadow">
-          <ng-container *ngIf="amigoSeleccionado.avatar; else iniciales3">
-            <img [src]="amigoSeleccionado.avatar" alt="avatar" class="w-full h-full object-cover rounded-full" />
-          </ng-container>
-          <ng-template #iniciales3>{{ amigoSeleccionado.nombreUsuario ? amigoSeleccionado.nombreUsuario[0] : '?' }}</ng-template>
-        </div>
-        <div class="flex-1 min-w-0">
-          <div class="font-bold text-lg text-[#7f5af0] truncate">{{ amigoSeleccionado.nombreUsuario }}</div>
-          <div class="flex items-center gap-1 text-xs">
-            <span class="inline-block w-2 h-2 rounded-full"
-              [ngClass]="amigoSeleccionado.online ? 'bg-green-400' : 'bg-gray-500'">
-            </span>
-            <span [ngClass]="amigoSeleccionado.online ? 'text-green-400' : 'text-gray-400'">
-              {{ amigoSeleccionado.online ? 'En línea' : 'Desconectado' }}
-            </span>
-          </div>
-        </div>
+
+    <!-- Chat principal -->
+    <section class="flex-1 flex flex-col bg-gradient-to-br from-[#232946]/90 via-[#18122b]/90 to-[#7f5af0]/30 relative">
+      <!-- Si no hay amigo seleccionado -->
+      <div *ngIf="!amigoSeleccionado" class="flex flex-1 flex-col items-center justify-center h-full p-8 select-none">
+        <svg class="w-24 h-24 text-[#7f5af0] mb-6 drop-shadow-lg animate-pulse" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="3"/><rect x="7" y="3" width="10" height="4" rx="2"/><circle cx="8.5" cy="13.5" r="1.5"/><circle cx="15.5" cy="13.5" r="1.5"/></svg>
+        <h2 class="text-2xl md:text-3xl font-pixelground text-[#7f5af0] mb-2">¡Bienvenido a PixelGround Chat!</h2>
+        <p class="text-base md:text-lg text-white/80 font-mono text-center max-w-md">Selecciona un amigo para comenzar a chatear.<br>¡Tus conversaciones aparecerán aquí!</p>
       </div>
-      <!-- Mensajes -->
-      <div #chatMensajes class="flex-1 overflow-y-auto space-y-3 px-2 py-4 bg-gradient-to-b from-[#232946]/60 to-[#18122b]/80 scroll-smooth">
-        <div *ngFor="let m of mensajes; let i = index" class="flex items-end group"
-          [ngClass]="m.remitenteId === usuarioActual.id ? 'justify-end' : 'justify-start'">
-          <div class="flex flex-col items-end max-w-[75%]"
-            *ngIf="m.remitenteId === usuarioActual.id">
-            <div class="flex items-center gap-2 mb-1">
-              <span class="text-xs text-gray-400">Tú</span>
-              <span class="text-xs text-gray-500">{{ m.hora ? m.hora : '' }}</span>
-            </div>
-            <div class="bg-[#7f5af0] text-white px-4 py-2 rounded-2xl rounded-br-sm shadow-lg font-mono text-base break-words whitespace-pre-wrap animate-fade-in-up">
-              {{ m.contenido }}
-            </div>
+
+      <!-- Chat activo -->
+      <div *ngIf="amigoSeleccionado" class="flex flex-col h-full">
+        <!-- Cabecera del chat -->
+        <div class="flex items-center gap-4 px-6 py-4 border-b border-[#7f5af0]/20 bg-[#232946]/80 shadow-md">
+          <div class="w-12 h-12 rounded-full bg-[#232946] flex items-center justify-center text-xl font-bold text-[#7f5af0] border-2 border-[#7f5af0]/30 shadow overflow-hidden">
+            <ng-container *ngIf="amigoSeleccionado.avatar; else iniciales3">
+              <img [src]="amigoSeleccionado.avatar" alt="avatar" class="w-full h-full object-cover rounded-full" />
+            </ng-container>
+            <ng-template #iniciales3>{{ amigoSeleccionado.nombreUsuario ? amigoSeleccionado.nombreUsuario[0] : '?' }}</ng-template>
           </div>
-          <div class="flex flex-col items-start max-w-[75%]"
-            *ngIf="m.remitenteId !== usuarioActual.id">
-            <div class="flex items-center gap-2 mb-1">
-              <span class="text-xs text-[#7f5af0] font-bold">{{ amigoSeleccionado.nombreUsuario }}</span>
-              <span class="text-xs text-gray-500">{{ m.hora ? m.hora : '' }}</span>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-lg text-[#7f5af0] truncate">{{ amigoSeleccionado.nombreUsuario }}</div>
+          </div>
+        </div>
+
+        <!-- Mensajes -->
+        <div #chatMensajes class="flex-1 chat-mensajes-scroll overflow-y-auto space-y-3 px-2 py-4 md:px-8 md:py-6 bg-gradient-to-b from-[#232946]/60 to-[#18122b]/80 scroll-smooth custom-scrollbar">
+          <div *ngFor="let m of mensajes; let i = index" class="flex items-end group"
+            [ngClass]="m.remitenteId === usuarioActual.id ? 'justify-end' : 'justify-start'">
+            <div class="flex flex-col items-end max-w-[75%]" *ngIf="m.remitenteId === usuarioActual.id">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs text-gray-400 flex items-center gap-1"><svg class='w-4 h-4 text-[#7f5af0]' fill='currentColor' viewBox='0 0 20 20'><path d='M10 2a8 8 0 100 16 8 8 0 000-16zm0 14.5A6.5 6.5 0 1110 3.5a6.5 6.5 0 010 13z'/></svg> Tú</span>
+                <span class="text-xs text-gray-500">{{ m.hora ? m.hora : '' }}</span>
+              </div>
+              <div class="bg-[#7f5af0] text-white px-4 py-2 rounded-2xl rounded-br-sm shadow-lg font-mono text-base break-words whitespace-pre-wrap animate-fade-in-up border border-[#7f5af0]/30">
+                {{ m.contenido }}
+              </div>
             </div>
-            <div class="bg-[#232946] text-white px-4 py-2 rounded-2xl rounded-bl-sm shadow-lg font-mono text-base break-words whitespace-pre-wrap animate-fade-in-up">
-              {{ m.contenido }}
+            <div class="flex flex-col items-start max-w-[75%]" *ngIf="m.remitenteId !== usuarioActual.id">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs text-[#7f5af0] font-bold flex items-center gap-1"><svg class='w-4 h-4 text-[#232946]' fill='currentColor' viewBox='0 0 20 20'><path d='M10 2a8 8 0 100 16 8 8 0 000-16zm0 14.5A6.5 6.5 0 1110 3.5a6.5 6.5 0 010 13z'/></svg> {{ amigoSeleccionado.nombreUsuario }}</span>
+                <span class="text-xs text-gray-500">{{ m.hora ? m.hora : '' }}</span>
+              </div>
+              <div class="bg-[#232946] text-white px-4 py-2 rounded-2xl rounded-bl-sm shadow-lg font-mono text-base break-words whitespace-pre-wrap animate-fade-in-up border border-[#7f5af0]/20">
+                {{ m.contenido }}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <!-- Input para escribir -->
-      <div *ngIf="amigoSeleccionado" class="flex gap-2 items-center px-4 py-3 border-t border-[#7f5af0]/20 bg-[#232946]/80">
-        <textarea [(ngModel)]="mensaje" (keydown.enter)="enviarMensaje()" (keydown.shift.enter)="$event.stopPropagation()" rows="1"
-          placeholder="Escribe un mensaje..."
-          class="flex-1 px-4 py-2 rounded-2xl bg-[#18122b]/90 text-white focus:outline-none focus:ring-2 focus:ring-[#7f5af0] border-2 border-[#7f5af0]/20 shadow-inner resize-none font-mono transition-all min-h-[44px] max-h-[120px]">
-        </textarea>
-        <button (click)="enviarMensaje()"
-          class="w-12 h-12 flex items-center justify-center bg-[#7f5af0] hover:bg-[#5f3dc4] text-white rounded-full shadow-lg border-2 border-[#7f5af0]/30 hover:shadow-[#7f5af0]/30 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#7f5af0]">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-        </button>
+
+        <!-- Input para escribir -->
+        <div *ngIf="amigoSeleccionado" class="flex gap-2 items-center px-4 py-3 border-t border-[#7f5af0]/20 bg-[#232946]/80">
+          <input [(ngModel)]="mensaje" (keydown.enter)="enviarMensaje()" placeholder="Escribe un mensaje..."
+            class="flex-1 bg-[#18122b]/80 text-white px-4 py-3 rounded-2xl border-2 border-[#7f5af0]/30 focus:border-[#7f5af0] font-mono shadow-inner transition-all placeholder:text-[#7f5af0]/60 placeholder:font-pixelground outline-none text-base" />
+          <button (click)="enviarMensaje()"
+            class="bg-[#7f5af0] hover:bg-pink-500 text-white px-6 py-3 rounded-2xl font-pixelground text-lg shadow-lg transition-all focus:ring-2 focus:ring-[#7f5af0] focus:outline-none tracking-wider cursor-pointer">
+            <svg class="w-6 h-6 inline-block mr-1 -mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
+            Enviar
+          </button>
+        </div>
       </div>
     </section>
   </div>

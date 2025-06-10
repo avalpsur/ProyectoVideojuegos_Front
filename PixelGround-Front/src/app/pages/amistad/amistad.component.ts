@@ -4,16 +4,17 @@ import { FormsModule } from '@angular/forms';
 import { AmistadService } from '../../core/services/amistad.service';
 import { UsuarioService, Usuario } from '../../core/services/usuario.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router, RouterModule } from '@angular/router';
 
 export interface UsuarioBusqueda extends Usuario {
-  avatar?: string; 
-  solicitudEnviada?: boolean; 
+  avatar?: string;
+  solicitudEnviada?: boolean;
 }
 
 @Component({
   selector: 'app-amistad',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './amistad.component.html'
 })
 export class AmistadComponent implements OnInit {
@@ -28,8 +29,9 @@ export class AmistadComponent implements OnInit {
   constructor(
     private amistadService: AmistadService,
     private usuarioService: UsuarioService,
-    private http: HttpClient
-  ) {}
+    private http: HttpClient, 
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
@@ -37,73 +39,70 @@ export class AmistadComponent implements OnInit {
     this.cargarAmigos();
   }
 
-buscarUsuarios(): void {
-  const nombre = this.usuarioBuscado.trim();
-  if (!nombre) {
-    this.resultadosBusqueda = [];
-    return;
+  buscarUsuarios(): void {
+    const nombre = this.usuarioBuscado.trim();
+    if (!nombre) {
+      this.resultadosBusqueda = [];
+      return;
+    }
+
+    this.buscando = true;
+
+    this.usuarioService.buscarUsuariosPorNombreParcial(nombre).subscribe(
+      usuarios => {
+        this.resultadosBusqueda = usuarios
+          .filter(u => u.id !== this.usuario.id && !this.amigos.some(a => a.id === u.id))
+          .map(u => ({ ...u }));
+        this.buscando = false;
+      },
+      () => (this.buscando = false)
+    );
   }
 
-  this.buscando = true;
 
-  this.usuarioService.buscarUsuariosPorNombreParcial(nombre).subscribe(
-    usuarios => {
-      this.resultadosBusqueda = usuarios
-        .filter(u => u.id !== this.usuario.id && !this.amigos.some(a => a.id === u.id))
-        .map(u => ({ ...u }));
-      this.buscando = false;
-    },
-    () => (this.buscando = false)
-  );
-}
-
-
-  enviarSolicitud(receptorId: number): void {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    this.http.post('http://localhost:8080/api/amistades/solicitar', { receptor: receptorId }, { headers })
-      .subscribe(() => {
-        this.modal = { visible: true, mensaje: '¡Solicitud enviada con éxito!' };
-        this.resultadosBusqueda = this.resultadosBusqueda.map(u => u.id === receptorId ? { ...u, solicitudEnviada: true } : u);
-        this.cargarSolicitudes();
-      });
-  }
-
-  aceptarSolicitud(solicitanteId: number): void {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    this.http.post('http://localhost:8080/api/amistades/aceptar', { solicitanteId }, { headers })
-      .subscribe(() => {
-        this.cargarSolicitudes();
-        this.cargarAmigos();
-      });
-  }
-
-  rechazarSolicitud(solicitanteId: number): void {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    this.http.post('http://localhost:8080/api/amistades/rechazar', { solicitanteId }, { headers })
-      .subscribe(() => {
-        this.cargarSolicitudes();
-      });
-  }
 
   cargarSolicitudes(): void {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    this.http.get<any[]>('http://localhost:8080/api/amistades/pendientes', { headers })
-      .subscribe(data => {
-        this.solicitudesPendientes = data;
-      });
+    this.amistadService.obtenerSolicitudes().subscribe({
+      next: res => this.solicitudesPendientes = res,
+      error: err => console.error('Error al cargar solicitudes:', err)
+    });
   }
 
   cargarAmigos(): void {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    this.http.get<any[]>('http://localhost:8080/api/amistades', { headers })
-      .subscribe(data => {
-        this.amigos = data;
-      });
+    this.amistadService.obtenerAmigos().subscribe({
+      next: res => this.amigos = res,
+      error: err => console.error('Error al cargar amigos:', err)
+    });
+  }
+
+  enviarSolicitud(receptorId: number): void {
+    this.amistadService.enviarSolicitud(receptorId).subscribe({
+      next: () => {
+        this.modal = { visible: true, mensaje: '¡Solicitud enviada con éxito!' };
+        this.resultadosBusqueda = this.resultadosBusqueda.map(u =>
+          u.id === receptorId ? { ...u, solicitudEnviada: true } : u
+        );
+        this.cargarSolicitudes();
+      },
+      error: err => console.error('Error al enviar solicitud:', err)
+    });
+  }
+
+  aceptarSolicitud(solicitanteId: number): void {
+    this.amistadService.aceptarSolicitud(solicitanteId).subscribe({
+      next: () => {
+        this.cargarSolicitudes();
+        this.cargarAmigos();
+      },
+      error: err => console.error('Error al aceptar solicitud:', err)
+    });
+  }
+
+  rechazarSolicitud(solicitanteId: number): void {
+    this.amistadService.rechazarSolicitud(solicitanteId).subscribe({
+      next: () => this.cargarSolicitudes(),
+      error: err => console.error('Error al rechazar solicitud:', err)
+    });
   }
 
   cerrarModal(): void {

@@ -7,14 +7,14 @@ export interface Usuario {
   nombreUsuario: string;
   email: string;
   rol: string;
-  avatar?: string; 
+  avatar?: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
   private apiUrl = 'http://localhost:8080/api/usuarios';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getUsuarioByEmail(email: string): Observable<Usuario> {
     const token = localStorage.getItem('token');
@@ -34,7 +34,7 @@ export class UsuarioService {
     const token = localStorage.getItem('token');
     const headers = { Authorization: `Bearer ${token}` };
 
-    return this.http.get<Usuario[]>(`${this.apiUrl}/buscar?nombre=${encodeURIComponent(nombre)}`, { headers });
+    return this.http.get<Usuario[]>(`${this.apiUrl}/buscar/${encodeURIComponent(nombre)}`, { headers });
   }
 
   getAllUsuarios(): Observable<Usuario[]> {

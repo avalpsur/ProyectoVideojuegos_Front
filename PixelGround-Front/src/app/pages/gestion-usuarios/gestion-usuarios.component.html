@@ -23,16 +23,16 @@
             </span>
           </td>
           <td class="py-2 px-3 flex gap-2">
-            <button (click)="abrirModal(usuario)" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded shadow text-xs">Editar Rol</button>
-            <button (click)="confirmarEliminar(usuario)" class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded shadow text-xs">Eliminar</button>
+            <button (click)="abrirModal(usuario)" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded shadow text-xs cursor-pointer">Editar Rol</button>
+            <button (click)="confirmarEliminar(usuario)" class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded shadow text-xs cursor-pointer">Eliminar</button>
           </td>
         </tr>
       </tbody>
     </table>
     <div class="flex justify-between items-center mt-6">
-      <button (click)="cambiarPagina(-1)" [disabled]="paginaActual === 1" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50">Anterior</button>
+      <button (click)="cambiarPagina(-1)" [disabled]="paginaActual === 1" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 cursor-pointer">Anterior</button>
       <span class="text-gray-700">Página {{ paginaActual }} de {{ totalPaginas }}</span>
-      <button (click)="cambiarPagina(1)" [disabled]="paginaActual === totalPaginas" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50">Siguiente</button>
+      <button (click)="cambiarPagina(1)" [disabled]="paginaActual === totalPaginas" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 cursor-pointer">Siguiente</button>
     </div>
   </div>
 
@@ -40,13 +40,13 @@
   <div *ngIf="mostrarModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-sm border border-gray-200">
       <h3 class="text-lg font-bold mb-4">Editar Rol de {{ usuarioEditando?.nombreUsuario }}</h3>
-      <select [(ngModel)]="nuevoRol" class="w-full p-2 border rounded mb-4">
+      <select [(ngModel)]="nuevoRol" class="w-full p-2 border rounded mb-4 cursor-pointer">
         <option value="JUGADOR">JUGADOR</option>
         <option value="ADMIN">ADMIN</option>
       </select>
       <div class="flex justify-end gap-2">
-        <button (click)="cerrarModal()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancelar</button>
-        <button (click)="guardarRol()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Guardar</button>
+        <button (click)="cerrarModal()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer">Cancelar</button>
+        <button (click)="guardarRol()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 cursor-pointer">Guardar</button>
       </div>
     </div>
   </div>
@@ -56,8 +56,8 @@
     <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-sm border border-gray-200">
       <h3 class="text-lg font-bold mb-4 text-red-600">¿Eliminar usuario {{ usuarioAEliminar?.nombreUsuario }}?</h3>
       <div class="flex justify-end gap-2">
-        <button (click)="cancelarEliminar()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancelar</button>
-        <button (click)="eliminarUsuario()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Eliminar</button>
+        <button (click)="cancelarEliminar()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer">Cancelar</button>
+        <button (click)="eliminarUsuario()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 cursor-pointer">Eliminar</button>
       </div>
     </div>
   </div>

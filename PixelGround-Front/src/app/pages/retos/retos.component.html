@@ -11,17 +11,17 @@
       <div class="flex gap-2 flex-wrap justify-center md:justify-start py-4 px-4">
         <button (click)="cambiarTab('todos')"
           [ngClass]="{'bg-pink-600 text-white ring-2 ring-pink-400': tabSeleccionada === 'todos', 'bg-zinc-900/80 text-pink-300': tabSeleccionada !== 'todos'}"
-          class="px-5 py-2 rounded-2xl font-pixel text-lg shadow-xl border-b-4 border-pink-400/40 focus:outline-none transition-all duration-200 hover:ring-2 hover:ring-pink-400/60">
+          class="px-5 py-2 rounded-2xl font-pixel text-lg shadow-xl border-b-4 border-pink-400/40 focus:outline-none transition-all duration-200 hover:ring-2 hover:ring-pink-400/60 cursor-pointer">
           Todos los retos
         </button>
         <button (click)="cambiarTab('activos')"
           [ngClass]="{'bg-pink-600 text-white ring-2 ring-pink-400': tabSeleccionada === 'activos', 'bg-zinc-900/80 text-pink-300': tabSeleccionada !== 'activos'}"
-          class="px-5 py-2 rounded-2xl font-pixel text-lg shadow-xl border-b-4 border-pink-400/40 focus:outline-none transition-all duration-200 hover:ring-2 hover:ring-pink-400/60">
+          class="px-5 py-2 rounded-2xl font-pixel text-lg shadow-xl border-b-4 border-pink-400/40 focus:outline-none transition-all duration-200 hover:ring-2 hover:ring-pink-400/60 cursor-pointer">
           Retos activos
         </button>
         <button (click)="cambiarTab('mis')"
           [ngClass]="{'bg-pink-600 text-white ring-2 ring-pink-400': tabSeleccionada === 'mis', 'bg-zinc-900/80 text-pink-300': tabSeleccionada !== 'mis'}"
-          class="px-5 py-2 rounded-2xl font-pixel text-lg shadow-xl border-b-4 border-pink-400/40 focus:outline-none transition-all duration-200 hover:ring-2 hover:ring-pink-400/60">
+          class="px-5 py-2 rounded-2xl font-pixel text-lg shadow-xl border-b-4 border-pink-400/40 focus:outline-none transition-all duration-200 hover:ring-2 hover:ring-pink-400/60 cursor-pointer">
           Mis retos
         </button>
       </div>
@@ -61,7 +61,7 @@
               <td class="px-6 py-4 text-right">
                 <ng-container *ngIf="!estaInscrito(reto); else yaInscrito">
                   <button (click)="unirseAReto(reto)"
-                    class="px-4 py-1 text-sm font-pixel bg-pink-600 hover:bg-pink-700 text-white rounded-2xl ring-2 ring-pink-400/40 transition shadow-md">
+                    class="px-4 py-1 text-sm font-pixel bg-pink-600 hover:bg-pink-700 text-white rounded-2xl ring-2 ring-pink-400/40 transition shadow-md cursor-pointer">
                     Unirse
                   </button>
                 </ng-container>
@@ -130,7 +130,7 @@
 
         <div class="mt-6 flex justify-end">
           <button (click)="cerrarModalDetalle()"
-            class="px-5 py-2 rounded-2xl bg-zinc-800 text-pink-300 font-pixel shadow hover:bg-zinc-700 transition-all ring-2 ring-pink-400/20">Cerrar</button>
+            class="px-5 py-2 rounded-2xl bg-zinc-800 text-pink-300 font-pixel shadow hover:bg-zinc-700 transition-all ring-2 ring-pink-400/20 cursor-pointer">Cerrar</button>
         </div>
       </div>
     </div>

@@ -14,6 +14,7 @@ export class MenuComponent implements OnInit {
   nombreUsuario: string = '';
   avatar: string = '';
   rol: string = '';
+  mostrarDropdown = false;
 
   constructor(
     private router: Router,

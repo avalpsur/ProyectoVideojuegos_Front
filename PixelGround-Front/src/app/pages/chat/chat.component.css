@@ -1,0 +1,21 @@
+.chat-mensajes-scroll {
+  max-height: calc(100vh - 220px);
+  min-height: 120px;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .chat-mensajes-scroll {
+    max-height: calc(100vh - 180px);
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #7f5af0aa;
+  border-radius: 8px;
+}
