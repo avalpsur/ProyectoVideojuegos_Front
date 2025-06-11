@@ -1,0 +1,70 @@
+<!-- Vista de un Hilo y sus Respuestas -->
+<div
+    class="min-h-screen bg-gradient-to-br from-[#1a1207] via-[#2d160a] to-[#1a1207] text-white py-10 px-2 flex flex-col items-center">
+    <div class="w-full max-w-3xl mx-auto flex flex-col gap-8">
+        <div class="flex items-center gap-2 mb-6">
+            <button (click)="volverAHilos()" class="text-[#a15a27] hover:text-[#e2b07a] font-bold text-lg">←
+                Hilos</button>
+            <h2 class="text-2xl font-bold text-[#a15a27] ml-2">{{ hilo?.titulo }}</h2>
+        </div>
+        <div *ngIf="error" class="bg-red-900/80 text-red-200 rounded-lg shadow p-4 text-center font-bold">{{ error }}
+        </div>
+        <div *ngIf="cargando" class="text-[#e2b07a] text-center py-8 animate-pulse">Cargando hilo...</div>
+        <div *ngIf="hilo" class="bg-[#2d160a]/80 border border-[#a15a27]/40 rounded-xl shadow p-5 flex flex-col gap-2">
+            <div class="flex items-center gap-3 mb-2">
+                <div
+                    class="w-10 h-10 rounded-full bg-[#a15a27]/40 flex items-center justify-center text-xl font-bold text-[#e2b07a] border-2 border-[#a15a27]/30 shadow overflow-hidden">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="font-bold text-lg text-[#e2b07a]">{{ hilo.creador }}</div>
+                    <div class="text-xs text-[#e2b07a]/80">{{ hilo.fechaCreacion | date:'short' }}</div>
+                </div>
+            </div>
+            <div class="text-base text-[#e2b07a]">{{ hilo.contenido }}</div>
+        </div>
+        <div class="flex flex-col gap-4 mt-4">
+            <div *ngFor="let r of respuestasPagina"
+                class="bg-[#1a1207]/80 border border-[#a15a27]/40 rounded-xl shadow p-4 flex flex-col gap-1">
+                <div class="flex items-center gap-3 mb-1">
+                    <div
+                        class="w-8 h-8 rounded-full bg-[#a15a27]/40 flex items-center justify-center text-lg font-bold text-[#e2b07a] border-2 border-[#a15a27]/30 shadow overflow-hidden">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-bold text-[#e2b07a]">{{ r.creador }}</div>
+                        <div class="text-xs text-[#e2b07a]/80">{{ r.fechaCreacion | date:'short' }}</div>
+                    </div>
+                </div>
+                <div class="text-sm text-[#e2b07a]">{{ r.contenido }}</div>
+            </div>
+            <div *ngIf="respuestasPagina.length === 0" class="text-[#e2b07a]/70 italic text-center py-4">No hay
+                respuestas aún en este hilo.</div>
+        </div>
+        <div *ngIf="totalPaginas > 1" class="flex justify-center gap-4 mt-6">
+            <button (click)="cambiarPagina(-1)" [disabled]="pagina === 1"
+                class="px-4 py-2 rounded-lg bg-[#2d160a] text-[#e2b07a] font-bold border border-[#a15a27]/20 shadow hover:bg-[#a15a27]/30 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">←
+                Anterior</button>
+            <span class="text-[#e2b07a] font-pixel text-base flex items-center">Página {{ pagina }} de {{ totalPaginas
+                }}</span>
+            <button (click)="cambiarPagina(1)" [disabled]="pagina === totalPaginas"
+                class="px-4 py-2 rounded-lg bg-[#2d160a] text-[#e2b07a] font-bold border border-[#a15a27]/20 shadow hover:bg-[#a15a27]/30 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">Siguiente
+                →</button>
+        </div>
+        <form (ngSubmit)="responder()" #form="ngForm"
+            class="mt-8 flex flex-col gap-2 bg-[#2d160a]/80 p-4 rounded-lg shadow">
+            <textarea [(ngModel)]="nuevaRespuesta" name="nuevaRespuesta" required placeholder="Responder..."
+                class="p-2 rounded bg-[#1a1207] text-white border border-[#a15a27] focus:outline-none"
+                rows="2"></textarea>
+            <button type="submit" [disabled]="form.invalid || !nuevaRespuesta.trim()"
+                class="bg-[#a15a27] hover:bg-[#9c4507] text-white font-bold rounded-lg px-4 py-2 shadow transition self-end">
+                Responder
+            </button>
+        </form>
+
+    </div>
+</div>

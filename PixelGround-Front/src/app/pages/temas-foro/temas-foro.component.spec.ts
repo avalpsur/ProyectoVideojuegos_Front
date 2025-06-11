@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ForoComponent } from './foro.component';
+import { TemasForoComponent } from './temas-foro.component';
 
-describe('ForoComponent', () => {
-  let component: ForoComponent;
-  let fixture: ComponentFixture<ForoComponent>;
+describe('TemasForoComponent', () => {
+  let component: TemasForoComponent;
+  let fixture: ComponentFixture<TemasForoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ForoComponent]
+      imports: [TemasForoComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ForoComponent);
+    fixture = TestBed.createComponent(TemasForoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

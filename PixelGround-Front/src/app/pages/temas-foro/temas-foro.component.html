@@ -1,0 +1,25 @@
+<!-- Vista principal de Temas del Foro -->
+<div class="min-h-screen bg-gradient-to-br from-[#1a1207] via-[#2d160a] to-[#1a1207] text-white py-10 px-2 flex flex-col items-center">
+  <div class="w-full max-w-4xl mx-auto flex flex-col gap-8">
+    <h1 class="text-4xl font-bold font-pixelground text-[#a15a27] drop-shadow-lg mb-6 text-center">Foro PixelGround</h1>
+    <div *ngIf="error" class="bg-red-900/80 text-red-200 rounded-lg shadow p-4 text-center font-bold">{{ error }}</div>
+    <div *ngIf="cargando" class="text-[#e2b07a] text-center py-8 animate-pulse">Cargando temas...</div>
+    <div *ngIf="!cargando && temas.length === 0" class="text-[#e2b07a]/80 italic text-center py-8 text-lg">No hay temas aún en el foro.</div>
+    <div class="flex flex-col gap-4">
+      <div *ngFor="let tema of temas" class="bg-[#2d160a]/80 border border-[#a15a27]/40 rounded-xl shadow p-5 flex flex-col gap-2 hover:bg-[#a15a27]/20 transition group">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="font-bold text-2xl text-[#a15a27] group-hover:text-[#e2b07a]">{{ tema.nombre }}</div>
+            <div class="text-sm text-[#e2b07a] mb-1">{{ tema.descripcion }}</div>
+            <div class="text-xs text-[#e2b07a]/80">Por {{ tema.creador }} el {{ tema.fechaCreacion | date:'shortDate' }}</div>
+          </div>
+          <button (click)="irATema(tema)" class="bg-[#a15a27] hover:bg-[#9c4507] text-white font-bold rounded-lg px-4 py-2 shadow transition ml-2">Ver hilos</button>
+        </div>
+        <div class="flex gap-4 mt-2 text-xs text-[#e2b07a]/80">
+          <span>Hilos: {{ tema.numHilos || 0 }}</span>
+          <span>Respuestas: {{ tema.numRespuestas || 0 }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

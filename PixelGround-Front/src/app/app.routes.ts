@@ -12,6 +12,9 @@ import { GestionUsuariosComponent } from './pages/gestion-usuarios/gestion-usuar
 import { RetosComponent } from './pages/retos/retos.component';
 import { ListaDetalleComponent } from './pages/lista-detalle/lista-detalle.component';
 import { SteamCallbackComponent } from './pages/steam-callback/steam-callback.component';
+import { MensajesForoComponent } from './pages/mensajes-foro/mensajes-foro.component';
+import { TemasForoComponent } from './pages/temas-foro/temas-foro.component';
+import { HilosForoComponent } from './pages/hilos-foro/hilos-foro.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -29,4 +32,7 @@ export const routes: Routes = [
   { path: 'retos', component: RetosComponent },
   { path: 'lista/:id', component: ListaDetalleComponent },
   { path: 'steam-callback', component: SteamCallbackComponent },
+  { path: 'foro', component: TemasForoComponent },
+  { path: 'foro/tema/:id', component: HilosForoComponent },
+  { path: 'foro/hilo/:id', component: MensajesForoComponent },
 ];

@@ -1,0 +1,36 @@
+<!-- Vista de Hilos de un Tema -->
+<div class="min-h-screen bg-gradient-to-br from-[#1a1207] via-[#2d160a] to-[#1a1207] text-white py-10 px-2 flex flex-col items-center">
+  <div class="w-full max-w-4xl mx-auto flex flex-col gap-8">
+    <div class="flex items-center gap-2 mb-6">
+      <button (click)="volverATemas()" class="text-[#a15a27] hover:text-[#e2b07a] font-bold text-lg">← Temas</button>
+      <h2 class="text-3xl font-bold text-[#a15a27] ml-2">{{ tema?.nombre }}</h2>
+    </div>
+    <div *ngIf="error" class="bg-red-900/80 text-red-200 rounded-lg shadow p-4 text-center font-bold">{{ error }}</div>
+    <div *ngIf="cargando" class="text-[#e2b07a] text-center py-8 animate-pulse">Cargando hilos...</div>
+    <div *ngIf="!cargando && hilosPagina.length === 0" class="text-[#e2b07a]/80 italic text-center py-8 text-lg">No hay hilos aún en este tema.</div>
+    <div class="flex flex-col gap-4">
+      <div *ngFor="let hilo of hilosPagina" class="bg-[#1a1207]/80 border border-[#a15a27]/40 rounded-xl shadow p-5 flex flex-col gap-2 hover:bg-[#a15a27]/20 transition group">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="font-bold text-xl text-[#e2b07a] group-hover:text-[#a15a27]">{{ hilo.titulo }}</div>
+            <div class="text-xs text-[#e2b07a]/80">Por {{ hilo.creador }} el {{ hilo.fechaCreacion | date:'short' }}</div>
+          </div>
+          <button (click)="irAHilo(hilo)" class="bg-[#a15a27] hover:bg-[#9c4507] text-white font-bold rounded-lg px-4 py-2 shadow transition ml-2">Ver hilo</button>
+        </div>
+        <div class="flex gap-4 mt-2 text-xs text-[#e2b07a]/80">
+          <span>Respuestas: {{ hilo.numRespuestas || (hilo.respuestas?.length || 0) }}</span>
+          <span *ngIf="hilo.fijado" class="inline-flex items-center gap-1"><svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14.5A6.5 6.5 0 1110 3.5a6.5 6.5 0 010 13z"/></svg>Fijado</span>
+          <span *ngIf="hilo.popular" class="inline-flex items-center gap-1"><svg class="w-4 h-4 text-pink-400" fill="currentColor" viewBox="0 0 20 20"><path d="M3.172 3.172a4 4 0 015.656 0L10 4.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/></svg>Popular</span>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="totalPaginas > 1" class="flex justify-center gap-4 mt-6">
+      <button (click)="cambiarPagina(-1)" [disabled]="pagina === 1" class="px-4 py-2 rounded-lg bg-[#2d160a] text-[#e2b07a] font-bold border border-[#a15a27]/20 shadow hover:bg-[#a15a27]/30 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">← Anterior</button>
+      <span class="text-[#e2b07a] font-pixel text-base flex items-center">Página {{ pagina }} de {{ totalPaginas }}</span>
+      <button (click)="cambiarPagina(1)" [disabled]="pagina === totalPaginas" class="px-4 py-2 rounded-lg bg-[#2d160a] text-[#e2b07a] font-bold border border-[#a15a27]/20 shadow hover:bg-[#a15a27]/30 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">Siguiente →</button>
+    </div>
+    <div class="flex justify-end mt-8">
+      <button class="bg-[#a15a27] hover:bg-[#9c4507] text-white font-bold rounded-lg px-4 py-2 shadow transition" routerLink="/foro">Volver a temas</button>
+    </div>
+  </div>
+</div>
