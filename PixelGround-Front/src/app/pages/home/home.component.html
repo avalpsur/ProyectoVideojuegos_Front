@@ -30,21 +30,14 @@
     <!-- Columna izquierda -->
     <section class="bg-zinc-900/90 p-4 rounded-2xl shadow-xl border border-zinc-800 flex flex-col">
       <h2 class="text-xl font-bold text-[var(--color-rosa-principal)] mb-4 flex items-center gap-2">
-        <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 17l4 4 4-4m-4-5v9" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Por jugar
+        <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="3"/><rect x="7" y="3" width="10" height="4" rx="2"/><circle cx="8.5" cy="13.5" r="1.5"/><circle cx="15.5" cy="13.5" r="1.5"/></svg>
+        Tus listas
       </h2>
+      <div *ngIf="listas?.length === 0" class="text-zinc-400 italic">No tienes listas aún.</div>
       <div class="space-y-4">
-        <div class="flex items-center gap-3 bg-gradient-to-r from-zinc-800 via-zinc-900 to-pink-900/30 p-3 rounded-xl shadow group hover:scale-[1.03] transition cursor-pointer">
-          <img src="assets/images/hollowknight.jpg" alt="Hollow Knight" class="w-12 h-12 object-cover rounded-lg border-2 border-pink-400/40 shadow" />
-          <span class="font-semibold text-zinc-100 group-hover:text-pink-400 transition">Hollow Knight</span>
-        </div>
-        <div class="flex items-center gap-3 bg-gradient-to-r from-zinc-800 via-zinc-900 to-indigo-900/30 p-3 rounded-xl shadow group hover:scale-[1.03] transition cursor-pointer">
-          <img src="assets/images/celeste.jpg" alt="Celeste" class="w-12 h-12 object-cover rounded-lg border-2 border-indigo-400/40 shadow" />
-          <span class="font-semibold text-zinc-100 group-hover:text-indigo-300 transition">Celeste</span>
-        </div>
-        <div class="flex items-center gap-3 bg-gradient-to-r from-zinc-800 via-zinc-900 to-green-900/30 p-3 rounded-xl shadow group hover:scale-[1.03] transition cursor-pointer">
-          <img src="assets/images/stardew.jpg" alt="Stardew Valley" class="w-12 h-12 object-cover rounded-lg border-2 border-green-400/40 shadow" />
-          <span class="font-semibold text-zinc-100 group-hover:text-green-300 transition">Stardew Valley</span>
+        <div *ngFor="let lista of listas" [routerLink]="['/lista', lista.id]" class="flex items-center gap-3 bg-gradient-to-r from-zinc-800 via-zinc-900 to-pink-900/30 p-3 rounded-xl shadow group hover:scale-[1.03] transition cursor-pointer">
+          <img [src]="lista.juegos && lista.juegos.length > 0 ? lista.juegos[0].imagenUrl : 'assets/default-list-cover.png'" alt="Portada lista" class="w-12 h-12 object-cover rounded-lg border-2 border-pink-400/40 shadow" />
+          <span class="font-semibold text-zinc-100 group-hover:text-pink-400 transition line-clamp-1">{{ lista.nombre }}</span>
         </div>
       </div>
     </section>
@@ -97,22 +90,40 @@
         <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m4 0h-1v-4h-1" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Tus estadísticas
       </h2>
-      <div class="flex flex-col gap-6">
-        <div class="flex items-center gap-4 bg-gradient-to-r from-green-900/30 via-zinc-900 to-zinc-800/80 p-4 rounded-xl shadow">
-          <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <div>
-            <div class="text-lg font-bold text-green-300">12</div>
-            <div class="text-xs text-zinc-400">Horas jugadas esta semana</div>
+      <ng-container *ngIf="!steamId; else estadisticasSteam">
+        <div class="text-center text-zinc-400 py-6 flex flex-col items-center gap-4">
+          <p class="text-sm">Vincula tu cuenta de Steam para ver estadísticas como juegos recientes, horas jugadas y logros.</p>
+          <button (click)="vincularSteam()"
+            class="bg-pink-600 hover:bg-pink-700 text-white font-pixel py-2 px-4 rounded-xl shadow transition">
+            Vincular cuenta de Steam
+          </button>
+        </div>
+      </ng-container>
+      <ng-template #estadisticasSteam>
+        <div *ngIf="steamStats.error" class="text-red-400 text-sm mb-2">{{ steamStats.error }}</div>
+        <div *ngIf="steamStats.horasSemana > 0; else sinJuegos" class="flex flex-col gap-6">
+          <div class="flex items-center gap-4 bg-gradient-to-r from-green-900/30 via-zinc-900 to-zinc-800/80 p-4 rounded-xl shadow">
+            <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div>
+              <div class="text-lg font-bold text-green-300 font-pixel">{{ steamStats.horasSemana }}</div>
+              <div class="text-xs text-zinc-400">Horas jugadas esta semana</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 bg-gradient-to-r from-pink-900/30 via-zinc-900 to-zinc-800/80 p-4 rounded-xl shadow">
+            <svg class="w-8 h-8 text-pink-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <div>
+              <div class="text-lg font-bold text-pink-300 font-pixel">{{ steamStats.juegoTop }}</div>
+              <div class="text-xs text-zinc-400">Juego más jugado esta semana ({{ steamStats.juegoTopHoras }} h)</div>
+            </div>
           </div>
         </div>
-        <div class="flex items-center gap-4 bg-gradient-to-r from-pink-900/30 via-zinc-900 to-zinc-800/80 p-4 rounded-xl shadow">
-          <svg class="w-8 h-8 text-pink-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <div>
-            <div class="text-lg font-bold text-pink-300">3</div>
-            <div class="text-xs text-zinc-400">Juegos completados</div>
+        <ng-template #sinJuegos>
+          <div class="text-zinc-400 italic py-8 flex flex-col items-center">
+            <svg class="w-10 h-10 text-zinc-700 mb-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 9h6m-3 3v3"/></svg>
+            No has jugado en Steam en las últimas 2 semanas.
           </div>
-        </div>
-      </div>
+        </ng-template>
+      </ng-template>
     </section>
   </div>
 </div>

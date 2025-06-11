@@ -8,6 +8,7 @@ export interface Usuario {
   email: string;
   rol: string;
   avatar?: string;
+  steamId?: string;
 }
 
 @Injectable({ providedIn: 'root' })

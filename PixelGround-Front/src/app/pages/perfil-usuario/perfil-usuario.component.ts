@@ -24,6 +24,16 @@ export class PerfilUsuarioComponent implements OnInit {
     { juego: 'Hollow Knight', texto: 'Metroidvania top.', fecha: '2025-05-20' }
   ];
 
+  steamJuegos: any[] = [];
+  steamJuegosPagina: any[] = [];
+  cargandoSteam = false;
+  steamError: string | null = null;
+  steamPagina = 1;
+  steamPorPagina = 8;
+  get steamTotalPaginas() {
+    return Math.ceil(this.steamJuegos.length / this.steamPorPagina) || 1;
+  }
+
   constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
  ngOnInit(): void {
@@ -48,6 +58,7 @@ cargarMiPerfil(token: string) {
       this.esPropioPerfil = true;
       this.verificarAmistad();
       this.cargando = false;
+      this.cargarSteamJuegos();
     },
     error: () => {
       this.error = 'No se pudo obtener tu perfil.';
@@ -67,6 +78,7 @@ cargarUsuarioPorNombre(nombreUsuario: string) {
         this.verificarPropioPerfil();
         this.verificarAmistad();
         this.cargando = false;
+        this.cargarSteamJuegos();
       },
       error: () => {
         this.error = 'Usuario no encontrado.';
@@ -75,6 +87,43 @@ cargarUsuarioPorNombre(nombreUsuario: string) {
     });
 }
 
+cargarSteamJuegos() {
+  if (!this.usuario?.steamId) return;
+  this.cargandoSteam = true;
+  this.steamError = null;
+  const token = localStorage.getItem('token');
+  const headers = { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
+  this.http.get<any[]>('http://localhost:8080/api/usuarios/steam/juegos', headers).subscribe({
+    next: juegos => {
+      this.steamJuegos = juegos;
+      this.steamPagina = 1;
+      this.actualizarSteamPagina();
+      this.cargandoSteam = false;
+    },
+    error: () => {
+      this.steamError = 'No se han podido cargar tus juegos de Steam.';
+      this.cargandoSteam = false;
+    }
+  });
+}
+
+actualizarSteamPagina() {
+  const start = (this.steamPagina - 1) * this.steamPorPagina;
+  const end = start + this.steamPorPagina;
+  this.steamJuegosPagina = this.steamJuegos.slice(start, end);
+}
+
+cambiarSteamPagina(delta: number) {
+  const nueva = this.steamPagina + delta;
+  if (nueva < 1 || nueva > this.steamTotalPaginas) return;
+  this.steamPagina = nueva;
+  this.actualizarSteamPagina();
+}
+
+imgError(event: Event) {
+  const img = event.target as HTMLImageElement;
+  img.src = 'assets/no-image.png';
+}
 
   verificarPropioPerfil() {
     const actual = localStorage.getItem('usuario');

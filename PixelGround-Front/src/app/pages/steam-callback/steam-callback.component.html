@@ -1,0 +1,8 @@
+<div class="min-h-screen flex flex-col items-center justify-center text-center px-4">
+  <div class="text-xl font-pixel text-white mb-4" [ngClass]="{ 'text-red-400': error, 'text-green-400': !error }">
+    {{ mensaje }}
+  </div>
+  <div class="text-zinc-400 text-sm" *ngIf="!error">
+    Serás redirigido automáticamente en unos segundos...
+  </div>
+</div>
