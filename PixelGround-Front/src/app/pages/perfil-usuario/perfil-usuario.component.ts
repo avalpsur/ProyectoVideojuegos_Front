@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Usuario } from '../../core/services/usuario.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-perfil-usuario',
@@ -18,7 +19,7 @@ export class PerfilUsuarioComponent implements OnInit {
   esAmigo = false;
   esPropioPerfil = false;
   modal = { visible: false, mensaje: '' };
-  listasCreadas = 3; // Mock
+  listasCreadas = 3; 
   ultimasResenas = [
     { juego: 'Celeste', texto: '¡Obra maestra!', fecha: '2025-06-01' },
     { juego: 'Hollow Knight', texto: 'Metroidvania top.', fecha: '2025-05-20' }

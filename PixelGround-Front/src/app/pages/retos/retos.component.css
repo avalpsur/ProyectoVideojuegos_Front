@@ -1,7 +1,3 @@
-/* PixelGround retos: centrado, responsive, botones y badges */
-.bg-pink-500, .bg-pink-600, .bg-pink-700, .bg-green-500, .bg-green-700, .bg-green-100, .bg-pink-100 {
-  /* Tailwind utility, solo para referencia */
-}
 
 input[type="text"], input[type="url"], textarea {
   font-family: inherit;

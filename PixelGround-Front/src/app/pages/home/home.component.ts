@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ListaJuegosService, ListaJuego } from '../../core/services/lista-juegos.service';
 import { RouterModule } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-home',
