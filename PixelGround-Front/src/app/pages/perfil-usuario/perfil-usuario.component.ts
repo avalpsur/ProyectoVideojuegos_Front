@@ -52,7 +52,7 @@ export class PerfilUsuarioComponent implements OnInit {
 
 cargarMiPerfil(token: string) {
   const headers = { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
-  this.http.get<Usuario>('http://localhost:8080/api/usuarios/perfil', headers).subscribe({
+  this.http.get<Usuario>('${environment.apiUrl}/usuarios/perfil', headers).subscribe({
     next: usuario => {
       this.usuario = usuario;
       this.esPropioPerfil = true;
@@ -71,7 +71,7 @@ cargarUsuarioPorNombre(nombreUsuario: string) {
   this.cargando = true;
   const token = localStorage.getItem('token');
   const headers = token ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) } : {};
-  this.http.get<Usuario>(`http://localhost:8080/api/usuarios/username/${nombreUsuario}`, headers)
+  this.http.get<Usuario>(`${environment.apiUrl}/usuarios/username/${nombreUsuario}`, headers)
     .subscribe({
       next: usuario => {
         this.usuario = usuario;
@@ -93,7 +93,7 @@ cargarSteamJuegos() {
   this.steamError = null;
   const token = localStorage.getItem('token');
   const headers = { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
-  this.http.get<any[]>('http://localhost:8080/api/usuarios/steam/juegos', headers).subscribe({
+  this.http.get<any[]>('${environment.apiUrl}/usuarios/steam/juegos', headers).subscribe({
     next: juegos => {
       this.steamJuegos = juegos;
       this.steamPagina = 1;
@@ -138,7 +138,7 @@ imgError(event: Event) {
     const token = localStorage.getItem('token');
     if (!token) return;
     const headers = { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
-    this.http.get<any[]>(`http://localhost:8080/api/amistades/amigos`, headers)
+    this.http.get<any[]>(`${environment.apiUrl}/amistades/amigos`, headers)
       .subscribe(amigos => {
         this.esAmigo = amigos.some(a => a.nombreUsuario === this.usuario?.nombreUsuario);
       });
@@ -149,7 +149,7 @@ imgError(event: Event) {
     const token = localStorage.getItem('token');
     if (!token) return;
     const headers = { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
-    this.http.post('http://localhost:8080/api/amistades/solicitar', { receptor: this.usuario.id }, headers)
+    this.http.post('${environment.apiUrl}/amistades/solicitar', { receptor: this.usuario.id }, headers)
       .subscribe(() => {
         this.modal = { visible: true, mensaje: '¡Solicitud enviada con éxito!' };
       });

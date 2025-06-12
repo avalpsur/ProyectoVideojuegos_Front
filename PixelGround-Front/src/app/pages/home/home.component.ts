@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit {
       this.steamStats.tieneSteam = true;
       const token = localStorage.getItem('token');
       const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-      this.http.get<any[]>('http://localhost:8080/api/steam/recientes', { headers }).subscribe({
+      this.http.get<any[]>('${environment.apiUrl}/steam/recientes', { headers }).subscribe({
         next: (juegos) => {
           if (!juegos || juegos.length === 0) {
             this.steamStats.horasSemana = 0;
@@ -93,7 +93,7 @@ export class HomeComponent implements OnInit {
 
   vincularSteam() {
     const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
-    window.location.href = `http://localhost:8080/api/steam/login?email=${usuario.email}`;
+    window.location.href = `${environment.apiUrl}/steam/login?email=${usuario.email}`;
   }
 
 

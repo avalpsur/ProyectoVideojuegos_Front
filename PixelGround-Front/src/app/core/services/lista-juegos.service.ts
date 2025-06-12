@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Juego {
   id: number;
@@ -19,7 +20,7 @@ export interface ListaJuego {
 
 @Injectable({ providedIn: 'root' })
 export class ListaJuegosService {
-  private baseUrl = 'http://localhost:8080/api/listas';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -30,14 +31,14 @@ export class ListaJuegosService {
 
   obtenerListasDeUsuario(usuarioId: number): Observable<ListaJuego[]> {
     return this.http.get<ListaJuego[]>(
-      `${this.baseUrl}/usuario/${usuarioId}`,
+      `${this.apiUrl}/usuario/${usuarioId}`,
       { headers: this.getAuthHeaders() }
     );
   }
 
   crearLista(lista: Partial<ListaJuego>): Observable<ListaJuego> {
     return this.http.post<ListaJuego>(
-      this.baseUrl,
+      this.apiUrl,
       lista,
       { headers: this.getAuthHeaders() }
     );
@@ -45,21 +46,21 @@ export class ListaJuegosService {
 
   anadirJuegoALista(listaId: number, apiId: number): Observable<void> {
     return this.http.post<void>(
-      `${this.baseUrl}/${listaId}/juegos`,
+      `${this.apiUrl}/${listaId}/juegos`,
       { apiId },
       { headers: this.getAuthHeaders() }
     );
   }
   eliminarJuegoDeLista(listaId: number, apiId: number): Observable<void> {
     return this.http.delete<void>(
-      `${this.baseUrl}/${listaId}/juegos/${apiId}`,
+      `${this.apiUrl}/${listaId}/juegos/${apiId}`,
       { headers: this.getAuthHeaders() }
     );
   }
 
   eliminarLista(id: number): Observable<void> {
     return this.http.delete<void>(
-      `${this.baseUrl}/${id}`,
+      `${this.apiUrl}/${id}`,
       { headers: this.getAuthHeaders() }
     );
   }

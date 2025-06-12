@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/auth';
-
-  constructor(private http: HttpClient) {}
+  private apiUrl = environment.apiUrl;
+  constructor(private http: HttpClient) { }
 
   login(login: string, password: string): Observable<string> {
     return this.http.post(`${this.apiUrl}/login`, { login, password }, { responseType: 'text' });
@@ -14,13 +14,13 @@ export class AuthService {
 
   register(email: string, nombreUsuario: string, password: string): Observable<string> {
     const body = { email, nombreUsuario, password };
-    return this.http.post('http://localhost:8080/api/usuarios/registro', body, {
+    return this.http.post(`${this.apiUrl}/usuarios/registro`, body, {
       responseType: 'text'
     });
   }
-  
+
   obtenerPerfil(token: string): Observable<any> {
-    return this.http.get('http://localhost:8080/api/usuarios/perfil', {
+    return this.http.get(`${this.apiUrl}/usuarios/perfil`, {
       headers: {
         Authorization: `Bearer ${token}`
       }

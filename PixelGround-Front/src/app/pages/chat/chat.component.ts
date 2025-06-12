@@ -5,6 +5,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ElementRef, ViewChild } from '@angular/core';
+import { environment } from '../../../environments/environment';
+
 
 @Component({
   selector: 'app-chat',
@@ -49,7 +51,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       Authorization: `Bearer ${token}`
     });
 
-    this.http.get<any[]>(`http://localhost:8080/api/amistades/amigos`, { headers })
+    this.http.get<any[]>(`${environment.apiUrl}/amistades/amigos`, { headers })
       .subscribe(data => {
         this.amigos = data;
       });
@@ -57,7 +59,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   conectarWebSocket() {
     this.cliente = new Client({
-      webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
+      webSocketFactory: () => new SockJS(`${environment.apiUrl.replace('/api', '')}/ws`),
       reconnectDelay: 5000,
       onConnect: () => {
         this.cliente.subscribe(
@@ -85,7 +87,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     });
 
     this.http.get<any[]>(
-      `http://localhost:8080/api/chat/historial?receptorId=${amigo.id}`,
+      `${environment.apiUrl}/chat/historial?receptorId=${amigo.id}`,
       { headers }
     ).subscribe((mensajes) => {
       this.mensajes = mensajes;

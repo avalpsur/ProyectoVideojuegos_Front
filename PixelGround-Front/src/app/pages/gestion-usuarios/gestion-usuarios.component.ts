@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UsuarioService, Usuario } from '../../core/services/usuario.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-gestion-usuarios',
@@ -28,9 +29,8 @@ export class GestionUsuariosComponent implements OnInit {
   }
 
   cargarUsuarios() {
-    // TODO: Implementar paginación real en el backend si es posible
     const token = localStorage.getItem('token');
-    fetch('http://localhost:8080/api/usuarios', {
+    fetch('${environment.apiUrl}/usuarios', {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -65,7 +65,7 @@ export class GestionUsuariosComponent implements OnInit {
   guardarRol() {
     if (!this.usuarioEditando) return;
     const token = localStorage.getItem('token');
-    fetch(`http://localhost:8080/api/usuarios/${this.usuarioEditando.id}/cambiar-rol`, {
+    fetch(`${environment.apiUrl}/usuarios/${this.usuarioEditando.id}/cambiar-rol`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ export class GestionUsuariosComponent implements OnInit {
   eliminarUsuario() {
     if (!this.usuarioAEliminar) return;
     const token = localStorage.getItem('token');
-    fetch(`http://localhost:8080/api/usuarios/${this.usuarioAEliminar.id}`, {
+    fetch(`${environment.apiUrl}/usuarios/${this.usuarioAEliminar.id}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${token}` }
     })

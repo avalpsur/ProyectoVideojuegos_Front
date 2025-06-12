@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../environments/environment';
+
 
 @Component({
   selector: 'app-steam-callback',
@@ -24,7 +26,7 @@ export class SteamCallbackComponent implements OnInit {
     if (claimedId && token) {
       const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
 
-      this.http.get('http://localhost:8080/api/usuarios/vincularSteam', {
+      this.http.get('${environment.apiUrl}/usuarios/vincularSteam', {
         headers,
         params: { 'openid.claimed_id': claimedId }
       }).subscribe({
