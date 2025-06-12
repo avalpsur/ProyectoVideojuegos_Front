@@ -92,21 +92,21 @@
         <!--  Hilos relacionados -->
         <aside *ngIf="hilosRelacionados.length > 0" class="bg-zinc-900/90 p-6 rounded-2xl shadow-xl border border-zinc-800 min-w-[280px] max-w-xs h-fit flex flex-col gap-2">
           <h2 class="text-lg font-bold text-[var(--color-rosa-principal)] mb-4 flex items-center gap-2 font-pixelground">
-            <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="3"/><rect x="7" y="3" width="10" height="4" rx="2"/><circle cx="8.5" cy="13.5" r="1.5"/><circle cx="15.5" cy="13.5" r="1.5"/></svg>
+            <lucide-icon name="message-square" class="w-6 h-6 text-pink-400" />
             Otros hilos del tema
           </h2>
           <ng-container *ngFor="let hiloRel of hilosRelacionados">
             <a [routerLink]="['/foro/hilo', hiloRel.id]"
                class="block bg-gradient-to-r from-zinc-800 via-zinc-900 to-pink-900/30 border border-zinc-800 rounded-xl shadow group hover:scale-[1.02] transition-transform cursor-pointer mb-2 p-4">
               <div class="flex items-center gap-3">
-                <svg class="w-6 h-6 text-pink-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="3"/><rect x="7" y="3" width="10" height="4" rx="2"/></svg>
+                <lucide-icon name="message-square" class="w-6 h-6 text-pink-400 flex-shrink-0" />
                 <div class="flex-1 min-w-0">
                   <div class="font-pixelground font-bold text-base text-pink-200 group-hover:text-white transition line-clamp-1">{{ hiloRel.titulo }}</div>
                   <div class="text-sm text-zinc-400 font-mono truncate">Por {{ hiloRel.nombreCreador }}</div>
                 </div>
                 <ng-container *ngIf="hiloRel.numRespuestas && hiloRel.numRespuestas > 0">
                   <span class="flex items-center gap-1 text-indigo-400 font-mono text-xs bg-indigo-900/40 px-2 py-1 rounded-lg">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="10" ry="8"/><circle cx="12" cy="12" r="3"/></svg>
+                    <lucide-icon name="message-circle" class="w-4 h-4" />
                     {{ hiloRel.numRespuestas }}
                   </span>
                 </ng-container>

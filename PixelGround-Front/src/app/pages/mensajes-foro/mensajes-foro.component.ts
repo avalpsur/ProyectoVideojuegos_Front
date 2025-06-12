@@ -4,11 +4,12 @@ import { ForoService } from '../../core/services/foro.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { LucideIconsModule } from '../../shared/lucide.module';
 
 @Component({
   selector: 'app-mensajes-foro',
   templateUrl: './mensajes-foro.component.html',
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, LucideIconsModule],
   styleUrls: ['./mensajes-foro.component.css']
 })
 export class MensajesForoComponent implements OnInit {
@@ -37,7 +38,6 @@ export class MensajesForoComponent implements OnInit {
     this.foroService.getHiloPorId(this.hiloId).subscribe({
       next: (hilo) => {
         this.hilo = hilo;
-        // Cargar hilos relacionados (otros hilos del mismo tema, excluyendo el actual)
         if (hilo.temaId) {
           this.foroService.getHilosPorTema(hilo.temaId).subscribe({
             next: (hilos) => {

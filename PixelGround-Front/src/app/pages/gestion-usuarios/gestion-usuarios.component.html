@@ -30,8 +30,12 @@
             </span>
           </td>
           <td class="py-2 px-3 flex gap-2">
-            <button (click)="abrirModal(usuario)" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded shadow text-xs cursor-pointer">Editar Rol</button>
-            <button (click)="confirmarEliminar(usuario)" class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded shadow text-xs cursor-pointer">Eliminar</button>
+            <button (click)="abrirModal(usuario)" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded shadow text-xs cursor-pointer flex items-center gap-1" title="Editar rol">
+              <lucide-icon name="pencil" class="w-4 h-4" />
+            </button>
+            <button (click)="confirmarEliminar(usuario)" class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded shadow text-xs cursor-pointer flex items-center gap-1" title="Eliminar usuario">
+              <lucide-icon name="trash" class="w-4 h-4" />
+            </button>
           </td>
         </tr>
       </tbody>

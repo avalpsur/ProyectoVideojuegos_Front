@@ -1,9 +1,11 @@
 <nav
   class="fixed top-0 left-0 z-50 w-full px-4 md:px-8 py-3 flex items-center justify-between bg-gradient-to-r from-gray-900 via-gray-950 to-indigo-950/90 text-sky-200 shadow-2xl border-b border-indigo-700/40 backdrop-blur-md font-pixelground">
   <div class="flex items-center gap-4 md:gap-8">
-    <span
-      class="text-2xl md:text-3xl font-extrabold text-sky-400 drop-shadow-[0_0_12px_theme('colors.sky.400')] tracking-widest select-none flex items-center gap-2">
-      <span class="inline-block align-middle">🕹️</span> PixelGround
+    <span class="inline-block align-middle">
+      <lucide-icon name="gamepad-2" class="w-5 h-5 text-sky-400" />
+    </span>
+    <span class="ml-1 text-2xl md:text-3xl font-extrabold tracking-tight text-sky-400 drop-shadow-sm font-pixelground">
+      PixelGround
     </span>
     <a routerLink="/home"
       class="relative font-semibold px-2 py-1 rounded-lg transition hover:text-indigo-400 hover:bg-indigo-800/20 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer">Inicio</a>
@@ -16,13 +18,14 @@
       <a routerLink="/comunidad"
         class="relative font-semibold px-2 py-1 rounded-lg transition hover:text-indigo-400 hover:bg-indigo-800/20 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer flex items-center gap-1">
         Comunidad
-        <svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-        </svg>
+        <lucide-icon name="chevron-down" class="w-4 h-4 inline-block" />
       </a>
-      <div class="absolute left-0 mt-2 w-40 bg-gray-900/95 rounded-lg shadow-xl border border-sky-400/30 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity z-50 backdrop-blur-md overflow-hidden flex flex-col">
-        <a routerLink="/retos" class="block px-4 py-3 text-sky-100 font-medium hover:bg-indigo-700/80 hover:text-white transition cursor-pointer">Retos</a>
-        <a routerLink="/foro" class="block px-4 py-3 text-sky-100 font-medium hover:bg-indigo-700/80 hover:text-white transition cursor-pointer">Foro</a>
+      <div
+        class="absolute left-0 mt-2 w-40 bg-gray-900/95 rounded-lg shadow-xl border border-sky-400/30 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity z-50 backdrop-blur-md overflow-hidden flex flex-col">
+        <a routerLink="/retos"
+          class="block px-4 py-3 text-sky-100 font-medium hover:bg-indigo-700/80 hover:text-white transition cursor-pointer">Retos</a>
+        <a routerLink="/foro"
+          class="block px-4 py-3 text-sky-100 font-medium hover:bg-indigo-700/80 hover:text-white transition cursor-pointer">Foro</a>
       </div>
     </div>
   </div>
@@ -33,51 +36,52 @@
 
     <button
       class="bg-transparent text-sky-400 text-xl rounded-full w-9 h-9 flex items-center justify-center border-2 border-transparent hover:bg-indigo-800/30 hover:text-white hover:border-sky-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-sky-400 cursor-pointer"
-      title="Notificaciones">🔔</button>
+      title="Notificaciones">
+      <lucide-icon name="bell" class="w-5 h-5" />
+    </button>
+
     <button
       class="bg-transparent text-sky-400 text-xl rounded-full w-9 h-9 flex items-center justify-center border-2 border-transparent hover:bg-indigo-800/30 hover:text-white hover:border-sky-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-sky-400 cursor-pointer"
-      routerLink="/chat" title="Chat">💬</button>
-
+      routerLink="/chat" title="Chat">
+      <lucide-icon name="message-circle" class="w-5 h-5" />
+    </button>
     <!-- MENÚ DE USUARIO -->
     <div class="relative group flex items-center">
       <button
         class="flex items-center gap-2 bg-transparent text-sky-100 font-bold rounded-xl px-3 py-2 border-2 border-transparent hover:text-sky-400 hover:bg-indigo-800/20 hover:border-sky-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-sky-400 cursor-pointer"
-        [routerLink]="['/perfil', nombreUsuario]"
-        (mouseenter)="mostrarDropdown = true"
-        (mouseleave)="mostrarDropdown = false"
-        (focus)="mostrarDropdown = true"
-        (blur)="mostrarDropdown = false"
-        [attr.aria-expanded]="mostrarDropdown ? 'true' : 'false'"
-        [attr.aria-haspopup]="true"
-        type="button"
-        id="user-menu-button"
-      >
-        <span class="w-7 h-7 rounded-full bg-sky-900/60 border-2 border-sky-400/40 flex items-center justify-center overflow-hidden">
+        [routerLink]="['/perfil', nombreUsuario]" (mouseenter)="mostrarDropdown = true"
+        (mouseleave)="mostrarDropdown = false" (focus)="mostrarDropdown = true" (blur)="mostrarDropdown = false"
+        [attr.aria-expanded]="mostrarDropdown ? 'true' : 'false'" [attr.aria-haspopup]="true" type="button"
+        id="user-menu-button">
+        <span
+          class="w-7 h-7 rounded-full bg-sky-900/60 border-2 border-sky-400/40 flex items-center justify-center overflow-hidden">
           <img *ngIf="avatar" [src]="avatar" class="w-full h-full object-cover rounded-full" />
           <span *ngIf="!avatar" class="text-xl">👤</span>
         </span>
         <span class="hidden sm:inline">{{ nombreUsuario }}</span>
-        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M5.25 7.5L10 12.25L14.75 7.5H5.25Z" />
-        </svg>
+        <lucide-icon name="chevron-down" class="w-4 h-4" />
       </button>
       <div
         class="absolute right-0 mt-2 w-44 bg-gray-900/95 rounded-lg shadow-2xl border border-sky-400/30 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity z-50 backdrop-blur-md overflow-hidden flex flex-col"
         [ngClass]="{ 'opacity-100 pointer-events-auto': mostrarDropdown, 'opacity-0 pointer-events-none': !mostrarDropdown }"
-        (mouseenter)="mostrarDropdown = true"
-        (mouseleave)="mostrarDropdown = false"
-        style="top:100%"
-        role="menu"
-        aria-labelledby="user-menu-button"
-      >
-        <a [routerLink]="['/perfil']" class="block px-4 py-3 text-sky-100 font-medium hover:bg-sky-700/80 hover:text-white transition cursor-pointer" role="menuitem">Ver perfil</a>
-        <a routerLink="/amistad" class="block px-4 py-3 text-sky-100 font-medium hover:bg-pink-600/80 hover:text-white transition cursor-pointer flex items-center gap-2" role="menuitem">
+        (mouseenter)="mostrarDropdown = true" (mouseleave)="mostrarDropdown = false" style="top:100%" role="menu"
+        aria-labelledby="user-menu-button">
+        <a [routerLink]="['/perfil']"
+          class="block px-4 py-3 text-sky-100 font-medium hover:bg-sky-700/80 hover:text-white transition cursor-pointer"
+          role="menuitem">Ver perfil</a>
+        <a routerLink="/amistad"
+          class="block px-4 py-3 text-sky-100 font-medium hover:bg-pink-600/80 hover:text-white transition cursor-pointer flex items-center gap-2"
+          role="menuitem">
           Amigos
         </a>
-        <a *ngIf="rol === 'ADMIN'" routerLink="/gestion-usuarios" class="block px-4 py-3 text-indigo-700 font-medium hover:bg-indigo-200/80 hover:text-indigo-900 transition cursor-pointer flex items-center gap-2 border-t border-indigo-200" role="menuitem">
+        <a *ngIf="rol === 'ADMIN'" routerLink="/gestion-usuarios"
+          class="block px-4 py-3 text-indigo-700 font-medium hover:bg-indigo-200/80 hover:text-indigo-900 transition cursor-pointer flex items-center gap-2 border-t border-indigo-200"
+          role="menuitem">
           Gestionar Usuarios
         </a>
-        <a (click)="cerrarSesion()" class="block px-4 py-3 text-sky-100 font-medium hover:bg-pink-600/80 hover:text-white transition cursor-pointer" role="menuitem">Cerrar sesión</a>
+        <a (click)="cerrarSesion()"
+          class="block px-4 py-3 text-sky-100 font-medium hover:bg-pink-600/80 hover:text-white transition cursor-pointer"
+          role="menuitem">Cerrar sesión</a>
       </div>
     </div>
   </div>
