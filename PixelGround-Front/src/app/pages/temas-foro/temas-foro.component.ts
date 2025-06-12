@@ -4,11 +4,12 @@ import { ForoService } from '../../core/services/foro.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
+import { LucideIconsModule } from '../../shared/lucide.module';
 
 @Component({
   selector: 'app-temas-foro',
   templateUrl: './temas-foro.component.html',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LucideIconsModule],
   styleUrls: ['./temas-foro.component.css']
 })
 export class TemasForoComponent implements OnInit {

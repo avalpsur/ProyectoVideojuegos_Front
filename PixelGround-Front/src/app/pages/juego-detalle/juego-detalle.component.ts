@@ -55,6 +55,8 @@ export class JuegoDetalleComponent implements OnInit {
   }
 
   votar(p: number): void {
+    if (this.miVoto === p) return;
+
     const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
 
     const voto: Votacion = {
@@ -65,9 +67,9 @@ export class JuegoDetalleComponent implements OnInit {
       imagenUrlJuego: this.juego?.background_image || 'URL vacía'
     };
 
+    this.miVoto = p;
     this.votacionService.votar(voto).subscribe({
       next: () => {
-        this.miVoto = p;
         this.cargarDatos();
         this.actividadService.registrarActividad(
           'voto',
@@ -75,9 +77,13 @@ export class JuegoDetalleComponent implements OnInit {
           JSON.stringify({ puntuacion: voto.puntuacion })
         ).subscribe();
       },
-      error: () => alert("Error al enviar el voto")
+      error: () => {
+        alert("Error al enviar el voto");
+        this.miVoto = 0;
+      }
     });
   }
+
 
   enviarReview(): void {
     const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');

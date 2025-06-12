@@ -16,15 +16,16 @@ export interface Reto {
 
 export interface ParticipanteReto {
   id?: number;
-  usuarioId: number;
+  idUsuario: number;         
   nombreUsuario: string;
-  retoId: number;
+  idReto: number;       
   tituloReto: string;
   comentario: string;
   imagenPruebaUrl: string | null;
   completado: boolean;
   fechaCompletado: string | null;
 }
+
 
 @Injectable({
   providedIn: 'root'

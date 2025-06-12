@@ -6,11 +6,12 @@ import { ListaJuegosService, ListaJuego } from '../../core/services/lista-juegos
 import { RouterModule } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { LucideIconsModule } from '../../shared/lucide.module';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, LucideIconsModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })

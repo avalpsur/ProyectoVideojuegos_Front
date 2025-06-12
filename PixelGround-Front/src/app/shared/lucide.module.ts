@@ -8,6 +8,8 @@ import {
   ChevronDown,
   Gamepad2,
   Bell,
+  TrendingUp,
+  Users
 } from 'lucide-angular';
 
 const icons = {
@@ -17,7 +19,9 @@ const icons = {
   MessageCircle,
   ChevronDown,
   Gamepad2,
-  Bell
+  Bell,
+  TrendingUp,
+  Users
 };
 
 @NgModule({
