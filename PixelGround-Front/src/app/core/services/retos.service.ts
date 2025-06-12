@@ -30,7 +30,7 @@ export interface ParticipanteReto {
   providedIn: 'root'
 })
 export class RetosService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl = `${environment.apiUrl}/retos`;
 
   constructor(private http: HttpClient) { }
 

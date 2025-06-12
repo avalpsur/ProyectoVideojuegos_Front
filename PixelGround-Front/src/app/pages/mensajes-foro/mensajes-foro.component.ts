@@ -3,11 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ForoService } from '../../core/services/foro.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-mensajes-foro',
   templateUrl: './mensajes-foro.component.html',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   styleUrls: ['./mensajes-foro.component.css']
 })
 export class MensajesForoComponent implements OnInit {
@@ -20,6 +21,7 @@ export class MensajesForoComponent implements OnInit {
   pageSize = 10;
   totalRespuestas = 0;
   nuevaRespuesta = '';
+  hilosRelacionados: any[] = [];
 
   constructor(private foroService: ForoService, private route: ActivatedRoute, private router: Router) {}
 
@@ -35,6 +37,17 @@ export class MensajesForoComponent implements OnInit {
     this.foroService.getHiloPorId(this.hiloId).subscribe({
       next: (hilo) => {
         this.hilo = hilo;
+        // Cargar hilos relacionados (otros hilos del mismo tema, excluyendo el actual)
+        if (hilo.temaId) {
+          this.foroService.getHilosPorTema(hilo.temaId).subscribe({
+            next: (hilos) => {
+              this.hilosRelacionados = hilos.filter((h: any) => h.id !== this.hiloId).slice(0, 6);
+            },
+            error: () => {
+              this.hilosRelacionados = [];
+            }
+          });
+        }
         this.foroService.getRespuestasHilo(this.hiloId).subscribe({
           next: (respuestas) => {
             this.respuestas = respuestas;

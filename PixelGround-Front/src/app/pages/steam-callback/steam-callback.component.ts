@@ -15,6 +15,8 @@ import { environment } from '../../../environments/environment';
 export class SteamCallbackComponent implements OnInit {
   mensaje = 'Procesando vinculación...';
   error = false;
+  private apiUrl = `${environment.apiUrl}/actividad`;
+
 
   constructor(private http: HttpClient, private router: Router) {}
 

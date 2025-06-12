@@ -5,11 +5,11 @@ import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = environment.apiUrl;
+private apiUrl = `${environment.apiUrl}`;
   constructor(private http: HttpClient) { }
 
   login(login: string, password: string): Observable<string> {
-    return this.http.post(`${this.apiUrl}/login`, { login, password }, { responseType: 'text' });
+    return this.http.post(`${this.apiUrl}/auth/login`, { login, password }, { responseType: 'text' });
   }
 
   register(email: string, nombreUsuario: string, password: string): Observable<string> {

@@ -63,7 +63,7 @@ export class HomeComponent implements OnInit {
       this.steamStats.tieneSteam = true;
       const token = localStorage.getItem('token');
       const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-      this.http.get<any[]>('${environment.apiUrl}/steam/recientes', { headers }).subscribe({
+      this.http.get<any[]>(`${environment.apiUrl}/steam/recientes`, { headers }).subscribe({
         next: (juegos) => {
           if (!juegos || juegos.length === 0) {
             this.steamStats.horasSemana = 0;

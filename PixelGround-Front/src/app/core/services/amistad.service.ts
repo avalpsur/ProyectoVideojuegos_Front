@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AmistadService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl = `${environment.apiUrl}/amistades`;
   constructor(private http: HttpClient) { }
 
   private getHeaders(): { headers: HttpHeaders } {

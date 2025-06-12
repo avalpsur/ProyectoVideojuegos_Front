@@ -20,9 +20,9 @@ export interface ListaJuego {
 
 @Injectable({ providedIn: 'root' })
 export class ListaJuegosService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl = `${environment.apiUrl}/listas`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');

@@ -1,0 +1,4 @@
+/* Mantener display block para el host */
+:host {
+  display: block;
+}

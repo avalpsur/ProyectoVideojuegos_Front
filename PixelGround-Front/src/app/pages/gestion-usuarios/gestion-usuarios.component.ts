@@ -16,6 +16,8 @@ export class GestionUsuariosComponent implements OnInit {
   paginaActual = 1;
   usuariosPorPagina = 5;
   totalPaginas = 1;
+  filtroNombre: string = '';
+
   usuarioEditando: Usuario | null = null;
   mostrarModal = false;
   nuevoRol = '';
@@ -30,19 +32,27 @@ export class GestionUsuariosComponent implements OnInit {
 
   cargarUsuarios() {
     const token = localStorage.getItem('token');
-    fetch('${environment.apiUrl}/usuarios', {
+    fetch(`${environment.apiUrl}/usuarios`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('Error al obtener usuarios');
+        return res.json();
+      })
       .then((data: Usuario[]) => {
         this.usuarios = data;
         this.totalPaginas = Math.ceil(this.usuarios.length / this.usuariosPorPagina);
-      });
+      })
+      .catch(err => console.error('Error en la carga de usuarios:', err));
   }
 
-  get usuariosPaginados() {
+  get usuariosFiltradosPaginados() {
+    const filtrados = this.usuarios.filter(u =>
+      u.nombreUsuario.toLowerCase().includes(this.filtroNombre.toLowerCase())
+    );
+    this.totalPaginas = Math.max(1, Math.ceil(filtrados.length / this.usuariosPorPagina));
     const inicio = (this.paginaActual - 1) * this.usuariosPorPagina;
-    return this.usuarios.slice(inicio, inicio + this.usuariosPorPagina);
+    return filtrados.slice(inicio, inicio + this.usuariosPorPagina);
   }
 
   cambiarPagina(delta: number) {

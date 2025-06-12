@@ -1,7 +1,14 @@
-<div class="bg-gray-50 min-h-[80vh] flex flex-col items-center py-8 px-2">
+<div class="bg-gray-50 min-h-[80vh] flex flex-col items-center py-8 px-2 pt-32">
   <div class="w-full max-w-4xl bg-white rounded-xl shadow-lg border border-gray-200 p-6">
-    <h2 class="text-2xl font-bold mb-6 text-gray-800">Gestión de Usuarios</h2>
-    <table class="w-full text-left border-separate border-spacing-y-2">
+    <h2 class="text-2xl font-bold mb-4 text-gray-800">Gestión de Usuarios</h2>
+
+    <!-- Buscador -->
+    <div class="mb-6 w-full max-w-xs">
+      <input type="text" [(ngModel)]="filtroNombre" (ngModelChange)="paginaActual = 1" placeholder="Buscar usuario..." class="w-full p-2 border rounded shadow-sm" />
+    </div>
+
+    <!-- Tabla -->
+    <table class="w-full text-left border-separate border-spacing-y-3 shadow-md">
       <thead>
         <tr class="text-gray-700">
           <th class="py-2 px-3">ID</th>
@@ -12,7 +19,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let usuario of usuariosPaginados" class="bg-white hover:bg-gray-100 rounded-lg shadow border border-gray-200">
+        <tr *ngFor="let usuario of usuariosFiltradosPaginados" class="bg-white hover:bg-gray-100 rounded-lg shadow border border-gray-200">
           <td class="py-2 px-3">{{ usuario.id }}</td>
           <td class="py-2 px-3 font-semibold">{{ usuario.nombreUsuario }}</td>
           <td class="py-2 px-3">{{ usuario.email }}</td>
@@ -23,12 +30,14 @@
             </span>
           </td>
           <td class="py-2 px-3 flex gap-2">
-            <button (click)="abrirModal(usuario)" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded shadow text-xs cursor-pointer">Editar Rol</button>
-            <button (click)="confirmarEliminar(usuario)" class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded shadow text-xs cursor-pointer">Eliminar</button>
+            <button (click)="abrirModal(usuario)" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded shadow text-xs cursor-pointer">Editar Rol</button>
+            <button (click)="confirmarEliminar(usuario)" class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded shadow text-xs cursor-pointer">Eliminar</button>
           </td>
         </tr>
       </tbody>
     </table>
+
+    <!-- Paginación -->
     <div class="flex justify-between items-center mt-6">
       <button (click)="cambiarPagina(-1)" [disabled]="paginaActual === 1" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 cursor-pointer">Anterior</button>
       <span class="text-gray-700">Página {{ paginaActual }} de {{ totalPaginas }}</span>
@@ -58,19 +67,6 @@
       <div class="flex justify-end gap-2">
         <button (click)="cancelarEliminar()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer">Cancelar</button>
         <button (click)="eliminarUsuario()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 cursor-pointer">Eliminar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bot Asistente Flotante -->
-  <div class="fixed bottom-6 right-6 z-50">
-    <div class="relative group">
-      <div class="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-400 to-pink-400 shadow-lg flex items-center justify-center animate-bounce cursor-pointer">
-        <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f916.png" alt="Bot" class="w-10 h-10" />
-      </div>
-      <div class="absolute bottom-20 right-0 w-64 bg-white border border-gray-300 rounded-lg shadow-xl p-4 text-sm text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
-        <strong>Consejo del bot:</strong><br>
-        Puedes eliminar usuarios problemáticos o promover usuarios de confianza a administradores.
       </div>
     </div>
   </div>
