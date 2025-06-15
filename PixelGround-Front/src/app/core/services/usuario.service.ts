@@ -56,4 +56,10 @@ private apiUrl = `${environment.apiUrl}/usuarios`;
     const headers = { Authorization: `Bearer ${token}` };
     return this.http.delete(`${this.apiUrl}/${id}`, { headers });
   }
+
+  cambiarPassword(id: number, nuevaPassword: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.put(`${this.apiUrl}/${id}/cambiar-password?nuevaPassword=${encodeURIComponent(nuevaPassword)}`, {}, { headers });
+  }
 }

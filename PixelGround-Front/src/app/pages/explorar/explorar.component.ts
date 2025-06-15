@@ -9,6 +9,10 @@ import { AuthService } from '../../core/services/auth.service';
 import { Votacion } from '../../core/models/votacion.model';
 import { Router } from '@angular/router';
 
+interface ListaJuegoConPortada extends ListaJuego {
+  portadaUrl?: string;
+}
+
 @Component({
   selector: 'app-explorar',
   standalone: true,
@@ -19,7 +23,7 @@ import { Router } from '@angular/router';
 export class ExplorarComponent implements OnInit {
   query = '';
   resultados: any[] = [];
-  listas: ListaJuego[] = [];
+  listas: ListaJuegoConPortada[] = [];
   selectedJuegoId: number | null = null;
   nuevaListaNombre: string = '';
   filtroGenero: string = '';
@@ -94,7 +98,25 @@ export class ExplorarComponent implements OnInit {
   cargarListas(): void {
     if (this.usuarioId) {
       this.listaService.obtenerListasDeUsuario(this.usuarioId).subscribe({
-        next: (listas) => this.listas = listas,
+        next: (listas) => {
+          // Para cada lista, obtener la portada
+          this.listas = listas.map(lista => ({ ...lista, portadaUrl: '/assets/default-list-cover.png' }));
+          this.listas.forEach((lista, idx) => {
+            if (lista.juegosId && lista.juegosId.length > 0) {
+              const primerId = lista.juegosId[0]?.apiId || lista.juegosId[0];
+              if (primerId) {
+                this.rawgService.obtenerJuegoPorId(Number(primerId)).subscribe({
+                  next: (juegoRAWG) => {
+                    this.listas[idx].portadaUrl = juegoRAWG.background_image || '/assets/default-list-cover.png';
+                  },
+                  error: () => {
+                    this.listas[idx].portadaUrl = '/assets/default-list-cover.png';
+                  }
+                });
+              }
+            }
+          });
+        },
         error: (err) => console.error('Error al cargar listas', err),
       });
     }
@@ -155,8 +177,11 @@ export class ExplorarComponent implements OnInit {
     this.buscar();
   }
 
-  anadirJuegoALista(listaId: number, juegoId: number): void {
-    this.listaService.anadirJuegoALista(listaId, juegoId).subscribe({
+  anadirJuegoALista(listaId: number, juego: any): void {
+    this.listaService.anadirJuegoALista(listaId, {
+      apiId: juego.id.toString(),
+      nombre: juego.name || 'Nombre desconocido'
+    }).subscribe({
       next: () => {
         alert('Juego añadido a la lista correctamente');
         this.selectedJuegoId = null;
@@ -169,7 +194,7 @@ export class ExplorarComponent implements OnInit {
   }
 
   eliminarJuegoDeLista(listaId: number, juegoId: number): void {
-    this.listaService.eliminarJuegoDeLista(listaId, juegoId).subscribe({
+    this.listaService.eliminarJuegoDeLista(listaId, juegoId.toString()).subscribe({
       next: () => {
         alert('Juego eliminado de la lista correctamente');
         this.selectedJuegoId = null;

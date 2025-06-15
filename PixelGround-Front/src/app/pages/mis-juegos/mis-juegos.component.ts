@@ -4,6 +4,11 @@ import { ListaJuegosService, ListaJuego } from '../../core/services/lista-juegos
 import { AuthService } from '../../core/services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { RawgApiService } from '../../core/services/rawg-api.service';
+
+interface ListaJuegoConPortada extends ListaJuego {
+  portadaUrl?: string | null;
+}
 
 @Component({
   selector: 'app-mis-juegos',
@@ -13,15 +18,19 @@ import { Router, RouterModule } from '@angular/router';
   styleUrls: ['./mis-juegos.component.css']
 })
 export class MisJuegosComponent implements OnInit {
-  listas: ListaJuego[] = [];
+  listas: ListaJuegoConPortada[] = [];
   nombreLista: string = '';
   descripcionLista: string = '';
   usuarioId: number | null = null;
+  paginaActual: number = 1;
+  elementosPorPagina: number = 8;
+  filtroNombreLista: string = '';
 
   constructor(
     private listaService: ListaJuegosService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private rawgApiService: RawgApiService
   ) {}
 
   ngOnInit(): void {
@@ -38,13 +47,28 @@ export class MisJuegosComponent implements OnInit {
   }
 
   cargarListas(): void {
-    this.listaService.obtenerListasDeUsuario(this.usuarioId!).subscribe({
-      next: (listas) => {
-        this.listas = listas;
-      },
-      error: (err) => console.error('Error al cargar listas', err),
-    });
-  }
+  this.listaService.obtenerListasDeUsuario(this.usuarioId!).subscribe({
+    next: (listas) => {
+      this.listas = listas.map(lista => ({ ...lista, portadaUrl: null }));
+
+      this.listas.forEach(lista => {
+        if (lista.juegosId?.length > 0) {
+          const apiId = lista.juegosId[0];
+          this.rawgApiService.obtenerJuegoPorId(Number(apiId)).subscribe({
+            next: juego => {
+              lista.portadaUrl = juego.background_image;
+            },
+            error: () => {
+              lista.portadaUrl = null; 
+            }
+          });
+        }
+      });
+    },
+    error: (err) => console.error('Error al cargar listas', err),
+  });
+}
+
 
   crearLista(): void {
     if (!this.nombreLista.trim() || !this.usuarioId) return;
@@ -72,6 +96,31 @@ export class MisJuegosComponent implements OnInit {
         console.error('Error al eliminar lista', err);
       }
     });
+  }
+
+  get listasFiltradas(): ListaJuegoConPortada[] {
+    if (!this.filtroNombreLista.trim()) return this.listas;
+    const filtro = this.filtroNombreLista.trim().toLowerCase();
+    return this.listas.filter(l => l.nombre.toLowerCase().includes(filtro));
+  }
+
+  get listasPaginadas(): ListaJuegoConPortada[] {
+    const inicio = (this.paginaActual - 1) * this.elementosPorPagina;
+    return this.listasFiltradas.slice(inicio, inicio + this.elementosPorPagina);
+  }
+
+  get totalPaginas(): number {
+    return Math.max(1, Math.ceil(this.listasFiltradas.length / this.elementosPorPagina));
+  }
+
+  cambiarPagina(delta: number) {
+    this.paginaActual += delta;
+    if (this.paginaActual < 1) this.paginaActual = 1;
+    if (this.paginaActual > this.totalPaginas) this.paginaActual = this.totalPaginas;
+  }
+
+  onFiltroNombreListaChange() {
+    this.paginaActual = 1;
   }
 
   trackById(index: number, item: ListaJuego): number {

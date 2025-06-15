@@ -4,10 +4,10 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 export interface Juego {
-  id: number;
+  id?: number;
   apiId: string;
-  nombre: string;
-  imagenUrl: string;
+  nombre?: string;
+  imagenUrl?: string;
 }
 
 export interface ListaJuego {
@@ -15,7 +15,9 @@ export interface ListaJuego {
   nombre: string;
   descripcion: string;
   usuarioId: number;
-  juegos: Juego[];
+  juegosId: Juego[];
+  publica: boolean;
+  miembrosId: number[];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -36,6 +38,19 @@ export class ListaJuegosService {
     );
   }
 
+  obtenerListaPorId(id: number): Observable<ListaJuego> {
+    return this.http.get<ListaJuego>(
+      `${this.apiUrl}/${id}`,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  obtenerListasPublicas(): Observable<ListaJuego[]> {
+    return this.http.get<ListaJuego[]>(
+      `${this.apiUrl}/publicas`
+    );
+  }
+
   crearLista(lista: Partial<ListaJuego>): Observable<ListaJuego> {
     return this.http.post<ListaJuego>(
       this.apiUrl,
@@ -44,19 +59,14 @@ export class ListaJuegosService {
     );
   }
 
-  anadirJuegoALista(listaId: number, apiId: number): Observable<void> {
+  anadirJuegoALista(listaId: number, juego: { apiId: string; nombre?: string }): Observable<void> {
     return this.http.post<void>(
       `${this.apiUrl}/${listaId}/juegos`,
-      { apiId },
+      juego,
       { headers: this.getAuthHeaders() }
     );
   }
-  eliminarJuegoDeLista(listaId: number, apiId: number): Observable<void> {
-    return this.http.delete<void>(
-      `${this.apiUrl}/${listaId}/juegos/${apiId}`,
-      { headers: this.getAuthHeaders() }
-    );
-  }
+
 
   eliminarLista(id: number): Observable<void> {
     return this.http.delete<void>(
@@ -64,4 +74,28 @@ export class ListaJuegosService {
       { headers: this.getAuthHeaders() }
     );
   }
+
+  unirseALista(listaId: number): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/${listaId}/unirse`,
+      {},
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  cambiarVisibilidad(listaId: number): Observable<void> {
+    return this.http.patch<void>(
+      `${this.apiUrl}/${listaId}/visibilidad`,
+      {},
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  eliminarJuegoDeLista(listaId: number, apiId: string): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiUrl}/${listaId}/juegos/${apiId}`,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
 }

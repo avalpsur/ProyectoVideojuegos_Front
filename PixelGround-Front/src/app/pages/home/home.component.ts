@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { LucideIconsModule } from '../../shared/lucide.module';
+import { RawgApiService } from '../../core/services/rawg-api.service';
 
 @Component({
   selector: 'app-home',
@@ -23,22 +24,18 @@ export class HomeComponent implements OnInit {
 
   steamId: string | null = null;
 
-  steamStats: {
-    horasSemana: number;
-    juegoTop: string;
-    juegoTopHoras: number;
-    tieneSteam: boolean;
-    error?: string;
-  } = {
-      horasSemana: 0,
-      juegoTop: '',
-      juegoTopHoras: 0,
-      tieneSteam: false,
-    };
+  steamStats = {
+    horasSemana: 0,
+    juegoTop: '',
+    juegoTopHoras: 0,
+    tieneSteam: false,
+    error: ''
+  };
 
   constructor(
     private actividadService: ActividadService,
     private listaService: ListaJuegosService,
+    private rawgApiService: RawgApiService,
     private http: HttpClient
   ) { }
 
@@ -46,12 +43,16 @@ export class HomeComponent implements OnInit {
     const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
     this.steamId = usuario.steamId || null;
     this.nombreUsuario = usuario.nombreUsuario || '...';
+
     if (usuario.id) {
       this.listaService.obtenerListasDeUsuario(usuario.id).subscribe({
-        next: (listas) => (this.listas = listas),
+        next: (listas) => {
+          this.enriquecerListasConImagenes(listas);
+        },
         error: () => (this.listas = []),
       });
     }
+
     this.actividadService.obtenerFeed().subscribe({
       next: (res: Actividad[]) => {
         this.actividades = res;
@@ -66,12 +67,7 @@ export class HomeComponent implements OnInit {
       const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
       this.http.get<any[]>(`${environment.apiUrl}/steam/recientes`, { headers }).subscribe({
         next: (juegos) => {
-          if (!juegos || juegos.length === 0) {
-            this.steamStats.horasSemana = 0;
-            this.steamStats.juegoTop = '';
-            this.steamStats.juegoTopHoras = 0;
-            return;
-          }
+          if (!juegos || juegos.length === 0) return;
           let totalMin = 0;
           let topJuego = juegos[0];
           for (const juego of juegos) {
@@ -80,7 +76,7 @@ export class HomeComponent implements OnInit {
               topJuego = juego;
             }
           }
-          this.steamStats.horasSemana = Math.round((totalMin / 2) / 60 * 10) / 10; // mitad de minutos a horas, 1 decimal
+          this.steamStats.horasSemana = Math.round((totalMin / 2) / 60 * 10) / 10;
           this.steamStats.juegoTop = topJuego.name;
           this.steamStats.juegoTopHoras = Math.round((topJuego.playtime_2weeks / 2) / 60 * 10) / 10;
         },
@@ -88,17 +84,46 @@ export class HomeComponent implements OnInit {
           this.steamStats.error = 'No se pudieron cargar las estadísticas de Steam.';
         },
       });
-    } else {
-      this.steamStats.tieneSteam = false;
     }
+  }
+
+  enriquecerListasConImagenes(listas: ListaJuego[]) {
+    const nuevasListas: ListaJuego[] = [];
+    let pendientes = listas.length;
+
+    if (pendientes === 0) {
+      this.listas = [];
+      return;
+    }
+
+    listas.forEach((lista) => {
+      const primeraId = lista.juegosId?.[0];
+      if (!primeraId) {
+        nuevasListas.push({ ...lista, juegosId: [] });
+        if (--pendientes === 0) this.listas = nuevasListas;
+        return;
+      }
+
+      this.rawgApiService.obtenerJuegoPorId(+primeraId).subscribe({
+        next: (juego) => {
+          nuevasListas.push({
+            ...lista,
+            juegosId: [{ ...juego, imagenUrl: juego.background_image }]
+          });
+          if (--pendientes === 0) this.listas = nuevasListas;
+        },
+        error: () => {
+          nuevasListas.push(lista);
+          if (--pendientes === 0) this.listas = nuevasListas;
+        },
+      });
+    });
   }
 
   vincularSteam() {
     const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
     window.location.href = `${environment.apiUrl}/steam/login?email=${usuario.email}`;
   }
-
-
 
   extraerPuntuacion(contenidoExtra: string): string {
     try {
@@ -112,4 +137,31 @@ export class HomeComponent implements OnInit {
   isImagenValida(url: string): boolean {
     return !!url && url !== 'URL vacía';
   }
+
+  onImageError(event: Event) {
+    (event.target as HTMLImageElement).src = 'assets/no-image.png';
+  }
+
+  cargarImagenesParaFeed(): void {
+    for (const actividad of this.actividades) {
+      if ((!actividad.imagenUrlJuego || actividad.imagenUrlJuego === 'URL vacía') && actividad.juegoApiId) {
+        const rawgId = Number(actividad.juegoApiId);
+        if (!isNaN(rawgId)) {
+          this.rawgApiService.obtenerJuegoPorId(rawgId).subscribe({
+            next: (juego) => {
+              actividad.imagenUrlJuego = juego.background_image || 'https://via.placeholder.com/64x64?text=Juego';
+            },
+            error: () => {
+              actividad.imagenUrlJuego = 'https://via.placeholder.com/64x64?text=Juego';
+            }
+          });
+        } else {
+          actividad.imagenUrlJuego = 'https://via.placeholder.com/64x64?text=Juego';
+        }
+      }
+    }
+  }
+
+
+
 }

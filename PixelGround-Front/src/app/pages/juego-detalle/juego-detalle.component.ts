@@ -8,6 +8,8 @@ import { Review } from '../../core/models/review.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Votacion } from '../../core/models/votacion.model';
+import { Router } from '@angular/router';
+import { ListaJuegosService, ListaJuego } from '../../core/services/lista-juegos.service';
 
 @Component({
   selector: 'app-juego-detalle',
@@ -22,18 +24,29 @@ export class JuegoDetalleComponent implements OnInit {
   puntuacionMedia: number = 0;
   reviews: Review[] = [];
   nuevareview: string = '';
+  showAddToListModal: boolean = false;
+  mostrarDescripcionCompleta: boolean = false;
+  listas: ListaJuego[] = [];
+  nuevaListaNombre: string = '';
+  usuarioId: number | null = null;
+  addToListError: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private rawgApi: RawgApiService,
     private votacionService: VotacionService,
     private actividadService: ActividadService,
-    private reviewService: ReviewService
+    private reviewService: ReviewService,
+    private listaService: ListaJuegosService,
+    public router: Router // Inyectar Router y hacerlo público
   ) { }
 
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.paramMap.get('id'));
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+    this.usuarioId = usuario.id || null;
     this.cargarDatos();
+    this.cargarListas();
   }
 
   cargarDatos(): void {
@@ -54,31 +67,46 @@ export class JuegoDetalleComponent implements OnInit {
     });
   }
 
-  votar(p: number): void {
-    if (this.miVoto === p) return;
+  cargarListas(): void {
+    if (!this.usuarioId) return;
+    this.listaService.obtenerListasDeUsuario(this.usuarioId).subscribe({
+      next: listas => this.listas = listas,
+      error: () => this.listas = []
+    });
+  }
 
+  votar(): void {
     const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+    if (!usuario?.id || !this.miVoto) {
+      alert('Debes seleccionar una puntuación primero');
+      return;
+    }
 
     const voto: Votacion = {
       usuarioId: usuario.id,
-      juegoApiId: this.id.toString(),
-      puntuacion: p,
-      nombreJuego: this.juego?.name || 'Juego desconocido',
-      imagenUrlJuego: this.juego?.background_image || 'URL vacía'
+      juegoApiId: this.juego.id.toString(),
+      puntuacion: this.miVoto,
+      nombreJuego: this.juego.name || 'Juego desconocido',
+      imagenUrlJuego: this.juego.background_image || 'URL vacía'
     };
 
-    this.miVoto = p;
     this.votacionService.votar(voto).subscribe({
       next: () => {
-        this.cargarDatos();
         this.actividadService.registrarActividad(
           'voto',
           voto.juegoApiId,
-          JSON.stringify({ puntuacion: voto.puntuacion })
+          JSON.stringify({ puntuacion: voto.puntuacion }),
+          {
+            usuarioId: usuario.id,
+            nombreUsuario: usuario.nombreUsuario,
+            nombreJuego: voto.nombreJuego,
+            imagenUrlJuego: voto.imagenUrlJuego
+          }
         ).subscribe();
+        alert(`Has votado ${voto.nombreJuego} con ${voto.puntuacion} estrellas`);
       },
       error: () => {
-        alert("Error al enviar el voto");
+        alert('Error al enviar el voto');
         this.miVoto = 0;
       }
     });
@@ -110,5 +138,50 @@ export class JuegoDetalleComponent implements OnInit {
 
   get generosTexto(): string {
     return this.juego?.genres?.map((g: any) => g.name).join(', ') || '';
+  }
+
+  abrirModalAnadirLista(): void {
+    this.showAddToListModal = true;
+  }
+
+  cerrarModalAnadirLista(): void {
+    this.showAddToListModal = false;
+  }
+
+  anadirJuegoALista(listaId: number): void {
+    if (!this.juego) return;
+    this.listaService.anadirJuegoALista(listaId, {
+      apiId: this.juego.id.toString(),
+      nombre: this.juego.name
+    }).subscribe({
+      next: () => {
+        this.addToListError = '';
+        this.cerrarModalAnadirLista();
+      },
+      error: () => {
+        this.addToListError = 'Error al añadir el juego a la lista';
+      }
+    });
+  }
+
+  crearYAnadirLista(): void {
+    if (!this.nuevaListaNombre.trim() || !this.usuarioId) return;
+    this.listaService.crearLista({
+      usuarioId: this.usuarioId,
+      nombre: this.nuevaListaNombre
+    }).subscribe({
+      next: (nuevaLista) => {
+        this.listas.push(nuevaLista);
+        this.anadirJuegoALista(nuevaLista.id);
+        this.nuevaListaNombre = '';
+      },
+      error: () => {
+        this.addToListError = 'Error al crear la lista';
+      }
+    });
+  }
+
+  setPuntuacion(valor: number): void {
+    this.miVoto = valor;
   }
 }

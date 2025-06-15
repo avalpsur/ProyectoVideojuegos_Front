@@ -69,12 +69,12 @@
             <!-- Paginación -->
             <div *ngIf="totalPaginas > 1" class="flex justify-center gap-4 mt-6">
                 <button (click)="cambiarPagina(-1)" [disabled]="pagina === 1"
-                    class="px-4 py-2 rounded-lg bg-zinc-800 text-pink-200 font-pixel font-bold border border-pink-400/20 shadow hover:bg-pink-900/30 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">←
+                    class="px-4 py-2 rounded-lg bg-zinc-800 text-pink-200 font-pixelground font-bold border border-pink-400/20 shadow hover:bg-pink-900/30 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">←
                     Anterior</button>
                 <span class="text-pink-300 font-pixel text-base flex items-center">Página {{ pagina }} de {{
                     totalPaginas }}</span>
                 <button (click)="cambiarPagina(1)" [disabled]="pagina === totalPaginas"
-                    class="px-4 py-2 rounded-lg bg-zinc-800 text-pink-200 font-pixel font-bold border border-pink-400/20 shadow hover:bg-pink-900/30 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">Siguiente
+                    class="px-4 py-2 rounded-lg bg-zinc-800 text-pink-200 font-pixelground font-bold border border-pink-400/20 shadow hover:bg-pink-900/30 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">Siguiente
                     →</button>
             </div>
 
@@ -85,7 +85,7 @@
                     class="p-3 rounded bg-zinc-950 text-white border border-pink-400 focus:outline-none font-mono"
                     rows="3"></textarea>
                 <button type="submit" [disabled]="form.invalid || !nuevaRespuesta.trim()"
-                    class="bg-[var(--color-rosa-principal)] hover:bg-pink-500 text-white font-bold font-pixelground rounded-xl px-6 py-2 shadow transition self-end">Responder</button>
+                    class="bg-[var(--color-rosa-principal)] hover:bg-pink-500 text-white font-bold font-pixelground rounded-xl px-6 py-2 shadow transition self-end cursor-pointer">Responder</button>
             </form>
         </div>
 

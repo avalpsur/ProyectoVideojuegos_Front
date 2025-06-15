@@ -3,11 +3,12 @@ import { RetosService, Reto, ParticipanteReto } from '../../core/services/retos.
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
+import { LucideIconsModule } from '../../shared/lucide.module';
 
 @Component({
   selector: 'app-retos',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LucideIconsModule],
   templateUrl: './retos.component.html',
   styleUrl: './retos.component.css'
 })
@@ -27,10 +28,17 @@ export class RetosComponent implements OnInit {
   imagenUrlCompletar = '';
   retoUsuarioIdACompletar: number | null = null;
 
-
-
-
   mostrarModalUnirse: boolean = false;
+  mostrarModalNuevoReto: boolean = false;
+  nuevoReto: any = {
+    titulo: '',
+    descripcion: '',
+    juego: '',
+    fechaInicio: '',
+    fechaExpiracion: ''
+  };
+  errorNuevoReto: string = '';
+  loadingNuevoReto: boolean = false;
 
   constructor(private retosService: RetosService, private authService: AuthService) { }
 
@@ -176,13 +184,15 @@ export class RetosComponent implements OnInit {
     this.mostrarModalUnirse = false;
   }
 
-  abrirDetalleReto(reto: any): void {
-    this.retoDetalleSeleccionado = reto;
+  abrirDetalleReto(reto: Reto): void {
+    this.retoSeleccionado = reto;
   }
 
+
   cerrarModalDetalle(): void {
-    this.retoDetalleSeleccionado = null;
+    this.retoSeleccionado = null;
   }
+  
   isReto(reto: any): boolean {
     return reto.hasOwnProperty('juego') && reto.hasOwnProperty('descripcion');
   }
@@ -192,33 +202,72 @@ export class RetosComponent implements OnInit {
   }
 
   abrirModalCompletar(id: number) {
-  this.retoUsuarioIdACompletar = id;
-  this.comentarioCompletar = '';
-  this.imagenUrlCompletar = '';
-  this.mostrarModalCompletar = true;
-}
+    this.retoUsuarioIdACompletar = id;
+    this.comentarioCompletar = '';
+    this.imagenUrlCompletar = '';
+    this.mostrarModalCompletar = true;
+  }
 
-cerrarModalCompletar() {
-  this.mostrarModalCompletar = false;
-  this.retoUsuarioIdACompletar = null;
-}
+  cerrarModalCompletar() {
+    this.mostrarModalCompletar = false;
+    this.retoUsuarioIdACompletar = null;
+  }
 
-confirmarCompletar() {
-  if (!this.retoUsuarioIdACompletar) return;
+  confirmarCompletar() {
+    if (!this.retoUsuarioIdACompletar) return;
 
-  this.retosService.completarReto(
-    this.retoUsuarioIdACompletar,
-    this.comentarioCompletar,
-    this.imagenUrlCompletar
-  ).subscribe({
-    next: () => {
-      this.cerrarModalCompletar();
-      this.retosService.getRetosPorUsuario(this.idUsuario).subscribe({
-        next: (participaciones) => this.misParticipaciones = participaciones
-      });
-    },
-    error: () => alert('Error al completar el reto')
-  });
-}
+    this.retosService.completarReto(
+      this.retoUsuarioIdACompletar,
+      this.comentarioCompletar,
+      this.imagenUrlCompletar
+    ).subscribe({
+      next: () => {
+        this.cerrarModalCompletar();
+        this.retosService.getRetosPorUsuario(this.idUsuario).subscribe({
+          next: (participaciones) => this.misParticipaciones = participaciones
+        });
+      },
+      error: () => alert('Error al completar el reto')
+    });
+  }
+
+  abrirModalNuevoReto() {
+    this.mostrarModalNuevoReto = true;
+    this.nuevoReto = {
+      titulo: '',
+      descripcion: '',
+      juego: '',
+      fechaInicio: '',
+      fechaExpiracion: ''
+    };
+    this.errorNuevoReto = '';
+  }
+
+  cerrarModalNuevoReto() {
+    this.mostrarModalNuevoReto = false;
+    this.errorNuevoReto = '';
+  }
+
+  crearNuevoReto() {
+    this.errorNuevoReto = '';
+    if (!this.nuevoReto.titulo || !this.nuevoReto.juego || !this.nuevoReto.fechaInicio || !this.nuevoReto.fechaExpiracion) {
+      this.errorNuevoReto = 'Por favor, completa todos los campos obligatorios.';
+      return;
+    }
+    this.loadingNuevoReto = true;
+    this.retosService.crearReto(this.nuevoReto).subscribe({
+      next: () => {
+        this.cerrarModalNuevoReto();
+        this.cargarRetos();
+      },
+      error: () => {
+        this.errorNuevoReto = 'Error al crear el reto. Inténtalo de nuevo.';
+        this.loadingNuevoReto = false;
+      },
+      complete: () => {
+        this.loadingNuevoReto = false;
+      }
+    });
+  }
 
 }

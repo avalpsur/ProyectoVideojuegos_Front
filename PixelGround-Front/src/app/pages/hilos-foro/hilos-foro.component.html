@@ -1,11 +1,11 @@
 <div class="min-h-screen bg-gradient-to-br from-zinc-950 via-zinc-900 to-indigo-950 text-white flex flex-col items-center py-10 px-2 pt-28">
   <div class="w-full max-w-4xl mx-auto flex flex-col gap-8">
     <div class="flex items-center gap-3">
-      <button (click)="volverATemas()" class="bg-zinc-800 text-pink-200 font-bold font-mono px-4 py-2 rounded-xl hover:bg-pink-900/30 transition shadow border border-pink-400/30">← Temas</button>
+      <button (click)="volverATemas()" class="bg-zinc-800 text-pink-200 font-bold font-mono px-4 py-2 rounded-xl hover:bg-pink-900/30 transition shadow border border-pink-400/30 cursor-pointer">← Temas</button>
       <h2 class="text-3xl font-bold text-[var(--color-rosa-principal)] font-pixelground drop-shadow ml-2">{{ tema?.nombre }}</h2>
     </div>
     <div class="flex justify-end">
-      <button (click)="mostrarFormularioCrearHilo = true" class="bg-[var(--color-rosa-principal)] hover:bg-pink-500 text-white font-bold font-pixelground rounded-xl px-6 py-2 shadow transition">
+      <button (click)="mostrarFormularioCrearHilo = true" class="bg-[var(--color-rosa-principal)] hover:bg-pink-500 text-white font-bold font-pixelground rounded-xl px-6 py-2 shadow transition cursor-pointer">
         + Crear hilo
       </button>
     </div>
@@ -15,8 +15,8 @@
       <input [(ngModel)]="nuevoHilo.titulo" placeholder="Título del hilo" class="bg-zinc-800 text-white p-3 rounded border border-pink-400 font-mono" />
       <textarea [(ngModel)]="nuevoHilo.contenido" placeholder="Contenido del hilo" class="bg-zinc-800 text-white p-3 rounded border border-pink-400 font-mono" rows="3"></textarea>
       <div class="flex justify-end gap-4">
-        <button (click)="crearHilo()" class="bg-green-600 hover:bg-green-500 text-white font-bold px-4 py-2 rounded">Publicar</button>
-        <button (click)="mostrarFormularioCrearHilo = false" class="bg-zinc-700 hover:bg-zinc-600 text-white font-bold px-4 py-2 rounded">Cancelar</button>
+        <button (click)="crearHilo()" class="bg-green-600 hover:bg-green-500 text-white font-bold px-4 py-2 rounded cursor-pointer">Publicar</button>
+        <button (click)="mostrarFormularioCrearHilo = false" class="bg-zinc-700 hover:bg-zinc-600 text-white font-bold px-4 py-2 rounded cursor-pointer">Cancelar</button>
       </div>
     </div>
 
@@ -38,7 +38,7 @@
               Por {{ hilo.nombreCreador }} • {{ hilo.fechaCreacion | date:'short' }}
             </div>
           </div>
-          <button *ngIf="rol === 'ADMIN'" (click)="$event.stopPropagation(); eliminarHilo(hilo)" class="text-red-400 hover:text-red-300 font-bold text-xs font-mono ml-2">Eliminar</button>
+          <button *ngIf="rol === 'ADMIN'" (click)="$event.stopPropagation(); eliminarHilo(hilo)" class="text-red-400 hover:text-red-300 font-bold text-xs font-mono ml-2 cursor-pointer">Eliminar</button>
         </div>
 
         <div class="flex gap-4 mt-2 text-xs text-zinc-400 font-mono">
@@ -59,9 +59,9 @@
 
     <!-- Paginación -->
     <div *ngIf="totalPaginas > 1" class="flex justify-center gap-4 mt-6">
-      <button (click)="cambiarPagina(-1)" [disabled]="pagina === 1" class="px-4 py-2 rounded-lg bg-zinc-800 text-pink-200 font-bold font-pixelground border border-pink-400/30 shadow hover:bg-pink-900/30 transition disabled:opacity-50 disabled:cursor-not-allowed">← Anterior</button>
+      <button (click)="cambiarPagina(-1)" [disabled]="pagina === 1" class="px-4 py-2 rounded-lg bg-zinc-800 text-pink-200 font-bold font-pixelground border border-pink-400/30 shadow hover:bg-pink-900/30 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">← Anterior</button>
       <span class="text-pink-300 font-pixelground text-base flex items-center">Página {{ pagina }} de {{ totalPaginas }}</span>
-      <button (click)="cambiarPagina(1)" [disabled]="pagina === totalPaginas" class="px-4 py-2 rounded-lg bg-zinc-800 text-pink-200 font-bold font-pixelground border border-pink-400/30 shadow hover:bg-pink-900/30 transition disabled:opacity-50 disabled:cursor-not-allowed">Siguiente →</button>
+      <button (click)="cambiarPagina(1)" [disabled]="pagina === totalPaginas" class="px-4 py-2 rounded-lg bg-zinc-800 text-pink-200 font-bold font-pixelground border border-pink-400/30 shadow hover:bg-pink-900/30 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">Siguiente →</button>
     </div>
   </div>
 </div>

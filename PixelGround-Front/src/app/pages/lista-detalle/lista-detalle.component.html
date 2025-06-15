@@ -1,12 +1,16 @@
-<div class="min-h-screen pt-24 px-2 sm:px-6 bg-gradient-to-br from-gray-950 via-zinc-900 to-indigo-950 text-white font-pixelground">
+<div
+  class="min-h-screen pt-24 px-2 sm:px-6 bg-gradient-to-br from-gray-950 via-zinc-900 to-indigo-950 text-white font-pixelground">
   <div class="max-w-3xl mx-auto mb-10">
-    <button routerLink="/mis-juegos" class="mb-6 text-pink-400 hover:underline font-mono text-sm">← Volver a mis listas</button>
+    <button (click)="router.navigate(['/mis-juegos'])" class="mb-6 text-pink-400 hover:underline font-mono text-sm cursor-pointer">
+      ← Volver a mis listas
+    </button>
     <div *ngIf="loading" class="text-center text-zinc-400">Cargando...</div>
     <div *ngIf="error" class="text-center text-red-400">{{ error }}</div>
     <ng-container *ngIf="!loading && lista">
       <!-- Portada -->
-      <div class="w-full aspect-[3/1] rounded-2xl overflow-hidden shadow-xl mb-6 bg-cover bg-center border border-pink-400/30"
-           [ngStyle]="{ 'background-image': lista.juegos && lista.juegos.length > 0 ? 'url(' + lista.juegos[0].imagenUrl + ')' : 'url(/assets/default-list-cover.png)' }">
+      <div
+        class="w-full aspect-[3/1] rounded-2xl overflow-hidden shadow-xl mb-6 bg-cover bg-center border border-pink-400/30"
+        [ngStyle]="{ 'background-image': juegos && juegos.length > 0 ? 'url(' + juegos[0].imagenUrl + ')' : 'url(/assets/default-list-cover.png)' }">
         <div class="w-full h-full bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
       </div>
       <!-- Info principal -->
@@ -14,20 +18,85 @@
         <div>
           <h1 class="text-3xl md:text-4xl font-bold text-pink-400 drop-shadow-neon mb-2">{{ lista.nombre }}</h1>
           <p class="text-zinc-300 font-mono text-base mb-1">{{ lista.descripcion || 'Sin descripción' }}</p>
-          <div class="text-sm text-zinc-400">Creada por: <span class="text-pink-300 font-bold">{{ usuario?.nombreUsuario || 'Desconocido' }}</span></div>
+          <div class="text-sm text-zinc-400">Creada por: <span class="text-pink-300 font-bold">{{ usuario?.nombreUsuario
+              || 'Desconocido' }}</span></div>
+        </div>
+        <div class="flex flex-col gap-2 items-end">
+          <button *ngIf="puedeUnirse" (click)="unirseALista()"
+            class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-xl shadow-lg border-2 border-green-400/30 hover:shadow-green-500/30 transition-all duration-200 tracking-wider text-base cursor-pointer">
+            Unirse a esta lista
+          </button>
+          <button *ngIf="puedeGestionar" (click)="abrirModalAnadirJuego()"
+            class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-xl shadow-lg border-2 border-pink-400/30 hover:shadow-pink-500/30 transition-all duration-200 tracking-wider text-base cursor-pointer">
+            Añadir a esta lista
+          </button>
         </div>
       </div>
       <!-- Juegos de la lista -->
       <div>
         <h2 class="text-xl font-semibold text-pink-300 mb-4 font-pixel">Juegos en la lista</h2>
-        <div *ngIf="!lista.juegos || lista.juegos.length === 0" class="text-zinc-400 italic">Esta lista está vacía.</div>
+        <div class="mb-4 flex flex-col md:flex-row md:items-center gap-4">
+          <input type="text" [(ngModel)]="filtroNombreJuego" (ngModelChange)="onFiltroNombreJuegoChange()"
+            placeholder="Buscar juego por nombre..."
+            class="flex-1 p-3 rounded-lg bg-zinc-800/90 border-2 border-zinc-700 focus:border-pink-400 text-white placeholder-zinc-400 shadow-inner focus:outline-none transition-all duration-200 font-semibold" />
+        </div>
+        <div *ngIf="!juegos || juegos.length === 0" class="text-zinc-400 italic">Esta lista está vacía.</div>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
-          <div *ngFor="let juego of lista.juegos" class="bg-zinc-800/80 rounded-xl shadow-lg border border-zinc-700 p-3 flex flex-col items-center hover:bg-pink-900/20 transition cursor-pointer">
+          <div *ngFor="let juego of juegosPaginados"
+               class="bg-zinc-800/80 rounded-xl shadow-lg border border-zinc-700 p-3 flex flex-col items-center hover:bg-pink-900/20 transition cursor-pointer relative"
+               [routerLink]="['/juego', juego.apiId]">
             <img [src]="juego.imagenUrl || '/assets/default-list-cover.png'" alt="{{ juego.nombre }}" class="w-full aspect-[3/4] object-cover rounded-lg mb-2 border border-pink-400/20">
             <div class="text-center">
               <div class="text-pink-200 font-bold text-lg line-clamp-1">{{ juego.nombre }}</div>
             </div>
+            <button *ngIf="puedeEliminarJuego" (click)="$event.stopPropagation(); eliminarJuegoDeLista(juego)" title="Eliminar juego"
+              class="absolute top-2 right-2 bg-pink-600/90 text-white rounded-full w-8 h-8 flex items-center justify-center border-2 border-pink-300 shadow-lg hover:bg-red-600 hover:border-red-400 hover:scale-110 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-pink-400/60 cursor-pointer">
+              <lucide-icon name="trash" class="w-5 h-5" />
+            </button>
           </div>
+        </div>
+        <!-- Controles de paginación -->
+        <div class="flex justify-center items-center gap-4 mt-8" *ngIf="totalPaginasJuegos > 1">
+          <button (click)="cambiarPaginaJuegos(-1)" [disabled]="paginaActualJuegos === 1"
+            class="px-4 py-2 rounded-lg bg-zinc-800 text-pink-200 font-pixelground font-bold border border-pink-400/20 shadow hover:bg-pink-900/30 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+            ← Anterior
+          </button>
+          <span class="text-pink-300 font-pixelground text-base flex items-center">Página {{ paginaActualJuegos }} de {{
+            totalPaginasJuegos }}</span>
+          <button (click)="cambiarPaginaJuegos(1)" [disabled]="paginaActualJuegos === totalPaginasJuegos"
+            class="px-4 py-2 rounded-lg bg-zinc-800 text-pink-200 font-pixelground font-bold border border-pink-400/20 shadow hover:bg-pink-900/30 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+            Siguiente →
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal añadir juego -->
+      <div *ngIf="showAddGameModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+        <div
+          class="bg-gradient-to-br from-[#1f002b] via-[#232946] to-[#3e206d] rounded-2xl shadow-2xl p-8 border-2 border-pink-400 flex flex-col items-center gap-4 animate-fade-in-up w-full max-w-lg">
+          <h3 class="text-xl font-bold text-pink-300 mb-2">Buscar juego para añadir</h3>
+          <input [(ngModel)]="queryRAWG" (keydown.enter)="buscarJuegosRAWG()" placeholder="Nombre del juego..."
+            class="w-full px-4 py-2 rounded-xl bg-zinc-800/90 text-white border-2 border-zinc-700 focus:border-pink-400 shadow-inner focus:outline-none font-mono transition-all duration-200 placeholder-zinc-400" />
+          <button (click)="buscarJuegosRAWG()"
+            class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-xl shadow-lg border-2 border-pink-400/30 hover:shadow-pink-500/30 transition-all duration-200 tracking-wider text-base cursor-pointer">Buscar</button>
+          <div *ngIf="addGameError" class="text-red-400">{{ addGameError }}</div>
+          <div *ngIf="juegosRAWG.length > 0" class="w-full max-h-60 overflow-y-auto grid grid-cols-1 gap-2">
+            <div *ngFor="let juego of juegosRAWG" (click)="seleccionarJuegoRAWG(juego)"
+              [class.bg-pink-900]="selectedRAWG && selectedRAWG.id === juego.id"
+              class="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-pink-900/40 transition border border-pink-400/10">
+              <img [src]="juego.background_image" alt="{{ juego.name }}" class="w-12 h-12 object-cover rounded shadow">
+              <div class="flex-1">
+                <div class="font-bold text-pink-200">{{ juego.name }}</div>
+                <div class="text-xs text-zinc-400">{{ juego.released }}</div>
+              </div>
+            </div>
+          </div>
+          <button *ngIf="selectedRAWG" (click)="anadirJuegoALista()" [disabled]="addGameLoading"
+            class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-xl shadow-lg border-2 border-green-400/30 transition-all duration-200 tracking-wider text-base cursor-pointer mt-2">
+            Añadir juego
+          </button>
+          <button (click)="cerrarModalAnadirJuego()"
+            class="mt-2 bg-zinc-700 hover:bg-zinc-800 text-white font-bold py-2 px-6 rounded-xl shadow-lg transition-all cursor-pointer">Cancelar</button>
         </div>
       </div>
     </ng-container>

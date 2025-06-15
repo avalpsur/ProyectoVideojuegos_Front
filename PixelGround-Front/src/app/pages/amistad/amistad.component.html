@@ -22,12 +22,12 @@
           <a [routerLink]="['/perfil', solicitud.nombreReceptor]" class="flex-1 font-bold text-lg text-pink-200 truncate hover:underline hover:text-pink-400 transition">
             {{ solicitud.nombreReceptor }}
           </a>
-          <button (click)="aceptarSolicitud(solicitud.idSolicitante)" title="Aceptar" class="bg-green-500 hover:scale-110 hover:brightness-110 text-white rounded-full p-2 shadow-lg transition-all mr-1 flex items-center justify-center">
+          <button (click)="aceptarSolicitud(solicitud.idSolicitante)" title="Aceptar" class="bg-green-500 hover:scale-110 hover:brightness-110 text-white rounded-full p-2 shadow-lg transition-all mr-1 flex items-center justify-center cursor-pointer">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
             </svg>
           </button>
-          <button (click)="rechazarSolicitud(solicitud.idSolicitante)" title="Rechazar" class="bg-red-500 hover:scale-110 hover:brightness-110 text-white rounded-full p-2 shadow-lg transition-all flex items-center justify-center">
+          <button (click)="rechazarSolicitud(solicitud.idSolicitante)" title="Rechazar" class="bg-red-500 hover:scale-110 hover:brightness-110 text-white rounded-full p-2 shadow-lg transition-all flex items-center justify-center cursor-pointer">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
             </svg>
@@ -87,8 +87,7 @@
           <a [routerLink]="['/perfil', user.nombreUsuario]" class="flex-1 font-bold text-lg text-pink-200 truncate hover:underline hover:text-pink-400 transition">
             {{ user.nombreUsuario }}
           </a>
-          <button (click)="enviarSolicitud(user.id)" *ngIf="!user.solicitudEnviada"
-            class="flex items-center gap-2 bg-pink-500 hover:scale-105 hover:brightness-110 text-white font-pixel py-2 px-4 rounded-lg shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-pink-400">
+          <button (click)="enviarSolicitud(user.id)" *ngIf="!user.solicitudEnviada" class="flex items-center gap-2 bg-pink-500 hover:scale-105 hover:brightness-110 text-white font-pixel py-2 px-4 rounded-lg shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-pink-400 cursor-pointer">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
             </svg>
@@ -107,7 +106,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
         </svg>
         <span class="text-pink-200 font-pixel text-xl">{{ modal.mensaje }}</span>
-        <button (click)="cerrarModal()" class="mt-2 bg-pink-500 hover:bg-pink-600 text-white font-bold font-pixel py-2 px-6 rounded-xl shadow-lg transition-all">
+        <button (click)="cerrarModal()" class="mt-2 bg-pink-500 hover:bg-pink-600 text-white font-bold font-pixel py-2 px-6 rounded-xl shadow-lg transition-all cursor-pointer">
           Cerrar
         </button>
       </div>

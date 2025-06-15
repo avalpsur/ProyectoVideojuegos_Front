@@ -12,7 +12,7 @@
             <div class="forum-card-desc">{{ tema.descripcion }}</div>
             <div class="forum-card-meta">Por {{ tema.creador }} el {{ tema.fechaCreacion | date:'shortDate' }}</div>
           </div>
-          <button (click)="irATema(tema)" class="forum-btn-main ml-2">Ver hilos</button>
+          <button (click)="irATema(tema)" class="forum-btn-main ml-2 cursor-pointer">Ver hilos</button>
         </div>
         <div class="flex gap-4 mt-2 text-xs text-zinc-400 font-mono">
           <span>Hilos: {{ tema.numHilos || 0 }}</span>

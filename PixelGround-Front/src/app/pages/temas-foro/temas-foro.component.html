@@ -19,11 +19,10 @@
       <textarea [(ngModel)]="nuevoTema.descripcion" placeholder="Descripción del tema"
         class="bg-zinc-800 text-white p-3 rounded border border-pink-400 font-mono" rows="3"></textarea>
       <div class="flex gap-4 justify-end">
-        <button (click)="crearTema()" class="bg-green-600 hover:bg-green-500 text-white font-bold px-4 py-2 rounded">
+        <button (click)="crearTema()" class="bg-green-600 hover:bg-green-500 text-white font-bold px-4 py-2 rounded cursor-pointer">
           Guardar
         </button>
-        <button (click)="mostrarFormularioCrearTema = false"
-          class="bg-zinc-700 hover:bg-zinc-600 text-white font-bold px-4 py-2 rounded">
+        <button (click)="mostrarFormularioCrearTema = false" class="bg-zinc-700 hover:bg-zinc-600 text-white font-bold px-4 py-2 rounded cursor-pointer">
           Cancelar
         </button>
       </div>

@@ -1,76 +1,138 @@
-<div class="pt-28 pb-12 px-2 sm:px-6 min-h-screen bg-gradient-to-br from-[#0f1021] via-[#1a1832] to-[#2d1e4f] text-white font-pixelground">
-  <div *ngIf="juego" class="max-w-6xl mx-auto bg-gradient-to-br from-[#232946]/90 via-[#2d3250]/90 to-[#3e206d]/80 rounded-3xl shadow-[0_8px_40px_0_rgba(80,0,120,0.25)] flex flex-col md:flex-row overflow-hidden border-4 border-[#7f5af0]/30 backdrop-blur-2xl">
-    <!-- Imagen -->
-    <div class="md:w-1/2 w-full relative flex items-center justify-center bg-[#18122b]/80">
-      <img [src]="juego.background_image" [alt]="juego.name" class="w-full h-full object-cover rounded-l-3xl md:rounded-l-3xl md:rounded-r-none rounded-t-3xl md:rounded-t-none shadow-2xl border-4 border-[#7f5af0]/40 saturate-150 brightness-90" />
-      <div class="absolute top-4 left-4 bg-[#7f5af0]/90 px-4 py-1 rounded-full text-xs text-white font-bold shadow-lg flex items-center gap-2 animate-pulse">
-        <svg class="w-4 h-4 text-yellow-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/></svg>
-        {{ puntuacionMedia.toFixed(1) }} / 5
-      </div>
-      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/80 px-6 py-2 rounded-full text-lg text-[#7f5af0] font-extrabold shadow-xl flex items-center gap-2 border-2 border-[#7f5af0]/40">
-        <svg class="w-6 h-6 text-[#7f5af0]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="3"/><rect x="7" y="3" width="10" height="4" rx="2"/><circle cx="8.5" cy="13.5" r="1.5"/><circle cx="15.5" cy="13.5" r="1.5"/></svg>
-        {{ juego.name }}
-      </div>
+<div
+  class="pt-28 pb-12 px-2 sm:px-6 min-h-screen bg-gradient-to-br from-[#0f1021] via-[#1a1832] to-[#2d1e4f] text-white font-pixelground">
+  <div *ngIf="juego" class="relative min-h-screen w-full overflow-x-hidden">
+    <!-- Fondo desenfocado -->
+    <div class="fixed inset-0 -z-10">
+      <div class="absolute inset-0 bg-black/80"></div>
+      <img [src]="juego.background_image" alt="Fondo juego"
+        class="w-full h-full object-cover blur-2xl scale-110 brightness-60 fixed inset-0 -z-20 select-none pointer-events-none" />
+      <div class="absolute inset-0 bg-gradient-to-b from-black via-black/60 to-transparent"></div>
     </div>
-    <!-- Contenido -->
-    <div class="md:w-1/2 w-full p-8 flex flex-col justify-between bg-gradient-to-br from-[#232946]/80 via-[#2d3250]/80 to-[#3e206d]/60">
-      <div>
-        <div class="flex flex-wrap gap-3 mb-6 mt-2">
-          <span class="inline-flex items-center gap-2 bg-[#7f5af0]/20 text-[#7f5af0] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-            {{ generosTexto }}
-          </span>
-          <span class="inline-flex items-center gap-2 bg-[#ff8906]/20 text-[#ff8906] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 3v4M8 3v4"/><rect x="2" y="7" width="20" height="14" rx="2"/></svg>
-            {{ juego.released }}
-          </span>
+
+    <!-- Botón volver -->
+    <button (click)="router.navigate(['/explorar'])"
+      class="absolute top-8 left-4 z-20 bg-black/60 hover:bg-black/80 text-white font-mono font-semibold px-5 py-2 rounded-xl shadow-lg border border-white/10 backdrop-blur-md flex items-center gap-2 cursor-pointer">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M15 19l-7-7 7-7" />
+      </svg>
+      Volver a explorar
+    </button>
+
+    <!-- Contenido principal -->
+    <div class="relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row gap-10 md:gap-16 pt-32 pb-16 px-2 md:px-0">
+      <!-- Imagen del juego -->
+      <div class="md:w-1/3 w-full flex justify-center items-start">
+        <img [src]="juego.background_image" [alt]="juego.name"
+          class="w-full max-w-xs aspect-[2/3] object-cover rounded-2xl shadow-2xl border-4 border-white/10 bg-black/40" />
+      </div>
+
+      <!-- Información -->
+      <div class="flex-1 flex flex-col gap-6">
+        <div>
+          <h1 class="text-4xl md:text-5xl font-bold drop-shadow-lg mb-2 flex flex-wrap items-center gap-3">
+            {{ juego.name }}
+            <span class="text-xl md:text-2xl font-mono font-semibold text-gray-300/80">
+              {{ juego.released?.slice(0,4) }}
+            </span>
+          </h1>
+
+          <!-- Géneros -->
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span *ngIf="generosTexto"
+              class="inline-flex items-center gap-2 bg-white/10 text-white/80 px-3 py-1 rounded-full text-xs font-mono font-semibold tracking-wider shadow">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              {{ generosTexto }}
+            </span>
+          </div>
+
+          <!-- Descripción expandible -->
+          <div>
+            <p
+              class="text-lg text-white/90 leading-relaxed font-mono bg-black/40 p-5 rounded-2xl shadow-inner border border-white/10 max-h-60 overflow-y-auto">
+              {{ juego.description_raw }}
+            </p>
+          </div>
         </div>
-        <p class="text-[#eaeaea] text-base leading-relaxed mb-8 bg-black/40 p-5 rounded-2xl shadow-inner border border-[#7f5af0]/20 font-mono">
-          {{ juego.description_raw }}
-        </p>
-        <!-- Estrellas de votación -->
-        <div class="mb-8">
-          <div class="flex items-center gap-2 mb-2">
-            <span class="text-lg font-bold text-[#ff8906]">Tu voto:</span>
+
+        <!-- Votación + Añadir -->
+        <div class="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+          <div class="flex items-center gap-2">
+            <span class="text-lg font-bold text-yellow-300 font-mono">Tu voto:</span>
             <div class="flex items-center gap-1 text-yellow-400 text-2xl select-none">
               <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
-                <span (click)="votar(star)"
-                  class="cursor-pointer transition-transform duration-150"
-                  [ngClass]="{
-                    'scale-125 drop-shadow-[0_0_12px_gold] text-yellow-300': miVoto >= star,
-                    'text-[#3e206d]/60': miVoto < star
-                  }">
-                  <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/>
-                  </svg>
+                <span (click)="setPuntuacion(star)" class="cursor-pointer transition-transform duration-150" [ngClass]="{
+            'scale-125 drop-shadow-[0_0_12px_gold] text-yellow-300': miVoto >= star,
+            'text-white/30': miVoto < star
+          }">
+                  ★
                 </span>
               </ng-container>
             </div>
           </div>
+
+          <!-- Botón para enviar voto -->
+          <div>
+            <button
+              class="mt-3 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg font-bold text-sm shadow transition-all duration-200 cursor-pointer"
+              (click)="votar()">
+              <svg class="w-5 h-5 inline-block mr-1 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24">
+                <path d="M5 13l4 4L19 7" />
+              </svg>
+              Enviar voto
+            </button>
+          </div>
         </div>
-        <!-- Review -->
-        <div class="mb-4">
-          <textarea [(ngModel)]="nuevareview" rows="3" placeholder="Escribe tu reseña..."
-            class="w-full bg-[#232946]/80 text-white border-2 border-[#7f5af0]/30 rounded-xl p-3 mb-2 shadow-inner focus:outline-none focus:ring-2 focus:ring-[#7f5af0] font-mono transition-all"></textarea>
-          <button (click)="enviarReview()"
-            class="bg-[#7f5af0] hover:bg-[#5f3dc4] text-white px-6 py-2 rounded-xl font-bold shadow-lg border-2 border-[#7f5af0]/30 hover:shadow-[#7f5af0]/30 transition-all duration-200 cursor-pointer">
-            Enviar reseña
-          </button>
+
+
+        <button (click)="abrirModalAnadirLista()"
+          class="bg-[#7f5af0] hover:bg-[#5f3dc4] text-white font-bold px-6 py-2 rounded-xl shadow-lg border-2 border-[#7f5af0]/30 hover:shadow-[#7f5af0]/30 transition-all duration-200 cursor-pointer font-mono">
+          Añadir a lista
+        </button>
+
+        <div class="flex items-center gap-2 ml-auto">
+          <span class="text-base text-white/80 font-mono">Media:</span>
+          <span class="text-2xl font-bold text-yellow-300 font-mono">{{ puntuacionMedia.toFixed(1) }}</span>
         </div>
+      </div>
+
+      <!-- Reseña nueva -->
+      <div class="mb-4">
+        <textarea [(ngModel)]="nuevareview" rows="3" placeholder="Escribe tu reseña..."
+          class="w-full bg-black/60 text-white border-2 border-[#7f5af0]/30 rounded-xl p-3 mb-2 shadow-inner focus:outline-none focus:ring-2 focus:ring-[#7f5af0] font-mono transition-all"></textarea>
+        <button (click)="enviarReview()"
+          class="bg-[#7f5af0] hover:bg-[#5f3dc4] text-white px-6 py-2 rounded-xl font-bold shadow-lg border-2 border-[#7f5af0]/30 hover:shadow-[#7f5af0]/30 transition-all duration-200 cursor-pointer">
+          Enviar reseña
+        </button>
       </div>
     </div>
   </div>
-  <!-- Lista de Reseñas -->
-  <div class="max-w-6xl mx-auto mt-10 bg-gradient-to-br from-[#232946]/90 via-[#2d3250]/90 to-[#3e206d]/80 p-8 rounded-3xl shadow-2xl border-4 border-[#7f5af0]/30 backdrop-blur-2xl">
-    <h2 class="text-2xl font-extrabold mb-6 text-[#7f5af0] drop-shadow-[0_0_8px_#7f5af0] font-pixelground flex items-center gap-2">
-      <svg class="w-7 h-7 text-[#7f5af0]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="3"/><rect x="7" y="3" width="10" height="4" rx="2"/><circle cx="8.5" cy="13.5" r="1.5"/><circle cx="15.5" cy="13.5" r="1.5"/></svg>
+
+  <!-- Reseñas -->
+  <div
+    class="max-w-5xl mx-auto mt-6 bg-black/70 p-8 rounded-3xl shadow-2xl border-4 border-[#7f5af0]/30 backdrop-blur-2xl">
+    <h2
+      class="text-2xl font-extrabold mb-6 text-[#7f5af0] drop-shadow-[0_0_8px_#7f5af0] font-pixelground flex items-center gap-2">
+      <svg class="w-7 h-7 text-[#7f5af0]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <rect x="3" y="7" width="18" height="13" rx="3" />
+        <rect x="7" y="3" width="10" height="4" rx="2" />
+        <circle cx="8.5" cy="13.5" r="1.5" />
+        <circle cx="15.5" cy="13.5" r="1.5" />
+      </svg>
       Reseñas de usuarios
     </h2>
+
     <div *ngIf="reviews.length === 0" class="text-gray-400 italic">No hay reseñas aún.</div>
+
     <ul *ngIf="reviews.length > 0" class="space-y-6">
-      <li *ngFor="let review of reviews" class="bg-black/50 p-6 rounded-2xl text-base text-gray-200 shadow-lg flex flex-col gap-2 border-2 border-[#7f5af0]/20">
+      <li *ngFor="let review of reviews"
+        class="bg-black/50 p-6 rounded-2xl text-base text-gray-200 shadow-lg flex flex-col gap-2 border-2 border-[#7f5af0]/20">
         <div class="flex items-center gap-3 mb-1">
-          <svg class="w-6 h-6 text-[#7f5af0]" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a5 5 0 100-10 5 5 0 000 10zm-7 8a7 7 0 0114 0H3z"/></svg>
+          <svg class="w-6 h-6 text-[#7f5af0]" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 12a5 5 0 100-10 5 5 0 000 10zm-7 8a7 7 0 0114 0H3z" />
+          </svg>
           <span class="font-bold text-[#7f5af0]">{{ review.nombreUsuario || 'Usuario anónimo' }}</span>
           <span class="text-xs text-gray-400">{{ review.fecha | date:'short' }}</span>
         </div>
@@ -78,4 +140,34 @@
       </li>
     </ul>
   </div>
+
+
+  <!-- Modal para añadir -->
+  <ng-container *ngIf="showAddToListModal">
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+      <div class="bg-zinc-900 rounded-2xl shadow-2xl border border-pink-400/30 p-6 w-full max-w-md relative">
+        <button (click)="cerrarModalAnadirLista()"
+          class="absolute top-3 right-3 text-zinc-400 hover:text-white text-2xl font-bold">&times;</button>
+        <h2 class="text-lg font-bold mb-4 text-white">Añadir a lista</h2>
+        <div class="flex flex-col gap-2">
+          <label class="text-sm text-zinc-300 mb-1">Selecciona una lista existente:</label>
+          <div class="flex flex-col gap-1 mb-3 max-h-40 overflow-y-auto">
+            <div *ngFor="let lista of listas" (click)="anadirJuegoALista(lista.id)"
+              class="w-full px-3 py-2 rounded-lg bg-zinc-800/80 text-white hover:bg-[var(--color-rosa-principal)]/30 cursor-pointer font-mono text-sm transition">
+              {{ lista.nombre }}
+            </div>
+          </div>
+          <label class="text-sm text-zinc-300 mb-1 mt-2">O crea una nueva lista:</label>
+          <input type="text" placeholder="Nombre de la nueva lista..." [(ngModel)]="nuevaListaNombre"
+            class="w-full px-3 py-2 rounded-lg bg-zinc-800/80 text-white border-2 border-zinc-700 focus:border-[var(--color-rosa-principal)] focus:outline-none font-mono mb-2" />
+          <button type="button"
+            class="w-full bg-[var(--color-rosa-principal)] hover:bg-pink-500 text-white py-2 rounded-lg font-bold text-sm shadow transition-all duration-200 cursor-pointer"
+            (click)="crearYAnadirLista()">
+            Crear y añadir
+          </button>
+          <div *ngIf="addToListError" class="text-red-400 text-sm mt-2">{{ addToListError }}</div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 </div>

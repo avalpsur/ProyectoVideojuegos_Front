@@ -9,7 +9,8 @@ import {
   Gamepad2,
   Bell,
   TrendingUp,
-  Users
+  Users,
+  Plus
 } from 'lucide-angular';
 
 const icons = {
@@ -21,7 +22,8 @@ const icons = {
   Gamepad2,
   Bell,
   TrendingUp,
-  Users
+  Users,
+  Plus
 };
 
 @NgModule({

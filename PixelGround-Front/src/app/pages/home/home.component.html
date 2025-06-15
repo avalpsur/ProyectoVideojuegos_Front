@@ -49,9 +49,8 @@
       <div class="space-y-4">
         <div *ngFor="let lista of listas" [routerLink]="['/lista', lista.id]"
           class="flex items-center gap-3 bg-gradient-to-r from-zinc-800 via-zinc-900 to-pink-900/30 p-3 rounded-xl shadow group hover:scale-[1.03] transition cursor-pointer">
-          <img
-            [src]="lista.juegos && lista.juegos.length > 0 ? lista.juegos[0].imagenUrl : 'assets/default-list-cover.png'"
-            alt="Portada lista" class="w-12 h-12 object-cover rounded-lg border-2 border-pink-400/40 shadow" />
+          <img [src]="lista.juegosId[0].imagenUrl || 'assets/no-image.png'" (error)="onImageError($event)" alt="Juego"
+            class="w-16 h-16 object-cover rounded-lg border-2 border-[var(--color-rosa-principal)]/40 shadow" />
           <span class="font-semibold text-zinc-100 group-hover:text-pink-400 transition line-clamp-1">{{ lista.nombre
             }}</span>
         </div>
@@ -114,7 +113,7 @@
           <p class="text-sm">Vincula tu cuenta de Steam para ver estadísticas como juegos recientes, horas jugadas y
             logros.</p>
           <button (click)="vincularSteam()"
-            class="bg-pink-600 hover:bg-pink-700 text-white font-pixel py-2 px-4 rounded-xl shadow transition">
+            class="bg-pink-600 hover:bg-pink-700 text-white font-pixel py-2 px-4 rounded-xl shadow transition cursor-pointer">
             Vincular cuenta de Steam
           </button>
         </div>

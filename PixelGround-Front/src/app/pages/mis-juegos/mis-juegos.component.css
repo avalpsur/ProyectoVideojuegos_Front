@@ -1,38 +1,29 @@
-/* Fuente personalizada retro/gamer (puedes añadirla en styles.css si tienes la fuente) */
-.font-pixelground {
-  font-family: 'Press Start 2P', 'VT323', 'Share Tech Mono', 'Montserrat', 'sans-serif';
-}
 
-/* Sombra neón para títulos y botones */
+
 .drop-shadow-neon {
   text-shadow: 0 0 6px var(--color-rosa-principal), 0 0 2px #fff2, 0 0 1px #fff2;
 }
 
-/* Borde neón para tarjetas y formularios */
 .border-neon {
   box-shadow: 0 0 0 2px var(--color-rosa-principal), 0 0 12px 0 var(--color-rosa-principal) inset;
   border-color: var(--color-rosa-principal) !important;
 }
 
-/* Animación sutil al hacer hover en tarjetas */
 .group:hover .drop-shadow-neon {
   filter: brightness(1.2) drop-shadow(0 0 8px var(--color-rosa-principal));
 }
 
-/* Responsive grid spacing */
 @media (max-width: 640px) {
   .grid {
     gap: 1.25rem !important;
   }
 }
 
-/* Mejoras para el botón eliminar */
 button:focus {
   outline: none;
   box-shadow: 0 0 0 2px var(--color-rosa-principal), 0 0 8px 2px var(--color-rosa-principal);
 }
 
-/* Opcional: pixelado sutil para imágenes de portada */
 .bg-cover {
   image-rendering: pixelated;
 }

@@ -1,25 +1,38 @@
-<div class="min-h-screen w-full pt-28 px-2 md:px-8 pb-12 bg-gradient-to-br from-[#111] via-[#1f002b] to-[#020024] flex flex-col items-center">
+<div
+  class="min-h-screen w-full pt-28 px-2 md:px-8 pb-12 bg-gradient-to-br from-[#111] via-[#1f002b] to-[#020024] flex flex-col items-center">
   <div class="w-full max-w-6xl mx-auto">
 
     <!-- Título y buscador -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
       <h1 class="text-3xl md:text-4xl font-pixel text-pink-300 drop-shadow-lg tracking-wide">Retos</h1>
-      <input type="text" [(ngModel)]="busqueda" placeholder="Buscar reto o juego..."
-        class="w-full md:w-72 px-4 py-2 rounded-2xl border-2 border-pink-400/30 focus:border-pink-400 focus:ring-2 focus:ring-pink-400/30 bg-black/70 text-pink-200 font-mono text-base shadow-pink-400/10 transition-all duration-200" />
+      <div class="flex items-center gap-2 w-full md:w-auto">
+        <input type="text" [(ngModel)]="busqueda" placeholder="Buscar reto o juego..."
+          class="w-full md:w-72 px-4 py-2 rounded-2xl border-2 border-pink-400/30 focus:border-pink-400 focus:ring-2 focus:ring-pink-400/30 bg-black/70 text-pink-200 font-mono text-base shadow-pink-400/10 transition-all duration-200" />
+        <button (click)="abrirModalNuevoReto()"
+          class="ml-2 px-5 py-2 bg-pink-600 hover:bg-pink-700 text-white font-pixel rounded-2xl shadow-lg border-2 border-pink-400/30 transition-all duration-200 text-base font-bold cursor-pointer">
+          <lucide-icon name="plus" class="w-5 h-5 inline-block mr-1 -mt-1" /> Nuevo reto
+        </button>
+      </div>
     </div>
 
     <!-- Tabs -->
     <div class="overflow-x-auto rounded-2xl shadow-xl bg-zinc-900/80">
       <div class="flex gap-2 flex-wrap justify-center md:justify-start py-4 px-4">
-        <button (click)="cambiarTab('todos')" [ngClass]="{'bg-pink-600 text-white ring-2 ring-pink-400': tabSeleccionada === 'todos', 'bg-zinc-900/80 text-pink-300': tabSeleccionada !== 'todos'}"
+        <button (click)="cambiarTab('todos')"
+          [ngClass]="{'bg-pink-600 text-white ring-2 ring-pink-400': tabSeleccionada === 'todos', 'bg-zinc-900/80 text-pink-300': tabSeleccionada !== 'todos'}"
+          class="cursor-pointer"
           class="px-5 py-2 rounded-2xl font-pixel text-lg shadow-xl border-b-4 border-pink-400/40 focus:outline-none transition-all duration-200 hover:ring-2 hover:ring-pink-400/60 cursor-pointer">
           Todos los retos
         </button>
-        <button (click)="cambiarTab('activos')" [ngClass]="{'bg-pink-600 text-white ring-2 ring-pink-400': tabSeleccionada === 'activos', 'bg-zinc-900/80 text-pink-300': tabSeleccionada !== 'activos'}"
+        <button (click)="cambiarTab('activos')"
+          [ngClass]="{'bg-pink-600 text-white ring-2 ring-pink-400': tabSeleccionada === 'activos', 'bg-zinc-900/80 text-pink-300': tabSeleccionada !== 'activos'}"
+          class="cursor-pointer"
           class="px-5 py-2 rounded-2xl font-pixel text-lg shadow-xl border-b-4 border-pink-400/40 focus:outline-none transition-all duration-200 hover:ring-2 hover:ring-pink-400/60 cursor-pointer">
           Retos activos
         </button>
-        <button (click)="cambiarTab('mis')" [ngClass]="{'bg-pink-600 text-white ring-2 ring-pink-400': tabSeleccionada === 'mis', 'bg-zinc-900/80 text-pink-300': tabSeleccionada !== 'mis'}"
+        <button (click)="cambiarTab('mis')"
+          [ngClass]="{'bg-pink-600 text-white ring-2 ring-pink-400': tabSeleccionada === 'mis', 'bg-zinc-900/80 text-pink-300': tabSeleccionada !== 'mis'}"
+          class="cursor-pointer"
           class="px-5 py-2 rounded-2xl font-pixel text-lg shadow-xl border-b-4 border-pink-400/40 focus:outline-none transition-all duration-200 hover:ring-2 hover:ring-pink-400/60 cursor-pointer">
           Mis retos
         </button>
@@ -48,18 +61,23 @@
         <tbody>
           <!-- Todos y activos -->
           <ng-container *ngIf="!isTabMis()">
-            <tr *ngFor="let reto of retosFiltrados" (click)="abrirDetalleReto(reto)" class="border-b border-zinc-800 hover:bg-zinc-700/40 transition cursor-pointer">
+            <tr *ngFor="let reto of retosFiltrados" (click)="abrirDetalleReto(reto)"
+              class="border-b border-zinc-800 hover:bg-zinc-700/40 transition cursor-pointer">
               <td class="px-6 py-4 text-white font-bold text-base">{{ reto.titulo }}</td>
               <td class="px-6 py-4 text-indigo-300">{{ reto.juego }}</td>
               <td class="px-6 py-4 text-zinc-300 max-w-xs truncate">{{ reto.descripcion }}</td>
-              <td class="px-6 py-4 text-zinc-400 text-sm">{{ reto.fechaInicio | date:'shortDate' }}<br><span class="text-xs">→</span> {{ reto.fechaExpiracion | date:'shortDate' }}</td>
+              <td class="px-6 py-4 text-zinc-400 text-sm">{{ reto.fechaInicio | date:'shortDate' }}<br><span
+                  class="text-xs">→</span> {{ reto.fechaExpiracion | date:'shortDate' }}</td>
               <td class="px-6 py-4">
-                <span *ngIf="esRetoActivo(reto)" class="inline-block px-3 py-1 bg-pink-600/80 text-white rounded font-pixel text-xs shadow">Activo</span>
-                <span *ngIf="!esRetoActivo(reto)" class="inline-block px-3 py-1 bg-zinc-700 text-zinc-300 rounded font-pixel text-xs">Finalizado</span>
+                <span *ngIf="esRetoActivo(reto)"
+                  class="inline-block px-3 py-1 bg-pink-600/80 text-white rounded font-pixel text-xs shadow">Activo</span>
+                <span *ngIf="!esRetoActivo(reto)"
+                  class="inline-block px-3 py-1 bg-zinc-700 text-zinc-300 rounded font-pixel text-xs">Finalizado</span>
               </td>
               <td class="px-6 py-4 text-right">
                 <ng-container *ngIf="!estaInscrito(reto); else yaInscrito">
-                  <button (click)="unirseAReto(reto)" class="px-4 py-1 text-sm font-pixel bg-pink-600 hover:bg-pink-700 text-white rounded-2xl ring-2 ring-pink-400/40 transition shadow-md cursor-pointer">
+                  <button (click)="unirseAReto(reto)"
+                    class="px-4 py-1 text-sm font-pixel bg-pink-600 hover:bg-pink-700 text-white rounded-2xl ring-2 ring-pink-400/40 transition shadow-md cursor-pointer">
                     Unirse
                   </button>
                 </ng-container>
@@ -72,17 +90,22 @@
 
           <!-- Mis retos -->
           <ng-container *ngIf="isTabMis()">
-            <tr *ngFor="let p of misRetos" class="border-b border-zinc-800 hover:bg-pink-950/30 transition duration-200 cursor-pointer rounded-xl">
+            <tr *ngFor="let p of misRetos"
+              class="border-b border-zinc-800 hover:bg-pink-950/30 transition duration-200 cursor-pointer rounded-xl">
               <td class="px-6 py-4 text-pink-200 font-bold text-base font-pixel tracking-wide">{{ p.tituloReto }}</td>
               <td class="px-6 py-4">
-                <span *ngIf="!p.completado" class="inline-block px-3 py-1 bg-pink-700/90 text-white rounded-2xl font-pixel text-xs shadow-md">Pendiente</span>
-                <span *ngIf="p.completado" class="inline-block px-3 py-1 bg-green-600/80 text-green-100 rounded-2xl font-pixel text-xs shadow-md">Completado</span>
+                <span *ngIf="!p.completado"
+                  class="inline-block px-3 py-1 bg-pink-700/90 text-white rounded-2xl font-pixel text-xs shadow-md">Pendiente</span>
+                <span *ngIf="p.completado"
+                  class="inline-block px-3 py-1 bg-green-600/80 text-green-100 rounded-2xl font-pixel text-xs shadow-md">Completado</span>
               </td>
-              <td class="px-6 py-4 text-zinc-300 font-mono max-w-xs truncate">{{ p.comentario || 'Sin comentario' }}</td>
-              <td class="px-6 py-4 text-zinc-400 font-mono text-sm">{{ p.completado ? (p.fechaCompletado | date:'shortDate') : '-' }}</td>
+              <td class="px-6 py-4 text-zinc-300 font-mono max-w-xs truncate">{{ p.comentario || 'Sin comentario' }}
+              </td>
+              <td class="px-6 py-4 text-zinc-400 font-mono text-sm">{{ p.completado ? (p.fechaCompletado |
+                date:'shortDate') : '-' }}</td>
               <td class="px-6 py-4 text-right">
                 <button *ngIf="!p.completado" (click)="abrirModalCompletar(p.id!)"
-                  class="px-4 py-1 text-xs font-pixel bg-green-600 hover:bg-green-700 text-white rounded-2xl ring-2 ring-green-400/40 transition shadow-md cursor-pointer">
+                  class="px-4 py-1 text-sm font-pixel bg-pink-600 hover:bg-pink-700 text-white rounded-2xl ring-2 ring-pink-400/40 transition shadow-md cursor-pointer">
                   Marcar como completado
                 </button>
               </td>
@@ -114,13 +137,89 @@
 
           <div class="flex justify-end gap-2 mt-2">
             <button type="button" (click)="cerrarModalCompletar()"
-              class="px-4 py-2 rounded bg-zinc-700 hover:bg-zinc-600 font-pixel ring-1 ring-zinc-500">Cancelar</button>
+              class="px-4 py-2 rounded bg-zinc-700 hover:bg-zinc-600 font-pixel ring-1 ring-zinc-500 cursor-pointer">Cancelar</button>
             <button type="submit"
-              class="px-4 py-2 rounded bg-green-600 hover:bg-green-700 text-white font-pixel ring-1 ring-green-400">Confirmar</button>
+              class="px-4 py-2 rounded bg-green-600 hover:bg-green-700 text-white font-pixel ring-1 ring-green-400 cursor-pointer">Confirmar</button>
           </div>
         </form>
       </div>
     </div>
+
+    <!-- Modal nuevo reto -->
+    <div *ngIf="mostrarModalNuevoReto" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+      <div
+        class="bg-zinc-900 rounded-2xl ring-2 ring-pink-400/40 shadow-2xl p-8 w-full max-w-lg flex flex-col gap-4 animate-fade-in-up">
+        <h2 class="text-2xl font-pixel text-pink-300 mb-2">Crear nuevo reto</h2>
+        <form (ngSubmit)="crearNuevoReto()" autocomplete="off" class="flex flex-col gap-4">
+          <div>
+            <label class="block text-pink-200 font-pixel mb-1">Título *</label>
+            <input type="text" [(ngModel)]="nuevoReto.titulo" name="titulo" required
+              class="w-full px-4 py-2 rounded-xl bg-black/60 text-white border-2 border-pink-400/30 focus:border-pink-400 focus:ring-2 focus:ring-pink-400/30 font-mono transition-all duration-200 placeholder-pink-300" />
+          </div>
+          <div>
+            <label class="block text-pink-200 font-pixel mb-1">Descripción</label>
+            <textarea [(ngModel)]="nuevoReto.descripcion" name="descripcion" rows="3"
+              class="w-full px-4 py-2 rounded-xl bg-black/60 text-white border-2 border-pink-400/30 focus:border-pink-400 focus:ring-2 focus:ring-pink-400/30 font-mono transition-all duration-200 placeholder-pink-300"></textarea>
+          </div>
+          <div>
+            <label class="block text-pink-200 font-pixel mb-1">Juego *</label>
+            <input type="text" [(ngModel)]="nuevoReto.juego" name="juego" required
+              class="w-full px-4 py-2 rounded-xl bg-black/60 text-white border-2 border-pink-400/30 focus:border-pink-400 focus:ring-2 focus:ring-pink-400/30 font-mono transition-all duration-200 placeholder-pink-300" />
+          </div>
+          <div class="flex gap-4">
+            <div class="flex-1">
+              <label class="block text-pink-200 font-pixel mb-1">Fecha inicio *</label>
+              <input type="date" [(ngModel)]="nuevoReto.fechaInicio" name="fechaInicio" required
+                class="w-full px-4 py-2 rounded-xl bg-black/60 text-white border-2 border-pink-400/30 focus:border-pink-400 focus:ring-2 focus:ring-pink-400/30 font-mono transition-all duration-200 placeholder-pink-300" />
+            </div>
+            <div class="flex-1">
+              <label class="block text-pink-200 font-pixel mb-1">Fecha expiración *</label>
+              <input type="date" [(ngModel)]="nuevoReto.fechaExpiracion" name="fechaExpiracion" required
+                class="w-full px-4 py-2 rounded-xl bg-black/60 text-white border-2 border-pink-400/30 focus:border-pink-400 focus:ring-2 focus:ring-pink-400/30 font-mono transition-all duration-200 placeholder-pink-300" />
+            </div>
+          </div>
+          <div *ngIf="errorNuevoReto" class="text-red-400 font-mono text-sm">{{ errorNuevoReto }}</div>
+          <div class="flex justify-end gap-2 mt-2">
+            <button type="button" (click)="cerrarModalNuevoReto()"
+              class="px-5 py-2 bg-zinc-700 hover:bg-zinc-800 text-white font-pixel rounded-2xl shadow transition-all cursor-pointer">Cancelar</button>
+            <button type="submit" [disabled]="loadingNuevoReto"
+              class="px-5 py-2 bg-pink-600 hover:bg-pink-700 text-white font-pixel rounded-2xl shadow-lg border-2 border-pink-400/30 transition-all duration-200 font-bold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+              Confirmar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal detalle reto -->
+    <div *ngIf="retoSeleccionado" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70" (click)="cerrarModalDetalle()">
+      <div class="bg-zinc-900 text-white rounded-2xl shadow-2xl p-6 max-w-md w-full border-2 border-pink-400/30" (click)="$event.stopPropagation()">
+        <h2 class="text-xl font-pixel text-pink-300 mb-4">Detalle del reto</h2>
+
+        <div class="flex flex-col gap-3 font-mono text-sm">
+          <p><span class="text-pink-400 font-bold">Título:</span> {{ retoSeleccionado.titulo }}</p>
+          <p><span class="text-indigo-400 font-bold">Juego:</span> {{ retoSeleccionado.juego }}</p>
+          <p><span class="text-zinc-300 font-bold">Descripción:</span> {{ retoSeleccionado.descripcion }}</p>
+          <p><span class="text-zinc-400 font-bold">Inicio:</span> {{ retoSeleccionado.fechaInicio | date:'shortDate' }}
+          </p>
+          <p><span class="text-zinc-400 font-bold">Expira:</span> {{ retoSeleccionado.fechaExpiracion |
+            date:'shortDate' }}</p>
+          <p>
+            <span class="text-pink-300 font-bold">Estado:</span>
+            <span *ngIf="retoSeleccionado && esRetoActivo(retoSeleccionado)" class="text-green-400 font-bold">Activo</span>
+            <span *ngIf="retoSeleccionado && !esRetoActivo(retoSeleccionado)" class="text-zinc-500">Finalizado</span>
+          </p>
+        </div>
+
+        <div class="flex justify-end mt-6">
+          <button (click)="cerrarModalDetalle()"
+            class="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-white font-pixel rounded-2xl ring-1 ring-zinc-500 cursor-pointer">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+
 
   </div>
 </div>

@@ -110,7 +110,7 @@
                 <label class="text-sm text-zinc-300 mb-1">Selecciona una lista existente:</label>
                 <div class="flex flex-col gap-1 mb-3 max-h-40 overflow-y-auto">
                   <div *ngFor="let lista of listas"
-                    (click)="anadirJuegoALista(juego.id, lista.id); cerrarModal(); $event.stopPropagation()"
+                    (click)="anadirJuegoALista(lista.id, juego); cerrarModal(); $event.stopPropagation()"
                     class="w-full px-3 py-2 rounded-lg bg-zinc-800/80 text-white hover:bg-[var(--color-rosa-principal)]/30 cursor-pointer font-mono text-sm transition">
                     {{ lista.nombre }}
                   </div>
@@ -158,6 +158,17 @@
           </button>
         </div>
       </div>
+    </ng-container>
+  </div>
+
+  <!-- Listas del usuario -->
+  <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-12">
+    <ng-container *ngFor="let lista of listas">
+      <div class="bg-gradient-to-b from-zinc-900/90 to-zinc-950/90 rounded-2xl overflow-hidden shadow-xl border border-zinc-800 hover:scale-[1.03] hover:shadow-pink-500/20 transition-transform cursor-pointer relative p-4 flex flex-col items-center">
+      <img [src]="lista.portadaUrl" alt="Portada" class="w-full h-48 object-cover rounded-lg shadow mb-2">
+      <h3 class="text-lg font-bold">{{ lista.nombre }}</h3>
+      <p class="text-sm text-gray-400">{{ lista.descripcion }}</p>
+    </div>
     </ng-container>
   </div>
 
